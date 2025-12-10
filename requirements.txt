@@ -2,7 +2,9 @@
 # Python 3.10+ required
 
 # GUI Framework
-PyQt6==6.6.1
+PyQt6==6.5.3
+PyQt6-Qt6==6.5.3
+
 
 # Media Playback Engine
 python-mpv==1.0.5
