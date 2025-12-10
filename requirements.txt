@@ -10,3 +10,6 @@ python-mpv>=1.0.1
 
 # Type Checking (development)
 mypy>=1.7.0
+
+# Building executables
+pyinstaller>=6.0.0
