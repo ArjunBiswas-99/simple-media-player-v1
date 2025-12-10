@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# PyInstaller
+*.spec
+*.manifest
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Application
+*.log
+pymedia_player.log
+
+# Build artifacts
+dist/
+build/
+
+# Test files (if you add tests later)
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
