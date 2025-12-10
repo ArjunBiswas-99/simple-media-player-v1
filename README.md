@@ -171,3 +171,4 @@ For bugs or feature requests, please see the project repository.
 
 See [MVP-STATUS.md](MVP-STATUS.md) for what's next.
 # simple-media-player
+# simple-media-player-v1
