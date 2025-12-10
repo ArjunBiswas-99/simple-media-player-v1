@@ -1,0 +1,12 @@
+# Simple Media Player - MVP Dependencies
+# Version: 0.1.0-alpha
+
+# GUI Framework
+PyQt6>=6.6.0
+PyQt6-Qt6>=6.6.0
+
+# Media Playback
+python-mpv>=1.0.1
+
+# Type Checking (development)
+mypy>=1.7.0
