@@ -266,9 +266,34 @@ python --version  # Must be 3.10 or higher
 - ✅ Controls auto-hide after 3 seconds
 - ✅ Press `Esc` or double-click to exit fullscreen
 
+## 🧪 Testing
+
+Simple Media Player has comprehensive unit and integration tests.
+
+### Run Tests
+
+```bash
+# Install dev dependencies
+pip install -r requirements-dev.txt
+
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src --cov-report=html
+```
+
+### Test Structure
+
+- **Unit Tests** (`tests/unit/`) - Test isolated components
+- **Integration Tests** (`tests/integration/`) - Test component interaction
+- **Coverage Target** - 70%+ overall coverage
+
+See [tests/README.md](tests/README.md) for detailed testing documentation.
+
 ## 🤝 Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
+Contributions are welcome! See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
 
 Quick start:
 
@@ -289,12 +314,15 @@ cd simple-media-player
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install in development mode
+# Install dependencies
 pip install -r requirements.txt
-pip install -e .
+pip install -r requirements-dev.txt
 
-# Run tests (if available)
-python -m pytest
+# Run tests
+pytest
+
+# Run the application
+python -m src.main
 ```
 
 ## 📝 License
