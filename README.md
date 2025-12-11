@@ -223,8 +223,8 @@ python --version  # Must be 3.10 or higher
 
 **Video plays but no audio**
 - ✅ Check PyQt6-Multimedia is installed: `pip show PyQt6-Multimedia`
-- ✅ Verify video file has audio track (try VLC to test)
-- ✅ Check volume slider and mute button
+- ✅ Verify video file has an audio track (test with another media player)
+- ✅ Check volume slider and mute button (press M to unmute)
 - ✅ Restart the application
 
 **Video won't load**
