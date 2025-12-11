@@ -119,12 +119,12 @@ class MainWindow(QMainWindow):
     def _create_control_panel(self):
         """Create the bottom control panel with modern design"""
         panel = QWidget()
-        panel.setFixedHeight(120)
+        panel.setFixedHeight(110)
         panel.setObjectName("controlPanel")
         
         layout = QVBoxLayout(panel)
-        layout.setContentsMargins(16, 10, 16, 10)
-        layout.setSpacing(12)
+        layout.setContentsMargins(16, 8, 16, 10)
+        layout.setSpacing(10)
         
         layout.addLayout(self._create_progress_bar())
         layout.addLayout(self._create_control_buttons())

@@ -104,21 +104,29 @@ class EnhancedThemeManager:
             background-color: rgba(255, 255, 255, 0.1);
             color: {colors['text_primary']};
             border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 28px;
-            min-width: 56px;
-            min-height: 56px;
-            max-width: 56px;
-            max-height: 56px;
-            font-size: 24px;
+            border-radius: 22px;
+            min-width: 44px;
+            min-height: 44px;
+            max-width: 44px;
+            max-height: 44px;
+            font-size: 20px;
+            outline: none;
         }}
         
         QPushButton#iconButton:hover {{
             background-color: {colors['accent']};
             border-color: {colors['accent']};
+            outline: none;
         }}
         
         QPushButton#iconButton:pressed {{
             background-color: {colors['accent_hover']};
+            outline: none;
+        }}
+        
+        QPushButton#iconButton:focus {{
+            outline: none;
+            border: 2px solid {colors['accent']};
         }}
         
         /* Theme Toggle Button */
