@@ -31,6 +31,7 @@ from .buffering_widget import BufferingWidget
 from .network_stream_dialog import NetworkStreamDialog
 from ..core.player import MediaPlayer
 from ..core.network_stream_handler import NetworkStreamHandler
+from ..core.preferences import Preferences
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +82,12 @@ class MainWindow(QMainWindow):
         self.player = MediaPlayer()
         self.theme_manager = ThemeManager()
         self.stream_handler = NetworkStreamHandler()
+        
+        # Initialize preferences manager
+        self.preferences = Preferences()
+        
+        # Load last opened directory from preferences
+        self.last_opened_directory = self.preferences.get_last_directory()
         
         # Playback state
         self.current_file = None
@@ -172,7 +179,28 @@ class MainWindow(QMainWindow):
         self.player.signals.playback_ended.connect(self._on_playback_ended)
         self.player.signals.error_occurred.connect(self._on_player_error)
         
+        # Restore saved preferences
+        self._restore_preferences()
+        
         self._apply_theme()
+    
+    def _restore_preferences(self):
+        """Restore saved preferences (theme and volume)"""
+        # Restore theme
+        saved_theme = self.preferences.get_theme()
+        if saved_theme == "light":
+            self.theme_manager.set_theme(Theme.LIGHT)
+        else:
+            self.theme_manager.set_theme(Theme.DARK)
+        logger.info(f"Restored theme: {saved_theme}")
+        
+        # Restore volume
+        saved_volume = self.preferences.get_volume()
+        self.volume_slider.setValue(saved_volume)
+        self.player.volume = saved_volume
+        self.volume_label.setText(f"{saved_volume}%")
+        self._update_volume_icon()
+        logger.info(f"Restored volume: {saved_volume}%")
     
     def _create_control_panel(self):
         """
@@ -649,7 +677,12 @@ class MainWindow(QMainWindow):
         """Toggle between light and dark themes"""
         self.theme_manager.toggle_theme()
         self._apply_theme()
-        logger.info(f"Theme changed to {self.theme_manager.current_theme.value}")
+        
+        # Save theme preference
+        theme_name = self.theme_manager.current_theme.value
+        self.preferences.set_theme(theme_name)
+        
+        logger.info(f"Theme changed to {theme_name}")
     
     def _start_fast_forward(self):
         """Start fast forwarding"""
@@ -673,14 +706,22 @@ class MainWindow(QMainWindow):
     def _on_open_file(self):
         """Handle open file action"""
         file_filter = f"Video Files ({' '.join(self.VIDEO_EXTENSIONS)});;All Files (*.*)"
+        
+        # Use last opened directory if available
+        start_directory = self.last_opened_directory or ""
+        
         filename, _ = QFileDialog.getOpenFileName(
             self,
             "Open Video File",
-            "",
+            start_directory,
             file_filter
         )
         
         if filename:
+            # Update and save last opened directory
+            directory = str(Path(filename).parent)
+            self.last_opened_directory = directory
+            self.preferences.set_last_directory(directory)
             self._load_file(filename)
     
     def _on_open_subtitle(self):
@@ -703,6 +744,10 @@ class MainWindow(QMainWindow):
     
     def _on_file_dropped(self, filepath):
         """Handle file dropped on video widget"""
+        # Update and save last opened directory
+        directory = str(Path(filepath).parent)
+        self.last_opened_directory = directory
+        self.preferences.set_last_directory(directory)
         self._load_file(filepath)
     
     def _on_open_network_stream(self):
@@ -927,6 +972,7 @@ class MainWindow(QMainWindow):
         self.player.volume = value
         self.volume_label.setText(f"{value}%")
         self._update_volume_icon()
+        self.preferences.set_volume(value)
     
     def _volume_up(self):
         """Increase volume by 5%"""

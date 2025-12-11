@@ -33,6 +33,7 @@ ENV/
 # Application
 *.log
 pymedia_player.log
+settings.json
 
 # Build artifacts
 dist/
