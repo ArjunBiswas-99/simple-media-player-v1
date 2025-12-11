@@ -28,11 +28,6 @@
 <img width="802" height="632" alt="image" src="https://github.com/user-attachments/assets/68d03cc0-6f5d-4a88-a266-1dcf073d73d3" />
 
 
-### Fullscreen Mode
-*Immersive fullscreen with auto-hiding controls*
-
-> *Add screenshots here using: `![Dark Theme](screenshots/dark-theme.png)`*
-
 ## 🎯 Key Features
 
 ### 🎥 Media Playback
