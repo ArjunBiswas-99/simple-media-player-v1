@@ -131,18 +131,27 @@ class AudioPlayer:
                 input_container.close()
                 return False
             
-            # Create output container for WAV
-            output_container = av.open(self._temp_audio_file, 'w')
+            # Create output container for WAV with proper format
+            output_container = av.open(self._temp_audio_file, 'w', format='wav')
             output_stream = output_container.add_stream('pcm_s16le', rate=44100)
-            output_stream.channels = 2
             
-            # Transcode audio
+            # Create resampler for audio conversion
+            resampler = av.audio.resampler.AudioResampler(
+                format='s16',
+                layout='stereo',
+                rate=44100
+            )
+            
+            # Transcode audio with resampling
+            frame_count = 0
             for packet in input_container.demux(audio_stream):
                 for frame in packet.decode():
                     # Resample to 44.1kHz stereo
-                    frame.pts = None
-                    for packet in output_stream.encode(frame):
-                        output_container.mux(packet)
+                    resampled_frames = resampler.resample(frame)
+                    for resampled_frame in resampled_frames:
+                        for packet in output_stream.encode(resampled_frame):
+                            output_container.mux(packet)
+                        frame_count += 1
             
             # Flush remaining packets
             for packet in output_stream.encode():
@@ -151,6 +160,8 @@ class AudioPlayer:
             # Close containers
             output_container.close()
             input_container.close()
+            
+            logger.info(f"Extracted {frame_count} audio frames")
             
             # Load the extracted audio
             pygame.mixer.music.load(self._temp_audio_file)
