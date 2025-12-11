@@ -70,8 +70,11 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.control_panel)
         
         self.player.initialize(self.video_widget)
-        self.player.set_frame_callback(self._on_frame_update)
-        self.player.set_time_pos_callback(self._on_time_update)
+        
+        # Connect player signals for thread-safe communication
+        self.player.signals.frame_ready.connect(self._on_frame_update)
+        self.player.signals.time_update.connect(self._on_time_update)
+        self.player.signals.playback_ended.connect(self._on_playback_ended)
         
         self._apply_theme()
     
@@ -513,6 +516,11 @@ class MainWindow(QMainWindow):
                 self.progress_slider.setValue(position)
             
             self.time_label.setText(self._format_time(time_pos))
+    
+    def _on_playback_ended(self):
+        """Handle playback end"""
+        self._update_play_button()
+        logger.info("Playback ended")
     
     def _update_ui(self):
         """Update UI elements"""

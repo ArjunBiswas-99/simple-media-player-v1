@@ -8,8 +8,16 @@ import threading
 import time
 from typing import Optional, Callable
 from pathlib import Path
+from PyQt6.QtCore import QObject, pyqtSignal
 
 logger = logging.getLogger(__name__)
+
+
+class PlayerSignals(QObject):
+    """Signals for thread-safe communication with GUI"""
+    frame_ready = pyqtSignal(object)  # Emits frame (numpy array)
+    time_update = pyqtSignal(float)   # Emits time position
+    playback_ended = pyqtSignal()     # Emits when video ends
 
 
 class MediaPlayer:
@@ -35,10 +43,11 @@ class MediaPlayer:
         self._muted = False
         self._playback_speed = 1.0
         
-        # Callbacks
-        self._frame_callback: Optional[Callable] = None
-        self._time_pos_callback: Optional[Callable] = None
-        self._end_callback: Optional[Callable] = None
+        # Thread-safe signals
+        self.signals = PlayerSignals()
+        
+        # Thread lock for video capture operations
+        self._capture_lock = threading.Lock()
         
         logger.info("OpenCV media player initialized")
     
@@ -147,24 +156,25 @@ class MediaPlayer:
         if not self._video_capture:
             return
         
-        try:
-            if relative:
-                current_pos = self._current_frame_number / self._fps
-                target_seconds = current_pos + seconds
-            else:
-                target_seconds = seconds
-            
-            # Clamp to valid range
-            target_seconds = max(0, min(target_seconds, self.duration))
-            
-            target_frame = int(target_seconds * self._fps)
-            self._video_capture.set(cv2.CAP_PROP_POS_FRAMES, target_frame)
-            self._current_frame_number = target_frame
-            
-            logger.debug(f"Seeked to {target_seconds:.2f}s (frame {target_frame})")
-            
-        except Exception as e:
-            logger.error(f"Seek failed: {e}")
+        with self._capture_lock:
+            try:
+                if relative:
+                    current_pos = self._current_frame_number / self._fps
+                    target_seconds = current_pos + seconds
+                else:
+                    target_seconds = seconds
+                
+                # Clamp to valid range
+                target_seconds = max(0, min(target_seconds, self.duration))
+                
+                target_frame = int(target_seconds * self._fps)
+                self._video_capture.set(cv2.CAP_PROP_POS_FRAMES, target_frame)
+                self._current_frame_number = target_frame
+                
+                logger.debug(f"Seeked to {target_seconds:.2f}s (frame {target_frame})")
+                
+            except Exception as e:
+                logger.error(f"Seek failed: {e}")
     
     def set_speed(self, speed: float):
         """
@@ -276,27 +286,23 @@ class MediaPlayer:
             if not self._video_capture:
                 break
             
-            # Read next frame
-            ret, frame = self._video_capture.read()
+            # Read next frame with thread lock
+            with self._capture_lock:
+                ret, frame = self._video_capture.read()
+                
+                if not ret:
+                    # End of video
+                    logger.info("End of video reached")
+                    self._is_playing = False
+                    self.signals.playback_ended.emit()
+                    break
+                
+                # Update frame number
+                self._current_frame_number = int(self._video_capture.get(cv2.CAP_PROP_POS_FRAMES))
             
-            if not ret:
-                # End of video
-                logger.info("End of video reached")
-                self._is_playing = False
-                if self._end_callback:
-                    self._end_callback()
-                break
-            
-            # Update frame number
-            self._current_frame_number = int(self._video_capture.get(cv2.CAP_PROP_POS_FRAMES))
-            
-            # Call frame callback to update display
-            if self._frame_callback:
-                self._frame_callback(frame)
-            
-            # Call time position callback
-            if self._time_pos_callback:
-                self._time_pos_callback(self.time_pos)
+            # Emit signals for thread-safe GUI updates
+            self.signals.frame_ready.emit(frame)
+            self.signals.time_update.emit(self.time_pos)
             
             # Sleep to maintain frame rate
             time.sleep(self._frame_delay)
