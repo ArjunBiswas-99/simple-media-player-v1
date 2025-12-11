@@ -9,10 +9,11 @@ from PyQt6.QtWidgets import (
     QPushButton, QSlider, QLabel, QFileDialog, QStyle,
     QMessageBox, QMenuBar, QMenu
 )
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer, QEvent
 from PyQt6.QtGui import QAction, QKeySequence
 
 from .video_widget import VideoWidget
+from .theme_manager import ThemeManager, Theme
 from ..core.player import MediaPlayer
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,6 @@ logger = logging.getLogger(__name__)
 class MainWindow(QMainWindow):
     """Main application window"""
     
-    # Supported video formats
     VIDEO_EXTENSIONS = (
         "*.mp4", "*.mkv", "*.avi", "*.mov", "*.wmv",
         "*.flv", "*.webm", "*.m4v", "*.mpg", "*.mpeg"
@@ -33,139 +33,188 @@ class MainWindow(QMainWindow):
         """Initialize the main window"""
         super().__init__()
         
-        self.player = MediaPlayer()
-        self.current_file = None
-        self.is_seeking = False
-        
+        self._initialize_components()
         self._setup_ui()
         self._create_menu()
         self._setup_shortcuts()
         self._setup_timer()
+        self._connect_signals()
         
         logger.info("Main window initialized")
+    
+    def _initialize_components(self):
+        """Initialize core components"""
+        self.player = MediaPlayer()
+        self.theme_manager = ThemeManager()
+        self.current_file = None
+        self.is_seeking = False
+        self._fast_forward_timer = None
+        self._is_fast_forwarding = False
     
     def _setup_ui(self):
         """Set up the user interface"""
         self.setWindowTitle("PyMedia Player")
         self.setMinimumSize(800, 600)
         
-        # Central widget and layout
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         
-        # Video widget
         self.video_widget = VideoWidget()
         self.video_widget.set_drop_callback(self._on_file_dropped)
         main_layout.addWidget(self.video_widget, stretch=1)
         
-        # Control panel
-        control_panel = self._create_control_panel()
-        main_layout.addWidget(control_panel)
+        self.control_panel = self._create_control_panel()
+        main_layout.addWidget(self.control_panel)
         
-        # Initialize player with video widget
         self.player.initialize(self.video_widget)
         self.player.set_time_pos_callback(self._on_time_update)
         
-        # Apply dark theme
-        self._apply_dark_theme()
+        self._apply_theme()
     
     def _create_control_panel(self):
         """Create the bottom control panel"""
         panel = QWidget()
         panel.setFixedHeight(100)
-        panel.setStyleSheet("background-color: #2b2b2b;")
+        panel.setObjectName("controlPanel")
         
         layout = QVBoxLayout(panel)
         layout.setContentsMargins(10, 5, 10, 5)
         
-        # Progress bar and time labels
+        layout.addLayout(self._create_progress_bar())
+        layout.addLayout(self._create_control_buttons())
+        
+        return panel
+    
+    def _create_progress_bar(self):
+        """Create progress bar with time labels"""
         progress_layout = QHBoxLayout()
         
         self.time_label = QLabel("00:00")
-        self.time_label.setStyleSheet("color: white;")
+        self.time_label.setObjectName("timeLabel")
         progress_layout.addWidget(self.time_label)
         
         self.progress_slider = QSlider(Qt.Orientation.Horizontal)
         self.progress_slider.setRange(0, 1000)
         self.progress_slider.setValue(0)
+        self.progress_slider.setObjectName("progressSlider")
+        
+        # Enable mouse tracking for click-to-seek
+        self.progress_slider.setMouseTracking(True)
+        self.progress_slider.installEventFilter(self)
+        
         self.progress_slider.sliderPressed.connect(self._on_slider_pressed)
         self.progress_slider.sliderReleased.connect(self._on_slider_released)
         self.progress_slider.sliderMoved.connect(self._on_slider_moved)
         progress_layout.addWidget(self.progress_slider, stretch=1)
         
         self.duration_label = QLabel("00:00")
-        self.duration_label.setStyleSheet("color: white;")
+        self.duration_label.setObjectName("durationLabel")
         progress_layout.addWidget(self.duration_label)
         
-        layout.addLayout(progress_layout)
-        
-        # Control buttons
+        return progress_layout
+    
+    def _create_control_buttons(self):
+        """Create control buttons layout"""
         button_layout = QHBoxLayout()
         
-        # Play/Pause button
-        self.play_button = QPushButton()
-        self.play_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay))
-        self.play_button.clicked.connect(self._toggle_play_pause)
-        self.play_button.setFixedSize(40, 40)
+        # Playback controls
+        self.play_button = self._create_button(
+            QStyle.StandardPixmap.SP_MediaPlay,
+            self._toggle_play_pause,
+            "Play/Pause"
+        )
         button_layout.addWidget(self.play_button)
         
-        # Stop button
-        stop_button = QPushButton()
-        stop_button.setIcon(self.style().standardIcon(QStyle.StandardPixmap.SP_MediaStop))
-        stop_button.clicked.connect(self._on_stop)
-        stop_button.setFixedSize(40, 40)
+        stop_button = self._create_button(
+            QStyle.StandardPixmap.SP_MediaStop,
+            self._on_stop,
+            "Stop"
+        )
         button_layout.addWidget(stop_button)
         
         button_layout.addSpacing(20)
         
-        # Volume control
-        volume_label = QLabel("🔊")
-        volume_label.setStyleSheet("color: white; font-size: 18px;")
-        button_layout.addWidget(volume_label)
-        
-        self.volume_slider = QSlider(Qt.Orientation.Horizontal)
-        self.volume_slider.setRange(0, 100)
-        self.volume_slider.setValue(100)
-        self.volume_slider.setFixedWidth(100)
-        self.volume_slider.valueChanged.connect(self._on_volume_changed)
-        button_layout.addWidget(self.volume_slider)
-        
-        self.volume_label = QLabel("100%")
-        self.volume_label.setStyleSheet("color: white;")
-        self.volume_label.setFixedWidth(40)
-        button_layout.addWidget(self.volume_label)
+        # Volume controls
+        button_layout.addLayout(self._create_volume_controls())
         
         button_layout.addSpacing(20)
         
         # Speed control
-        speed_label = QLabel("Speed:")
-        speed_label.setStyleSheet("color: white;")
-        button_layout.addWidget(speed_label)
-        
-        self.speed_button = QPushButton("1.0x")
-        self.speed_button.clicked.connect(self._cycle_speed)
-        self.speed_button.setFixedWidth(60)
-        button_layout.addWidget(self.speed_button)
+        button_layout.addLayout(self._create_speed_control())
         
         button_layout.addStretch()
         
         # Fullscreen button
         fullscreen_button = QPushButton("Fullscreen")
         fullscreen_button.clicked.connect(self._toggle_fullscreen)
+        fullscreen_button.setObjectName("controlButton")
         button_layout.addWidget(fullscreen_button)
         
-        layout.addLayout(button_layout)
+        return button_layout
+    
+    def _create_button(self, icon: QStyle.StandardPixmap, callback, tooltip: str):
+        """Create a styled button with icon"""
+        button = QPushButton()
+        button.setIcon(self.style().standardIcon(icon))
+        button.clicked.connect(callback)
+        button.setFixedSize(40, 40)
+        button.setToolTip(tooltip)
+        button.setObjectName("controlButton")
+        return button
+    
+    def _create_volume_controls(self):
+        """Create volume control widgets"""
+        layout = QHBoxLayout()
         
-        return panel
+        volume_icon = QLabel("🔊")
+        volume_icon.setObjectName("volumeIcon")
+        layout.addWidget(volume_icon)
+        
+        self.volume_slider = QSlider(Qt.Orientation.Horizontal)
+        self.volume_slider.setRange(0, 100)
+        self.volume_slider.setValue(100)
+        self.volume_slider.setFixedWidth(100)
+        self.volume_slider.setObjectName("volumeSlider")
+        self.volume_slider.valueChanged.connect(self._on_volume_changed)
+        layout.addWidget(self.volume_slider)
+        
+        self.volume_label = QLabel("100%")
+        self.volume_label.setFixedWidth(40)
+        self.volume_label.setObjectName("volumeLabel")
+        layout.addWidget(self.volume_label)
+        
+        return layout
+    
+    def _create_speed_control(self):
+        """Create speed control widgets"""
+        layout = QHBoxLayout()
+        
+        speed_label = QLabel("Speed:")
+        speed_label.setObjectName("speedLabel")
+        layout.addWidget(speed_label)
+        
+        self.speed_button = QPushButton("1.0x")
+        self.speed_button.clicked.connect(self._cycle_speed)
+        self.speed_button.setFixedWidth(60)
+        self.speed_button.setObjectName("controlButton")
+        layout.addWidget(self.speed_button)
+        
+        return layout
     
     def _create_menu(self):
         """Create the menu bar"""
         menubar = self.menuBar()
         
-        # File menu
+        self._create_file_menu(menubar)
+        self._create_playback_menu(menubar)
+        self._create_view_menu(menubar)
+        self._create_help_menu(menubar)
+    
+    def _create_file_menu(self, menubar):
+        """Create file menu"""
         file_menu = menubar.addMenu("&File")
         
         open_action = QAction("&Open File...", self)
@@ -184,8 +233,9 @@ class MainWindow(QMainWindow):
         quit_action.setShortcut(QKeySequence.StandardKey.Quit)
         quit_action.triggered.connect(self.close)
         file_menu.addAction(quit_action)
-        
-        # Playback menu
+    
+    def _create_playback_menu(self, menubar):
+        """Create playback menu"""
         playback_menu = menubar.addMenu("&Playback")
         
         play_pause_action = QAction("&Play/Pause", self)
@@ -197,8 +247,22 @@ class MainWindow(QMainWindow):
         stop_action.setShortcut("S")
         stop_action.triggered.connect(self._on_stop)
         playback_menu.addAction(stop_action)
+    
+    def _create_view_menu(self, menubar):
+        """Create view menu with theme toggle"""
+        view_menu = menubar.addMenu("&View")
         
-        # Help menu
+        self.theme_action = QAction("🌙 Dark Mode", self)
+        self.theme_action.triggered.connect(self._toggle_theme)
+        view_menu.addAction(self.theme_action)
+        
+        fullscreen_action = QAction("&Fullscreen", self)
+        fullscreen_action.setShortcut("F")
+        fullscreen_action.triggered.connect(self._toggle_fullscreen)
+        view_menu.addAction(fullscreen_action)
+    
+    def _create_help_menu(self, menubar):
+        """Create help menu"""
         help_menu = menubar.addMenu("&Help")
         
         about_action = QAction("&About", self)
@@ -211,99 +275,92 @@ class MainWindow(QMainWindow):
     
     def _setup_shortcuts(self):
         """Set up keyboard shortcuts"""
-        # Fullscreen
-        self.fullscreen_shortcut = QAction(self)
-        self.fullscreen_shortcut.setShortcut("F")
-        self.fullscreen_shortcut.triggered.connect(self._toggle_fullscreen)
-        self.addAction(self.fullscreen_shortcut)
+        shortcuts = {
+            "F": self._toggle_fullscreen,
+            "M": self._toggle_mute,
+            "Right": lambda: self.player.seek(5, relative=True),
+            "Left": lambda: self.player.seek(-5, relative=True),
+            "Up": self._volume_up,
+            "Down": self._volume_down,
+        }
         
-        # Mute
-        self.mute_shortcut = QAction(self)
-        self.mute_shortcut.setShortcut("M")
-        self.mute_shortcut.triggered.connect(self._toggle_mute)
-        self.addAction(self.mute_shortcut)
-        
-        # Seek forward
-        self.seek_forward_shortcut = QAction(self)
-        self.seek_forward_shortcut.setShortcut("Right")
-        self.seek_forward_shortcut.triggered.connect(lambda: self.player.seek(5, relative=True))
-        self.addAction(self.seek_forward_shortcut)
-        
-        # Seek backward
-        self.seek_backward_shortcut = QAction(self)
-        self.seek_backward_shortcut.setShortcut("Left")
-        self.seek_backward_shortcut.triggered.connect(lambda: self.player.seek(-5, relative=True))
-        self.addAction(self.seek_backward_shortcut)
-        
-        # Volume up
-        self.volume_up_shortcut = QAction(self)
-        self.volume_up_shortcut.setShortcut("Up")
-        self.volume_up_shortcut.triggered.connect(self._volume_up)
-        self.addAction(self.volume_up_shortcut)
-        
-        # Volume down
-        self.volume_down_shortcut = QAction(self)
-        self.volume_down_shortcut.setShortcut("Down")
-        self.volume_down_shortcut.triggered.connect(self._volume_down)
-        self.addAction(self.volume_down_shortcut)
+        for key, callback in shortcuts.items():
+            action = QAction(self)
+            action.setShortcut(key)
+            action.triggered.connect(callback)
+            self.addAction(action)
     
     def _setup_timer(self):
         """Set up update timer"""
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self._update_ui)
-        self.update_timer.start(100)  # Update every 100ms
+        self.update_timer.start(100)
     
-    def _apply_dark_theme(self):
-        """Apply dark theme to the application"""
-        self.setStyleSheet("""
-            QMainWindow {
-                background-color: #1e1e1e;
-            }
-            QPushButton {
-                background-color: #3c3c3c;
-                color: white;
-                border: 1px solid #555;
-                border-radius: 3px;
-                padding: 5px;
-            }
-            QPushButton:hover {
-                background-color: #4a4a4a;
-            }
-            QPushButton:pressed {
-                background-color: #2a2a2a;
-            }
-            QSlider::groove:horizontal {
-                border: 1px solid #555;
-                height: 8px;
-                background: #3c3c3c;
-                border-radius: 4px;
-            }
-            QSlider::handle:horizontal {
-                background: #2196F3;
-                border: 1px solid #1976D2;
-                width: 16px;
-                margin: -4px 0;
-                border-radius: 8px;
-            }
-            QSlider::handle:horizontal:hover {
-                background: #42A5F5;
-            }
-            QMenuBar {
-                background-color: #2b2b2b;
-                color: white;
-            }
-            QMenuBar::item:selected {
-                background-color: #3c3c3c;
-            }
-            QMenu {
-                background-color: #2b2b2b;
-                color: white;
-                border: 1px solid #555;
-            }
-            QMenu::item:selected {
-                background-color: #3c3c3c;
-            }
-        """)
+    def _connect_signals(self):
+        """Connect video widget signals"""
+        self.video_widget.double_clicked.connect(self._toggle_fullscreen)
+        self.video_widget.fast_forward_started.connect(self._start_fast_forward)
+        self.video_widget.fast_forward_stopped.connect(self._stop_fast_forward)
+    
+    def eventFilter(self, obj, event):
+        """Filter events for custom slider behavior"""
+        if obj == self.progress_slider and event.type() == QEvent.Type.MouseButtonPress:
+            if event.button() == Qt.MouseButton.LeftButton:
+                # Calculate click position and seek
+                value = QStyle.sliderValueFromPosition(
+                    self.progress_slider.minimum(),
+                    self.progress_slider.maximum(),
+                    event.position().x(),
+                    self.progress_slider.width()
+                )
+                self.progress_slider.setValue(value)
+                # Trigger seek
+                position = value / 1000.0
+                duration = self.player.duration
+                if duration > 0:
+                    self.player.seek(position * duration)
+                return True
+        return super().eventFilter(obj, event)
+    
+    def _apply_theme(self):
+        """Apply current theme to the application"""
+        stylesheet = self.theme_manager.get_full_stylesheet()
+        self.setStyleSheet(stylesheet)
+        
+        # Update control panel background
+        panel_style = self.theme_manager.get_stylesheet('control_panel')
+        self.control_panel.setStyleSheet(panel_style)
+        
+        # Update theme action text
+        if self.theme_manager.current_theme == Theme.DARK:
+            self.theme_action.setText("☀️ Light Mode")
+        else:
+            self.theme_action.setText("🌙 Dark Mode")
+    
+    def _toggle_theme(self):
+        """Toggle between light and dark themes"""
+        self.theme_manager.toggle_theme()
+        self._apply_theme()
+        logger.info(f"Theme changed to {self.theme_manager.current_theme.value}")
+    
+    def _start_fast_forward(self):
+        """Start fast forwarding"""
+        if not self.current_file:
+            return
+        
+        self._is_fast_forwarding = True
+        self._fast_forward_timer = QTimer()
+        self._fast_forward_timer.timeout.connect(lambda: self.player.seek(2, relative=True))
+        self._fast_forward_timer.start(100)
+        logger.info("Fast forward started")
+    
+    def _stop_fast_forward(self):
+        """Stop fast forwarding"""
+        if self._fast_forward_timer:
+            self._fast_forward_timer.stop()
+            self._fast_forward_timer = None
+        self._is_fast_forwarding = False
+        logger.info("Fast forward stopped")
     
     def _on_open_file(self):
         """Handle open file action"""
@@ -416,7 +473,7 @@ class MainWindow(QMainWindow):
             current_index = speeds.index(current_speed)
             next_index = (current_index + 1) % len(speeds)
         except ValueError:
-            next_index = 1  # Default to 1.0x
+            next_index = 1
         
         new_speed = speeds[next_index]
         self.player.set_speed(new_speed)
@@ -429,7 +486,6 @@ class MainWindow(QMainWindow):
     def _on_slider_released(self):
         """Handle slider release"""
         self.is_seeking = False
-        # Seek to the position
         position = self.progress_slider.value() / 1000.0
         duration = self.player.duration
         if duration > 0:
@@ -437,7 +493,6 @@ class MainWindow(QMainWindow):
     
     def _on_slider_moved(self, value):
         """Handle slider movement"""
-        # Update time label during seek
         position = value / 1000.0
         duration = self.player.duration
         if duration > 0:
@@ -447,23 +502,19 @@ class MainWindow(QMainWindow):
     def _on_time_update(self, time_pos):
         """Handle time position updates from player"""
         if not self.is_seeking:
-            # Update progress slider
             duration = self.player.duration
             if duration > 0:
                 position = int((time_pos / duration) * 1000)
                 self.progress_slider.setValue(position)
             
-            # Update time label
             self.time_label.setText(self._format_time(time_pos))
     
     def _update_ui(self):
         """Update UI elements"""
-        # Update duration label
         duration = self.player.duration
         if duration > 0:
             self.duration_label.setText(self._format_time(duration))
         
-        # Update play button
         self._update_play_button()
     
     def _format_time(self, seconds):
@@ -488,10 +539,12 @@ class MainWindow(QMainWindow):
             "<p><b>Features:</b></p>"
             "<ul>"
             "<li>Play video and audio files</li>"
-            "<li>Support for multiple formats (MP4, MKV, AVI, etc.)</li>"
-            "<li>External subtitle support (SRT, ASS, etc.)</li>"
-            "<li>Keyboard shortcuts for easy control</li>"
-            "<li>Dark theme interface</li>"
+            "<li>Support for multiple formats</li>"
+            "<li>External subtitle support</li>"
+            "<li>Keyboard shortcuts</li>"
+            "<li>Dark and Light themes</li>"
+            "<li>Double-click for fullscreen</li>"
+            "<li>Click and hold to fast forward</li>"
             "</ul>"
             "<p>Built with PyQt6 and python-mpv</p>"
         )
@@ -512,12 +565,17 @@ class MainWindow(QMainWindow):
         <tr><td><b>Ctrl+S</b></td><td>Open Subtitle</td></tr>
         <tr><td><b>Ctrl+Q</b></td><td>Quit</td></tr>
         </table>
+        <h3>Mouse Controls</h3>
+        <table>
+        <tr><td><b>Double-click video</b></td><td>Toggle Fullscreen</td></tr>
+        <tr><td><b>Click and hold video</b></td><td>Fast Forward</td></tr>
+        <tr><td><b>Click progress bar</b></td><td>Seek to position</td></tr>
+        </table>
         """
         QMessageBox.information(self, "Keyboard Shortcuts", shortcuts_text)
     
     def keyPressEvent(self, event):
         """Handle key press events"""
-        # Handle Escape to exit fullscreen
         if event.key() == Qt.Key.Key_Escape and self.isFullScreen():
             self.showNormal()
             event.accept()
@@ -526,6 +584,7 @@ class MainWindow(QMainWindow):
     
     def closeEvent(self, event):
         """Handle window close event"""
+        self._stop_fast_forward()
         self.player.shutdown()
         event.accept()
         logger.info("Application closed")
