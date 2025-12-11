@@ -62,16 +62,19 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(800, 600)
         
         central_widget = QWidget()
+        central_widget.setMouseTracking(True)
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         
         self.video_widget = VideoWidget()
+        self.video_widget.setMouseTracking(True)
         self.video_widget.set_drop_callback(self._on_file_dropped)
         main_layout.addWidget(self.video_widget, stretch=1)
         
         self.control_panel = self._create_control_panel()
+        self.control_panel.setMouseTracking(True)
         main_layout.addWidget(self.control_panel)
         
         self.player.initialize(self.video_widget)
