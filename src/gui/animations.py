@@ -1,11 +1,11 @@
 """
 Visual feedback animations for user interactions
-Provides non-intrusive visual cues for actions like play/pause, seek, and fullscreen
+YouTube-style overlay animations for play, pause, seek, etc.
 """
 
 import logging
-from PyQt6.QtWidgets import QLabel, QGraphicsOpacityEffect
-from PyQt6.QtCore import QTimer, QPropertyAnimation, QEasingCurve, Qt
+from PyQt6.QtWidgets import QLabel
+from PyQt6.QtCore import QTimer, QPropertyAnimation, QEasingCurve, Qt, QRect
 from PyQt6.QtGui import QFont
 
 logger = logging.getLogger(__name__)
@@ -13,12 +13,8 @@ logger = logging.getLogger(__name__)
 
 class FeedbackAnimation:
     """
-    Manages visual feedback animations for user actions
-    
-    Responsibilities:
-    - Display temporary overlay icons for actions
-    - Animate icon appearance and disappearance
-    - Provide non-intrusive visual feedback
+    YouTube-style visual feedback animations
+    Shows large temporary icons for user actions like play, pause, seek, etc.
     """
     
     def __init__(self, parent_widget):
@@ -26,73 +22,53 @@ class FeedbackAnimation:
         Initialize animation system
         
         Args:
-            parent_widget: Widget to display animations on (typically video widget)
+            parent_widget: Widget to display animations on (video widget)
         """
         self.parent = parent_widget
         self._create_feedback_label()
-        logger.debug("Animation system initialized")
+        logger.info("YouTube-style animation system initialized")
     
     def _create_feedback_label(self):
-        """Create the label widget for displaying feedback icons"""
-        self.feedback_label = QLabel(self.parent)
+        """Create the overlay label for feedback icons"""
+        self.feedback_label = QLabel("", self.parent)
         self.feedback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         
-        # Make sure label stays on top and is visible
-        self.feedback_label.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
-        self.feedback_label.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        self.feedback_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
-        
+        # Style like YouTube overlays
         self.feedback_label.setStyleSheet("""
             QLabel {
-                background-color: rgba(0, 0, 0, 180);
+                background-color: rgba(0, 0, 0, 160);
                 color: white;
-                border-radius: 50px;
-                font-size: 64px;
-                padding: 30px;
+                border-radius: 40px;
+                font-size: 72px;
+                font-weight: bold;
+                padding: 40px;
             }
         """)
-        self.feedback_label.hide()
         
-        # Opacity effect for fade animations
-        self.opacity_effect = QGraphicsOpacityEffect()
-        self.feedback_label.setGraphicsEffect(self.opacity_effect)
-        self.opacity_effect.setOpacity(1.0)
+        # Start hidden
+        self.feedback_label.hide()
+        self.feedback_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        
+        logger.debug("Feedback label created")
     
     def show_play_pause(self, is_playing: bool):
-        """
-        Show play or pause icon animation
-        
-        Args:
-            is_playing: True if playing (show pause icon), False if paused (show play icon)
-        """
+        """Show play ▶ or pause ⏸ icon"""
         icon = "⏸" if is_playing else "▶"
-        self._show_feedback(icon)
+        logger.info(f"Showing {'pause' if is_playing else 'play'} animation")
+        self._show_feedback(icon, 72)
     
     def show_seek_forward(self):
-        """Show seek forward animation"""
-        self._show_feedback("⏩")
+        """Show seek forward ⏩ icon"""
+        logger.info("Showing seek forward animation")
+        self._show_feedback("⏩", 72)
     
     def show_seek_backward(self):
-        """Show seek backward animation"""
-        self._show_feedback("⏪")
-    
-    def show_fullscreen(self, entering: bool):
-        """
-        Show fullscreen toggle animation
-        
-        Args:
-            entering: True if entering fullscreen, False if exiting
-        """
-        icon = "⛶" if entering else "⧉"
-        self._show_feedback(icon)
+        """Show seek backward ⏪ icon"""
+        logger.info("Showing seek backward animation")
+        self._show_feedback("⏪", 72)
     
     def show_volume(self, volume: int):
-        """
-        Show volume change animation
-        
-        Args:
-            volume: Current volume level (0-100)
-        """
+        """Show volume icon with percentage"""
         if volume == 0:
             icon = "🔇"
         elif volume < 33:
@@ -101,79 +77,59 @@ class FeedbackAnimation:
             icon = "🔉"
         else:
             icon = "🔊"
-        self._show_feedback(f"{icon}\n{volume}%", font_size=48)
+        logger.info(f"Showing volume animation: {volume}%")
+        self._show_feedback(f"{icon}\n{volume}%", 56)
     
     def show_speed(self, speed: float):
+        """Show playback speed"""
+        logger.info(f"Showing speed animation: {speed}x")
+        self._show_feedback(f"{speed}x", 56)
+    
+    def _show_feedback(self, text: str, font_size: int):
         """
-        Show playback speed change animation
+        Display feedback animation - YouTube style
         
         Args:
-            speed: Current playback speed (0.5, 1.0, 1.5, 2.0)
+            text: Icon or text to display
+            font_size: Font size in pixels
         """
-        self._show_feedback(f"{speed}x", font_size=48)
-    
-    def _show_feedback(self, text: str, font_size: int = 64):
-        """
-        Display feedback animation with fade in/out effect
-        
-        Args:
-            text: Text or icon to display
-            font_size: Font size for the display
-        """
-        logger.debug(f"Showing feedback animation: {text}")
-        
-        # Update label
-        self.feedback_label.setText(text)
-        self.feedback_label.setStyleSheet(f"""
-            QLabel {{
-                background-color: rgba(0, 0, 0, 180);
-                color: white;
-                border-radius: 50px;
-                font-size: {font_size}px;
-                padding: 30px;
-            }}
-        """)
-        
-        # Position at center of parent
-        self.feedback_label.adjustSize()
-        parent_rect = self.parent.rect()
-        parent_global = self.parent.mapToGlobal(parent_rect.topLeft())
-        
-        x = parent_global.x() + (parent_rect.width() - self.feedback_label.width()) // 2
-        y = parent_global.y() + (parent_rect.height() - self.feedback_label.height()) // 2
-        self.feedback_label.move(x, y)
-        
-        # Show with fade in
-        self.feedback_label.show()
-        self.feedback_label.raise_()
-        self.feedback_label.activateWindow()
-        
-        # Fade in animation
-        self.opacity_effect.setOpacity(0.0)
-        fade_in = QPropertyAnimation(self.opacity_effect, b"opacity")
-        fade_in.setDuration(150)
-        fade_in.setStartValue(0.0)
-        fade_in.setEndValue(1.0)
-        fade_in.setEasingCurve(QEasingCurve.Type.OutCubic)
-        fade_in.start()
-        
-        # Store animation reference to prevent garbage collection
-        self._current_animation = fade_in
-        
-        logger.debug(f"Animation shown at ({x}, {y})")
-        
-        # Auto-hide after delay with fade out
-        QTimer.singleShot(800, self._fade_out_feedback)
-    
-    def _fade_out_feedback(self):
-        """Fade out and hide the feedback label"""
-        fade_out = QPropertyAnimation(self.opacity_effect, b"opacity")
-        fade_out.setDuration(200)
-        fade_out.setStartValue(1.0)
-        fade_out.setEndValue(0.0)
-        fade_out.setEasingCurve(QEasingCurve.Type.InCubic)
-        fade_out.finished.connect(self.feedback_label.hide)
-        fade_out.start()
-        
-        # Store animation reference
-        self._current_animation = fade_out
+        try:
+            logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+            
+            # Update text and style
+            self.feedback_label.setText(text)
+            self.feedback_label.setStyleSheet(f"""
+                QLabel {{
+                    background-color: rgba(0, 0, 0, 160);
+                    color: white;
+                    border-radius: 40px;
+                    font-size: {font_size}px;
+                    font-weight: bold;
+                    padding: 40px;
+                }}
+            """)
+            
+            # Calculate size and position at center
+            self.feedback_label.adjustSize()
+            parent_rect = self.parent.rect()
+            label_width = self.feedback_label.width()
+            label_height = self.feedback_label.height()
+            
+            x = (parent_rect.width() - label_width) // 2
+            y = (parent_rect.height() - label_height) // 2
+            
+            self.feedback_label.setGeometry(x, y, label_width, label_height)
+            
+            # Show and bring to front
+            self.feedback_label.show()
+            self.feedback_label.raise_()
+            
+            logger.info(f"Animation positioned at ({x}, {y}) size ({label_width}x{label_height})")
+            logger.info(f"Parent size: {parent_rect.width()}x{parent_rect.height()}")
+            logger.info(f"Label visible: {self.feedback_label.isVisible()}")
+            
+            # Auto-hide after 800ms
+            QTimer.singleShot(800, self.feedback_label.hide)
+            
+        except Exception as e:
+            logger.error(f"Error showing animation: {e}", exc_info=True)
