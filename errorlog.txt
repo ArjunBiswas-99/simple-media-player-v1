@@ -1,27 +1,32 @@
-\Test\simple-media-player-v1> python -m src.main  
+t\simple-media-player-v1> python -m src.main
 pygame 2.5.2 (SDL 2.28.3, Python 3.10.8)
 Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-12-11 11:49:19,581 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 11:49:20,274 - src.core.audio_player - INFO - Audio player initialized with pygame mixer
-2025-12-11 11:49:20,274 - src.core.player - INFO - Media player initialized with PyAV + PyQt6 audio
-2025-12-11 11:49:20,295 - src.core.player - INFO - Player initialized with video widget
-2025-12-11 11:49:20,308 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 11:49:20,740 - __main__ - INFO - Application started successfully
-2025-12-11 11:49:26,859 - src.core.player - INFO - Playback stopped
-2025-12-11 11:49:27,482 - src.core.audio_player - ERROR - Failed to load audio: ModPlug_Load failed
-2025-12-11 11:49:27,482 - src.core.player - WARNING - Audio track not found or failed to load
-2025-12-11 11:49:27,482 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 11:49:27,482 - src.core.player - INFO - Duration: 7220.17s, FPS: 1947498750/81226927
-2025-12-11 11:49:27,484 - src.core.audio_player - WARNING - No audio loaded
-2025-12-11 11:49:27,485 - src.core.player - INFO - Video playback loop started
-2025-12-11 11:49:27,485 - src.core.player - INFO - Playback started
-2025-12-11 11:49:27,489 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 11:51:28,430 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 11:51:28,452 - src.core.player - INFO - Video playback completed
-2025-12-11 11:51:28,452 - src.core.player - INFO - Video playback loop ended
-2025-12-11 11:51:28,453 - src.core.player - INFO - Playback stopped
-2025-12-11 11:51:28,513 - src.core.audio_player - INFO - Audio player shut down
-2025-12-11 11:51:28,514 - src.core.player - INFO - Player shut down
-2025-12-11 11:51:28,514 - src.gui.main_window - INFO - Application closed
-2025-12-11 11:51:28,530 - src.gui.main_window - INFO - Playback ended
-2025-12-11 11:51:28,530 - __main__ - INFO - Application exited with code 0
+2025-12-11 11:56:00,372 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 11:56:01,105 - src.core.audio_player - INFO - Audio player initialized with pygame mixer
+2025-12-11 11:56:01,105 - src.core.player - INFO - Media player initialized with PyAV + PyQt6 audio
+2025-12-11 11:56:01,124 - src.core.player - INFO - Player initialized with video widget
+2025-12-11 11:56:01,131 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 11:56:01,591 - __main__ - INFO - Application started successfully
+2025-12-11 11:56:06,961 - src.core.player - INFO - Playback stopped
+2025-12-11 11:56:07,569 - src.core.audio_player - INFO - Direct load failed, extracting audio track...
+2025-12-11 11:56:07,606 - src.core.audio_player - ERROR - Failed to extract audio: attribute 'channels' of 'av.audio.codeccontext.AudioCodecContext' objects is not writable
+Traceback (most recent call last):
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\core\audio_player.py", line 75, in load
+    pygame.mixer.music.load(str(file_path))
+pygame.error: ModPlug_Load failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\core\audio_player.py", line 137, in _extract_and_load_audio        
+    output_stream.channels = 2
+  File "av/stream.py", line 140, in av.stream.Stream.__setattr__
+AttributeError: attribute 'channels' of 'av.audio.codeccontext.AudioCodecContext' objects is not writable
+2025-12-11 11:56:07,607 - src.core.player - WARNING - Audio track not found or failed to load
+2025-12-11 11:56:07,607 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 11:56:07,607 - src.core.player - INFO - Duration: 7220.17s, FPS: 1947498750/81226927
+2025-12-11 11:56:07,609 - src.core.audio_player - WARNING - No audio loaded
+2025-12-11 11:56:07,609 - src.core.player - INFO - Video playback loop started
+2025-12-11 11:56:07,609 - src.core.player - INFO - Playback started
+2025-12-11 11:56:07,612 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
+PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
