@@ -1,16 +1,21 @@
-\Desktop\Test\simple-media-player-v1> python -m src.main
-2025-12-11 12:22:33,561 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 12:22:33,706 - src.core.player - INFO - Media player initialized with PyQt6 Multimedia
-2025-12-11 12:22:33,723 - src.core.player - INFO - Player initialized with video widget
-2025-12-11 12:22:33,733 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 12:22:34,133 - __main__ - INFO - Application started successfully
-2025-12-11 12:22:47,490 - src.core.player - INFO - Playback stopped
-2025-12-11 12:22:47,596 - src.core.player - INFO - Loaded media: D:/TV/Detective,Thriller/Byomkesh Bakshi/Byomkesh Bakshi- Ep#2- Rastey Ka Kanta - YouTube.mp4
-2025-12-11 12:22:47,623 - src.core.player - INFO - Playback started
-2025-12-11 12:22:47,624 - src.gui.main_window - INFO - Playing: D:/TV/Detective,Thriller/Byomkesh Bakshi/Byomkesh Bakshi- Ep#2- Rastey Ka Kanta - YouTube.mp4
+a-player-v1> python -m src.main
+2025-12-11 12:26:01,487 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 12:26:02,217 - src.core.player - INFO - Media player initialized with PyQt6 Multimedia
+2025-12-11 12:26:02,235 - src.core.player - INFO - Player initialized with video widget
+2025-12-11 12:26:02,244 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 12:26:02,715 - __main__ - INFO - Application started successfully
+2025-12-11 12:26:08,443 - src.core.player - INFO - Playback stopped
+2025-12-11 12:26:08,485 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 12:26:08,511 - src.core.player - INFO - Playback started
+2025-12-11 12:26:08,512 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
     failed to get textures for frame; format: 172 textureConverter null
-2025-12-11 12:23:05,312 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 12:23:05,313 - src.core.player - INFO - Playback stopped
-2025-12-11 12:23:05,322 - src.core.player - INFO - Player shut down
-2025-12-11 12:23:05,322 - src.gui.main_window - INFO - Application closed
-2025-12-11 12:23:05,333 - __main__ - INFO - Application exited with code 0
+2025-12-11 12:26:47,504 - src.core.player - INFO - Playback speed set to 1.5x
+2025-12-11 12:26:52,285 - src.core.player - INFO - Playback speed set to 2.0x
+2025-12-11 12:26:53,960 - src.core.player - INFO - Playback speed set to 0.5x
+2025-12-11 12:26:56,329 - src.core.player - INFO - Playback speed set to 1.0x
+2025-12-11 12:27:20,854 - src.gui.main_window - INFO - Fast forward stopped
+2025-12-11 12:27:20,854 - src.core.player - INFO - Playback stopped
+2025-12-11 12:27:20,865 - src.core.player - INFO - Player shut down
+2025-12-11 12:27:20,865 - src.gui.main_window - INFO - Application closed
+2025-12-11 12:27:20,872 - __main__ - INFO - Application exited with code 0
+PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
