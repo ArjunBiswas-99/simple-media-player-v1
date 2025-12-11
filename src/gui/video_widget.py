@@ -104,6 +104,16 @@ class VideoWidget(QVideoWidget):
             event: Mouse event with click information
         """
         if event.button() == Qt.MouseButton.LeftButton:
+            # Cancel any pending long-press timer
+            self._is_mouse_pressed = False
+            self._press_timer.stop()
+            
+            # Stop any active fast-forward
+            if self._is_fast_forwarding:
+                self._is_fast_forwarding = False
+                self.fast_forward_stopped.emit()
+                logger.debug("Fast forward stopped by double-click")
+            
             self.double_clicked.emit()
             logger.debug("Video double-clicked")
         super().mouseDoubleClickEvent(event)
@@ -161,3 +171,17 @@ class VideoWidget(QVideoWidget):
             self._is_fast_forwarding = True
             self.fast_forward_started.emit()
             logger.debug("Fast forward started")
+    
+    def cancel_pending_interactions(self):
+        """
+        Cancel any pending mouse interactions (long-press timer, etc.)
+        Called when changing fullscreen state to prevent stuck timers
+        """
+        self._is_mouse_pressed = False
+        self._press_timer.stop()
+        
+        # Stop any active fast-forward
+        if self._is_fast_forwarding:
+            self._is_fast_forwarding = False
+            self.fast_forward_stopped.emit()
+            logger.debug("Pending interactions cancelled")

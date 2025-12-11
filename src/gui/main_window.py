@@ -623,6 +623,7 @@ class MainWindow(QMainWindow):
         if self.isFullScreen():
             # Exit fullscreen
             self._stop_fast_forward()  # Stop any fast-forward in progress
+            self.video_widget.cancel_pending_interactions()  # Cancel any pending timers in video widget
             self.showNormal()
             self.menuBar().show()
             self.control_panel.show()
