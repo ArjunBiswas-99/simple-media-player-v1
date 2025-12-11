@@ -15,7 +15,6 @@ from PyQt6.QtGui import QAction, QKeySequence
 from .video_widget import VideoWidget
 from .theme_manager import ThemeManager, Theme
 from .fullscreen_overlay import FullscreenMouseOverlay
-from .animations import FeedbackAnimation
 from ..core.player import MediaPlayer
 
 logger = logging.getLogger(__name__)
@@ -108,9 +107,6 @@ class MainWindow(QMainWindow):
         self.player.signals.duration_changed.connect(self._on_duration_changed)
         self.player.signals.playback_ended.connect(self._on_playback_ended)
         self.player.signals.error_occurred.connect(self._on_player_error)
-        
-        # Initialize animation system
-        self.animations = FeedbackAnimation(self.video_widget)
         
         self._apply_theme()
     
@@ -353,8 +349,8 @@ class MainWindow(QMainWindow):
         shortcuts = {
             "F": self._toggle_fullscreen,
             "M": self._toggle_mute,
-            "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
-            "Left": lambda: (self.player.seek(-5, relative=True), self.animations.show_seek_backward()),
+            "Right": lambda: self.player.seek(5, relative=True),
+            "Left": lambda: self.player.seek(-5, relative=True),
             "Up": self._volume_up,
             "Down": self._volume_down,
         }
@@ -569,9 +565,6 @@ class MainWindow(QMainWindow):
         self.player.toggle_pause()
         self._update_play_button()
         self._update_overlay_state()
-        
-        # Show animation
-        self.animations.show_play_pause(self.player.is_playing)
     
     def _update_overlay_state(self):
         """
@@ -606,7 +599,6 @@ class MainWindow(QMainWindow):
         """Handle volume slider change"""
         self.player.volume = value
         self.volume_label.setText(f"{value}%")
-        self.animations.show_volume(value)
     
     def _volume_up(self):
         """Increase volume by 5%"""
@@ -709,7 +701,6 @@ class MainWindow(QMainWindow):
         new_speed = speeds[next_index]
         self.player.set_speed(new_speed)
         self.speed_button.setText(f"{new_speed}x")
-        self.animations.show_speed(new_speed)
     
     def _on_slider_pressed(self):
         """Handle slider press"""
