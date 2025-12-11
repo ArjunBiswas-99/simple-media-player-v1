@@ -520,13 +520,18 @@ class MainWindow(QMainWindow):
     def _resize_to_video(self):
         """Resize main window to match video resolution (with reasonable limits)"""
         try:
-            video_size = self.video_widget.videoSize()
-            if video_size.isValid() and not video_size.isEmpty():
-                # Add control panel height
-                total_height = video_size.height() + self.control_panel.height()
+            from PyQt6.QtCore import QSize
+            from PyQt6.QtGui import QGuiApplication
+            
+            # Get video size from player
+            video_size = self.player.get_video_size()
+            
+            if video_size and isinstance(video_size, QSize) and video_size.isValid():
+                # Add control panel and menu bar height
+                menu_height = self.menuBar().height() if self.menuBar().isVisible() else 0
+                total_height = video_size.height() + self.control_panel.height() + menu_height
                 
                 # Limit to 90% of screen size
-                from PyQt6.QtGui import QGuiApplication
                 screen = QGuiApplication.primaryScreen().availableGeometry()
                 max_width = int(screen.width() * 0.9)
                 max_height = int(screen.height() * 0.9)
@@ -544,7 +549,11 @@ class MainWindow(QMainWindow):
                 window_rect.moveCenter(screen_center)
                 self.move(window_rect.topLeft())
                 
-                logger.debug(f"Resized window to {final_width}x{final_height}")
+                logger.info(f"Resized window to {final_width}x{final_height} (video: {video_size.width()}x{video_size.height()})")
+            else:
+                logger.debug("Video size not yet available, will retry")
+                # Retry after more time for metadata to load
+                QTimer.singleShot(500, self._resize_to_video)
         except Exception as e:
             logger.warning(f"Could not resize to video: {e}")
     

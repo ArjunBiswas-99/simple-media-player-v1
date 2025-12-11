@@ -269,6 +269,16 @@ class MediaPlayer:
         """Get current playback position in seconds"""
         return self._media_player.position() / 1000.0
     
+    def get_video_size(self):
+        """
+        Get video resolution from metadata
+        
+        Returns:
+            QSize object with width/height, or None if not available
+        """
+        from PyQt6.QtMultimedia import QMediaMetaData
+        return self._media_player.metaData().value(QMediaMetaData.Key.Resolution)
+    
     @property
     def muted(self) -> bool:
         """Check if audio is muted"""

@@ -36,6 +36,12 @@ class FeedbackAnimation:
         """Create the label widget for displaying feedback icons"""
         self.feedback_label = QLabel(self.parent)
         self.feedback_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        # Make sure label stays on top and is visible
+        self.feedback_label.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.feedback_label.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.feedback_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        
         self.feedback_label.setStyleSheet("""
             QLabel {
                 background-color: rgba(0, 0, 0, 180);
@@ -114,6 +120,8 @@ class FeedbackAnimation:
             text: Text or icon to display
             font_size: Font size for the display
         """
+        logger.debug(f"Showing feedback animation: {text}")
+        
         # Update label
         self.feedback_label.setText(text)
         self.feedback_label.setStyleSheet(f"""
@@ -129,13 +137,16 @@ class FeedbackAnimation:
         # Position at center of parent
         self.feedback_label.adjustSize()
         parent_rect = self.parent.rect()
-        x = (parent_rect.width() - self.feedback_label.width()) // 2
-        y = (parent_rect.height() - self.feedback_label.height()) // 2
+        parent_global = self.parent.mapToGlobal(parent_rect.topLeft())
+        
+        x = parent_global.x() + (parent_rect.width() - self.feedback_label.width()) // 2
+        y = parent_global.y() + (parent_rect.height() - self.feedback_label.height()) // 2
         self.feedback_label.move(x, y)
         
         # Show with fade in
         self.feedback_label.show()
         self.feedback_label.raise_()
+        self.feedback_label.activateWindow()
         
         # Fade in animation
         self.opacity_effect.setOpacity(0.0)
@@ -148,6 +159,8 @@ class FeedbackAnimation:
         
         # Store animation reference to prevent garbage collection
         self._current_animation = fade_in
+        
+        logger.debug(f"Animation shown at ({x}, {y})")
         
         # Auto-hide after delay with fade out
         QTimer.singleShot(800, self._fade_out_feedback)
