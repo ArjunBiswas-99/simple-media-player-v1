@@ -64,6 +64,8 @@ class MainWindow(QMainWindow):
         
         central_widget = QWidget()
         central_widget.setMouseTracking(True)
+        # Install event filter on central widget too
+        central_widget.installEventFilter(self)
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -493,10 +495,10 @@ class MainWindow(QMainWindow):
     
     def _update_play_button(self):
         """Update play/pause button icon"""
-        if self.player.is_paused:
-            self.play_button.setText("▶")
-        else:
+        if self.player.is_playing:
             self.play_button.setText("⏸")
+        else:
+            self.play_button.setText("▶")
     
     def _on_volume_changed(self, value):
         """Handle volume slider change"""
