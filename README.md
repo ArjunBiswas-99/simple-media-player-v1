@@ -1,218 +1,297 @@
-# PyMedia Player
+# 🎬 PyMedia Player
 
-A simple, lightweight media player built with Python, PyQt6, and PyAV with full audio and video support.
+[![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![PyQt6](https://img.shields.io/badge/PyQt6-6.0+-green.svg)](https://pypi.org/project/PyQt6/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](https://github.com/ArjunBiswas-99/simple-media-player)
 
-## Features
+> A modern, lightweight, cross-platform video player built with Python and PyQt6. Perfect for developers learning GUI programming or users seeking a simple, elegant media player.
 
-### Media Playback
-- **Full audio and video playback** - Synchronized audio and video streams
-- Play MP4, MKV, AVI, MOV, WMV, FLV, WebM, and more
-- Support for multiple video formats and codecs
-- Variable playback speed (0.5x, 1.0x, 1.5x, 2.0x) with pitch-preserved audio
-- Volume control with mute functionality
+## ✨ Why PyMedia Player?
 
-### User Interface
-- **Dark and Light theme modes** - Modern professional color schemes
-- Rounded, modern UI with gradient buttons
-- Prominent theme toggle button in control panel
-- Drag & drop support for video files
-- Fullscreen mode with auto-hiding controls
-- Controls appear on mouse movement in fullscreen
+- 🚀 **Zero configuration** - Works out of the box with system codecs
+- 🎨 **Beautiful UI** - Modern dark/light themes with smooth animations
+- ⚡ **Lightweight** - Pure Python, no heavy dependencies
+- 🔄 **Cross-platform** - Windows, macOS, and Linux support
+- 🎓 **Clean code** - Well-structured, perfect for learning PyQt6
+- 🆓 **Open source** - Free to use, modify, and learn from
+
+## 📸 Screenshots
+
+### Dark Theme
+*Modern dark interface perfect for nighttime viewing*
+
+### Light Theme  
+*Clean, professional light mode for daytime use*
+
+### Fullscreen Mode
+*Immersive fullscreen with auto-hiding controls*
+
+> *Add screenshots here using: `![Dark Theme](screenshots/dark-theme.png)`*
+
+## 🎯 Key Features
+
+### 🎥 Media Playback
+- ✅ **Universal format support** - MP4, MKV, AVI, MOV, WMV, FLV, WebM, and more
+- ✅ **Hardware acceleration** - Uses native OS media frameworks
+- ✅ **Perfect sync** - Audio and video perfectly synchronized
+- ✅ **Variable speed** - 0.5x to 2.0x playback with pitch preservation
+- ✅ **Subtitle support** - SRT, ASS, SSA formats
+
+### 🎨 Modern User Interface
+- 🌙 **Dark/Light themes** - Professional color schemes
+- 🖱️ **Intuitive controls** - Click-to-seek, drag-and-drop support
+- 🖼️ **Smart fullscreen** - Auto-hiding controls, mouse-activated
+- 📐 **Auto-resize** - Window adapts to video resolution
+- 🎯 **Responsive** - Smooth, lag-free interface
+
+### ⌨️ Power User Features
+- ⚡ **Keyboard shortcuts** - Complete keyboard control
+- 🔄 **Fast forward** - Click and hold to skip ahead
+- 🎚️ **Volume control** - Precise volume adjustment
+- ⏯️ **Playback control** - Play, pause, stop, seek
+- 🖼️ **Click-to-seek** - Jump anywhere instantly
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.10 or higher
+- pip (Python package installer)
+
+### Installation
+
+**1. Clone the repository:**
+```bash
+git clone https://github.com/ArjunBiswas-99/simple-media-player.git
+cd simple-media-player
+```
+
+**2. Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+**3. Run the player:**
+
+*Windows:*
+```bash
+python -m src.main
+```
+
+*macOS/Linux:*
+```bash
+python3 -m src.main
+```
+
+**That's it!** 🎉 No system dependencies, no complex setup.
+
+### Opening a Video
+
+**Method 1: Drag and Drop**
+- Simply drag a video file onto the player window
+
+**Method 2: File Menu**
+- Click `File → Open File` (or press `Ctrl+O`)
+
+**Method 3: Command Line**
+```bash
+python -m src.main "path/to/video.mp4"
+```
+
+## ⌨️ Keyboard Shortcuts
+
+### Playback Controls
+| Shortcut | Action |
+|----------|--------|
+| `Space` | Play/Pause |
+| `S` | Stop |
+| `←` / `→` | Seek backward/forward (5 seconds) |
+| `↑` / `↓` | Volume up/down |
+| `M` | Mute/Unmute |
+
+### Display Controls
+| Shortcut | Action |
+|----------|--------|
+| `F` | Toggle fullscreen |
+| `Esc` | Exit fullscreen |
+| `Ctrl+O` | Open file |
+| `Ctrl+S` | Open subtitle |
+| `Ctrl+Q` | Quit |
 
 ### Mouse Controls
-- **Click progress bar** - Seek to any position instantly
-- **Double-click video** - Toggle fullscreen
-- **Click and hold video** - Fast forward (2x speed)
-- **Mouse movement in fullscreen** - Show hidden controls
+| Action | Result |
+|--------|--------|
+| Click progress bar | Seek to position |
+| Double-click video | Toggle fullscreen |
+| Click and hold video | Fast forward (2x speed) |
+| Mouse move (fullscreen) | Show controls |
 
-### Keyboard Shortcuts
-- All standard media player shortcuts
-- Arrow keys for seeking and volume
-- Space for play/pause
-- F for fullscreen with auto-hide
+## 🏗️ Building Executable
 
-## Installation
-
-### Requirements
-- Python 3.10 or newer
-- Works on Windows, macOS, and Linux
-
-### Setup
-
-1. **Clone or download the repository**
-
-2. **Install Python dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the player:**
-   
-   **Windows:**
-   ```bash
-   python -m src.main
-   ```
-   
-   **macOS/Linux:**
-   ```bash
-   python3 -m src.main
-   ```
-
-That's it! All dependencies are pure Python packages - no external system libraries required.
-
-## Usage
-
-### Opening Videos
-1. Click "File" → "Open File..." (or press Ctrl+O)
-2. Or drag and drop a video file onto the player window
-3. Or run with a file: `python -m src.main "path/to/video.mp4"`
-
-### Controls
-
-**Playback:**
-- Space - Play/Pause
-- S - Stop
-- ←/→ - Seek backward/forward 5 seconds
-- Click progress bar - Jump to position
-
-**Display:**
-- F - Toggle fullscreen (controls auto-hide after 3 seconds)
-- Double-click video - Toggle fullscreen
-- Esc - Exit fullscreen
-- Move mouse - Show controls in fullscreen
-
-**Volume:**
-- M - Mute/Unmute
-- ↑/↓ - Volume up/down
-- Volume slider - Precise control
-
-**Advanced:**
-- Speed button - Cycle through playback speeds (audio pitch preserved)
-- Click and hold video - Fast forward
-- Theme toggle button (🌙/☀️) - Switch between dark and light modes
-
-**Theme:**
-- View menu → Toggle between Dark and Light modes
-- Or use the prominent theme button in the control panel
-
-## Building Executable
-
-To create a standalone executable:
+Create a standalone application:
 
 **Windows:**
 ```bash
 python build.py
 ```
+Output: `dist/PyMediaPlayer.exe`
 
-The .exe will be in `dist/PyMediaPlayer.exe`
-
-## Technical Details
-
-### Architecture
-
-Built following software design best practices:
-
-- **Separation of Concerns**: Distinct modules for media playback, audio, UI, and theming
-- **Component Independence**: Audio and video players can operate independently
-- **Clear Interfaces**: Well-defined APIs between components
-- **Thread Safety**: Proper synchronization for multi-threaded playback
-
-### Component Structure
-
-```
-src/
-├── core/
-│   ├── player.py        # Unified media player (audio + video)
-│   └── __init__.py
-├── gui/
-│   ├── main_window.py   # Main application window
-│   ├── video_widget.py  # Video display widget
-│   ├── theme_manager.py # Theme management
-│   └── __init__.py
-└── main.py              # Application entry point
+**Cross-platform:**
+```bash
+pip install pyinstaller
+pyinstaller --name="PyMedia Player" --windowed src/main.py
 ```
 
-### Technologies
+## 🔧 Technology Stack
 
-- **PyQt6** - Modern Qt6 bindings for Python, providing the GUI framework
-- **PyQt6-Multimedia** - Qt's native multimedia framework for unified audio/video playback
-- Uses OS-native codecs (Windows Media Foundation, AVFoundation on macOS, GStreamer on Linux)
+### Core Technologies
+- **[PyQt6](https://www.riverbankcomputing.com/software/pyqt/)** - Modern Qt6 bindings for Python
+- **[PyQt6-Multimedia](https://pypi.org/project/PyQt6-Multimedia/)** - Native multimedia framework
+- **Python 3.10+** - Latest Python features
 
-### Why PyQt6 Multimedia?
-
-**Unified Media Framework:**
-- Single library handles both audio and video
-- Leverages OS-native media frameworks for optimal performance
-- Automatic codec support through system codecs
-- Hardware acceleration where available
-
-**OS Integration:**
-- **Windows**: Uses Windows Media Foundation (WMF)
-- **macOS**: Uses AVFoundation framework
-- **Linux**: Uses GStreamer pipeline
-
-**Key Benefits:**
-- **Instant playback** - No audio extraction or preprocessing needed
-- **Zero external dependencies** - Uses codecs already on your system
-- **Perfect synchronization** - Qt handles audio/video sync automatically
-- **Professional quality** - Same framework used by major Qt applications
-- **Simple codebase** - One unified player instead of separate audio/video components
+### Architecture Highlights
+- 🏛️ **Clean Architecture** - Separation of concerns, SOLID principles
+- 🧩 **Modular Design** - Independent components with clear interfaces
+- 🔒 **Thread-safe** - Proper synchronization for multimedia
+- 📝 **Well-documented** - Comprehensive code comments
 
 ### How It Works
 
-The player uses Qt's QMediaPlayer which provides:
+```
+┌─────────────────────────────────────┐
+│        PyQt6 Application           │
+├─────────────────────────────────────┤
+│  GUI (main_window.py)              │
+│   ├─ Video Widget (video_widget.py)│
+│   ├─ Controls & UI                 │
+│   └─ Theme Manager                 │
+├─────────────────────────────────────┤
+│  Media Player (player.py)          │
+│   ├─ QMediaPlayer (Qt Multimedia)  │
+│   ├─ QAudioOutput (System audio)   │
+│   └─ QVideoSink (Video rendering)  │
+├─────────────────────────────────────┤
+│  Native OS Media Frameworks        │
+│   ├─ Windows: Media Foundation     │
+│   ├─ macOS: AVFoundation           │
+│   └─ Linux: GStreamer              │
+└─────────────────────────────────────┘
+```
 
-1. **Unified playback** - QMediaPlayer handles both audio and video streams from the same file
-2. **QVideoWidget** - Renders video frames directly to the GUI
-3. **QAudioOutput** - Routes audio to system audio devices
-4. **Automatic sync** - Qt's media framework keeps audio and video synchronized
-5. **Native performance** - Leverages OS codecs for optimal playback
+**Why PyQt6 Multimedia?**
+- ✅ Uses native OS codecs (no external libraries needed)
+- ✅ Hardware acceleration support
+- ✅ Perfect audio/video synchronization
+- ✅ Same technology used by professional Qt applications
+- ✅ Simple, unified API for all media types
 
-No manual frame timing or audio extraction required!
+## 📁 Project Structure
 
-## Troubleshooting
+```
+simple-media-player/
+├── src/
+│   ├── main.py              # Application entry point
+│   ├── core/
+│   │   └── player.py        # Media playback engine
+│   └── gui/
+│       ├── main_window.py   # Main application window
+│       ├── video_widget.py  # Video display & interactions
+│       ├── theme_manager.py # Theme system
+│       └── fullscreen_overlay.py
+├── requirements.txt         # Python dependencies
+├── build.py                # Executable builder
+└── README.md               # You are here!
+```
+
+## 🐛 Troubleshooting
+
+### Installation Issues
 
 **"No module named 'PyQt6'"**
 ```bash
+pip install --upgrade pip
 pip install PyQt6 PyQt6-Multimedia
 ```
 
-**Video plays but no audio**
-- Ensure PyQt6-Multimedia is installed: `pip install PyQt6-Multimedia`
-- Check that your video file contains an audio track
-- Try adjusting volume slider or unmuting (M key)
+**Python version error**
+```bash
+python --version  # Must be 3.10 or higher
+```
 
-**Audio/Video out of sync**
-- This is usually caused by variable frame rate videos
-- Try seeking to a different position to resync
-- Check console logs for any timing warnings
+### Playback Issues
+
+**Video plays but no audio**
+- ✅ Check PyQt6-Multimedia is installed: `pip show PyQt6-Multimedia`
+- ✅ Verify video file has audio track (try VLC to test)
+- ✅ Check volume slider and mute button
+- ✅ Restart the application
 
 **Video won't load**
-- Ensure the video file format is supported by FFmpeg
-- Check the console output for error messages
-- Try a different video file to verify the player works
-- Some exotic codecs may not be supported
+- ✅ Check file format is supported (MP4, MKV work best)
+- ✅ Look for error messages in terminal
+- ✅ Try a different video file
+- ✅ Ensure file isn't corrupted
 
-**Application won't start**
-- Make sure all dependencies are installed: `pip install -r requirements.txt`
-- Check Python version: `python --version` (need 3.10+)
-- Look for error messages in the console
+**Controls hidden in fullscreen**
+- ✅ Move mouse to show controls
+- ✅ Controls auto-hide after 3 seconds
+- ✅ Press `Esc` or double-click to exit fullscreen
 
-**Fullscreen controls won't show**
-- Move your mouse to trigger the controls
-- The controls auto-hide after 3 seconds of no movement
-- Double-click or press Esc to exit fullscreen
+## 🤝 Contributing
 
-## License
+Contributions are welcome! Here's how you can help:
 
-This project is open source and available for personal and educational use.
+1. 🍴 Fork the repository
+2. 🌟 Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. 💾 Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. 📤 Push to the branch (`git push origin feature/AmazingFeature`)
+5. 🎉 Open a Pull Request
 
-## Contributing
+### Development Setup
 
-Feel free to submit issues or pull requests to improve the player!
+```bash
+# Clone your fork
+git clone https://github.com/YOUR_USERNAME/simple-media-player.git
+cd simple-media-player
 
-## Credits
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-Built with modern Python technologies:
-- PyQt6 for the beautiful, responsive UI
-- PyQt6 Multimedia for native audio/video playback using OS frameworks
+# Install in development mode
+pip install -r requirements.txt
+pip install -e .
+
+# Run tests (if available)
+python -m pytest
+```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🌟 Star History
+
+If you find this project useful, please consider giving it a star! ⭐
+
+## 📬 Contact & Support
+
+- 🐛 **Bug Reports**: [Open an issue](https://github.com/ArjunBiswas-99/simple-media-player/issues)
+- 💡 **Feature Requests**: [Open an issue](https://github.com/ArjunBiswas-99/simple-media-player/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/ArjunBiswas-99/simple-media-player/discussions)
+
+## 🙏 Acknowledgments
+
+- PyQt6 team for excellent Python bindings
+- Qt Project for the robust multimedia framework
+- Open source community for inspiration and support
+
+---
+
+<div align="center">
+
+**Made with ❤️ using Python and PyQt6**
+
+[⬆ Back to Top](#-pymedia-player)
+
+</div>
