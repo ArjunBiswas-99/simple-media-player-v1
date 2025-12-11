@@ -1,67 +1,57 @@
 """
-Core player module - handles video/audio playback using mpv
+Core player module - handles video/audio playback using OpenCV
 """
 
 import logging
+import cv2
+import threading
+import time
 from typing import Optional, Callable
-import mpv
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
 
 class MediaPlayer:
-    """Wrapper around python-mpv for media playback"""
+    """Media player using OpenCV for video playback"""
     
     def __init__(self):
-        """Initialize the MPV player"""
-        self.player: Optional[mpv.MPV] = None
-        self._on_end_callback: Optional[Callable] = None
-        self._on_time_pos_callback: Optional[Callable] = None
+        """Initialize the media player"""
+        self._video_capture: Optional[cv2.VideoCapture] = None
+        self._current_file: Optional[str] = None
+        self._is_playing = False
+        self._is_paused = True
+        self._playback_thread: Optional[threading.Thread] = None
+        self._stop_flag = threading.Event()
         
+        # Playback state
+        self._current_frame_number = 0
+        self._total_frames = 0
+        self._fps = 30.0
+        self._frame_delay = 0.033  # ~30 fps default
+        
+        # Audio/Video properties
+        self._volume = 100
+        self._muted = False
+        self._playback_speed = 1.0
+        
+        # Callbacks
+        self._frame_callback: Optional[Callable] = None
+        self._time_pos_callback: Optional[Callable] = None
+        self._end_callback: Optional[Callable] = None
+        
+        logger.info("OpenCV media player initialized")
+    
     def initialize(self, video_widget):
         """
-        Initialize MPV with the video widget
+        Initialize player with video widget
         
         Args:
-            video_widget: Qt widget that will display the video
+            video_widget: Qt widget that will display video frames
         """
-        try:
-            # Get the window ID from the Qt widget
-            wid = int(video_widget.winId())
-            
-            # Create MPV instance with configuration
-            self.player = mpv.MPV(
-                wid=str(wid),
-                input_default_bindings=False,  # Disable MPV's default keybindings
-                input_vo_keyboard=False,       # We'll handle keyboard ourselves
-                keep_open='yes',               # Keep window open at end
-                osc=False,                     # Disable on-screen controller
-                ytdl=False,                    # Disable youtube-dl integration for MVP
-                log_handler=self._log_handler,
-                loglevel='info'
-            )
-            
-            # Register event observers
-            @self.player.property_observer('time-pos')
-            def time_observer(_name, value):
-                if value is not None and self._on_time_pos_callback:
-                    self._on_time_pos_callback(value)
-            
-            @self.player.event_callback('end-file')
-            def end_file_observer(event):
-                if self._on_end_callback:
-                    self._on_end_callback()
-            
-            logger.info("MPV player initialized successfully")
-            return True
-            
-        except Exception as e:
-            logger.error(f"Failed to initialize MPV: {e}")
-            return False
-    
-    def _log_handler(self, loglevel, component, message):
-        """Handle MPV log messages"""
-        logger.debug(f"[MPV/{component}] {message}")
+        self._video_widget = video_widget
+        logger.info("Player initialized with video widget")
+        return True
     
     def load_file(self, filepath: str) -> bool:
         """
@@ -73,38 +63,78 @@ class MediaPlayer:
         Returns:
             True if successful, False otherwise
         """
-        if not self.player:
-            logger.error("Player not initialized")
-            return False
-        
         try:
-            # Use the command method with 'loadfile' to properly load the file
-            self.player.command('loadfile', filepath)
-            logger.info(f"Loaded file: {filepath}")
+            # Stop current playback if any
+            self.stop()
+            
+            # Open video file
+            self._video_capture = cv2.VideoCapture(filepath)
+            
+            if not self._video_capture.isOpened():
+                logger.error(f"Failed to open video file: {filepath}")
+                return False
+            
+            # Get video properties
+            self._total_frames = int(self._video_capture.get(cv2.CAP_PROP_FRAME_COUNT))
+            self._fps = self._video_capture.get(cv2.CAP_PROP_FPS)
+            
+            if self._fps <= 0:
+                self._fps = 30.0  # Default fallback
+            
+            self._frame_delay = 1.0 / self._fps
+            self._current_frame_number = 0
+            self._current_file = filepath
+            
+            logger.info(f"Loaded video: {filepath}")
+            logger.info(f"Properties - Frames: {self._total_frames}, FPS: {self._fps}")
+            
             return True
+            
         except Exception as e:
             logger.error(f"Failed to load file: {e}")
             return False
     
     def play(self):
         """Start or resume playback"""
-        if self.player:
-            self.player.pause = False
+        if not self._video_capture:
+            logger.warning("No video loaded")
+            return
+        
+        self._is_paused = False
+        
+        if not self._is_playing:
+            self._is_playing = True
+            self._stop_flag.clear()
+            self._playback_thread = threading.Thread(target=self._playback_loop, daemon=True)
+            self._playback_thread.start()
+            logger.info("Playback started")
     
     def pause(self):
         """Pause playback"""
-        if self.player:
-            self.player.pause = True
+        self._is_paused = True
+        logger.info("Playback paused")
     
     def toggle_pause(self):
         """Toggle play/pause"""
-        if self.player:
-            self.player.pause = not self.player.pause
+        if self._is_paused:
+            self.play()
+        else:
+            self.pause()
     
     def stop(self):
         """Stop playback"""
-        if self.player:
-            self.player.stop()
+        self._is_playing = False
+        self._is_paused = True
+        self._stop_flag.set()
+        
+        if self._playback_thread and self._playback_thread.is_alive():
+            self._playback_thread.join(timeout=1.0)
+        
+        if self._video_capture:
+            self._current_frame_number = 0
+            self._video_capture.set(cv2.CAP_PROP_POS_FRAMES, 0)
+        
+        logger.info("Playback stopped")
     
     def seek(self, seconds: float, relative: bool = False):
         """
@@ -114,78 +144,27 @@ class MediaPlayer:
             seconds: Target position in seconds (or offset if relative=True)
             relative: If True, seek relative to current position
         """
-        if self.player:
-            try:
-                if relative:
-                    self.player.seek(seconds, reference='relative')
-                else:
-                    self.player.time_pos = seconds
-            except Exception as e:
-                logger.error(f"Seek failed: {e}")
-    
-    @property
-    def volume(self) -> int:
-        """Get current volume (0-100)"""
-        if self.player:
-            return int(self.player.volume)
-        return 100
-    
-    @volume.setter
-    def volume(self, value: int):
-        """Set volume (0-100)"""
-        if self.player:
-            self.player.volume = max(0, min(100, value))
-    
-    @property
-    def is_paused(self) -> bool:
-        """Check if playback is paused"""
-        if self.player:
-            return self.player.pause
-        return True
-    
-    @property
-    def is_playing(self) -> bool:
-        """Check if media is playing"""
-        if self.player:
-            return not self.player.pause and self.player.time_pos is not None
-        return False
-    
-    @property
-    def duration(self) -> float:
-        """Get total duration in seconds"""
-        if self.player and self.player.duration:
-            return float(self.player.duration)
-        return 0.0
-    
-    @property
-    def time_pos(self) -> float:
-        """Get current playback position in seconds"""
-        if self.player and self.player.time_pos:
-            return float(self.player.time_pos)
-        return 0.0
-    
-    @property
-    def muted(self) -> bool:
-        """Check if audio is muted"""
-        if self.player:
-            return self.player.mute
-        return False
-    
-    @muted.setter
-    def muted(self, value: bool):
-        """Mute or unmute audio"""
-        if self.player:
-            self.player.mute = value
-    
-    def toggle_mute(self):
-        """Toggle mute state"""
-        if self.player:
-            self.player.mute = not self.player.mute
-    
-    def toggle_fullscreen(self):
-        """Toggle fullscreen mode"""
-        if self.player:
-            self.player.fullscreen = not self.player.fullscreen
+        if not self._video_capture:
+            return
+        
+        try:
+            if relative:
+                current_pos = self._current_frame_number / self._fps
+                target_seconds = current_pos + seconds
+            else:
+                target_seconds = seconds
+            
+            # Clamp to valid range
+            target_seconds = max(0, min(target_seconds, self.duration))
+            
+            target_frame = int(target_seconds * self._fps)
+            self._video_capture.set(cv2.CAP_PROP_POS_FRAMES, target_frame)
+            self._current_frame_number = target_frame
+            
+            logger.debug(f"Seeked to {target_seconds:.2f}s (frame {target_frame})")
+            
+        except Exception as e:
+            logger.error(f"Seek failed: {e}")
     
     def set_speed(self, speed: float):
         """
@@ -194,36 +173,132 @@ class MediaPlayer:
         Args:
             speed: Playback speed multiplier (e.g., 0.5, 1.0, 1.5, 2.0)
         """
-        if self.player:
-            self.player.speed = speed
+        self._playback_speed = max(0.1, min(speed, 4.0))
+        self._frame_delay = (1.0 / self._fps) / self._playback_speed
+        logger.info(f"Playback speed set to {self._playback_speed}x")
     
     def load_subtitle(self, subtitle_path: str):
         """
         Load an external subtitle file
         
         Args:
-            subtitle_path: Path to subtitle file (SRT, ASS, etc.)
+            subtitle_path: Path to subtitle file
         """
-        if self.player:
-            try:
-                self.player.sub_add(subtitle_path)
-                logger.info(f"Loaded subtitle: {subtitle_path}")
-            except Exception as e:
-                logger.error(f"Failed to load subtitle: {e}")
+        # OpenCV doesn't have built-in subtitle support
+        # This would need to be implemented separately if needed
+        logger.info(f"Subtitle loading not yet implemented for OpenCV backend: {subtitle_path}")
+    
+    def set_frame_callback(self, callback: Callable):
+        """Set callback for frame updates"""
+        self._frame_callback = callback
     
     def set_time_pos_callback(self, callback: Callable):
         """Set callback for time position updates"""
-        self._on_time_pos_callback = callback
+        self._time_pos_callback = callback
     
     def set_end_file_callback(self, callback: Callable):
         """Set callback for end of file"""
-        self._on_end_callback = callback
+        self._end_callback = callback
+    
+    @property
+    def volume(self) -> int:
+        """Get current volume (0-100)"""
+        return self._volume
+    
+    @volume.setter
+    def volume(self, value: int):
+        """Set volume (0-100)"""
+        self._volume = max(0, min(100, value))
+        # Note: OpenCV doesn't handle audio directly
+        # Audio control would need a separate audio library
+    
+    @property
+    def is_paused(self) -> bool:
+        """Check if playback is paused"""
+        return self._is_paused
+    
+    @property
+    def is_playing(self) -> bool:
+        """Check if media is playing"""
+        return self._is_playing and not self._is_paused
+    
+    @property
+    def duration(self) -> float:
+        """Get total duration in seconds"""
+        if self._video_capture and self._total_frames > 0 and self._fps > 0:
+            return self._total_frames / self._fps
+        return 0.0
+    
+    @property
+    def time_pos(self) -> float:
+        """Get current playback position in seconds"""
+        if self._fps > 0:
+            return self._current_frame_number / self._fps
+        return 0.0
+    
+    @property
+    def muted(self) -> bool:
+        """Check if audio is muted"""
+        return self._muted
+    
+    @muted.setter
+    def muted(self, value: bool):
+        """Mute or unmute audio"""
+        self._muted = value
+    
+    def toggle_mute(self):
+        """Toggle mute state"""
+        self._muted = not self._muted
+    
+    def toggle_fullscreen(self):
+        """Toggle fullscreen mode - handled by GUI"""
+        pass
     
     def shutdown(self):
         """Clean up resources"""
-        if self.player:
-            try:
-                self.player.terminate()
-            except Exception as e:
-                logger.error(f"Error during shutdown: {e}")
-            self.player = None
+        self.stop()
+        
+        if self._video_capture:
+            self._video_capture.release()
+            self._video_capture = None
+        
+        logger.info("Player shut down")
+    
+    def _playback_loop(self):
+        """Main playback loop running in separate thread"""
+        logger.info("Playback loop started")
+        
+        while self._is_playing and not self._stop_flag.is_set():
+            if self._is_paused:
+                time.sleep(0.1)
+                continue
+            
+            if not self._video_capture:
+                break
+            
+            # Read next frame
+            ret, frame = self._video_capture.read()
+            
+            if not ret:
+                # End of video
+                logger.info("End of video reached")
+                self._is_playing = False
+                if self._end_callback:
+                    self._end_callback()
+                break
+            
+            # Update frame number
+            self._current_frame_number = int(self._video_capture.get(cv2.CAP_PROP_POS_FRAMES))
+            
+            # Call frame callback to update display
+            if self._frame_callback:
+                self._frame_callback(frame)
+            
+            # Call time position callback
+            if self._time_pos_callback:
+                self._time_pos_callback(self.time_pos)
+            
+            # Sleep to maintain frame rate
+            time.sleep(self._frame_delay)
+        
+        logger.info("Playback loop ended")

@@ -70,6 +70,7 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.control_panel)
         
         self.player.initialize(self.video_widget)
+        self.player.set_frame_callback(self._on_frame_update)
         self.player.set_time_pos_callback(self._on_time_update)
         
         self._apply_theme()
@@ -499,6 +500,10 @@ class MainWindow(QMainWindow):
             time_seconds = position * duration
             self.time_label.setText(self._format_time(time_seconds))
     
+    def _on_frame_update(self, frame):
+        """Handle frame updates from player"""
+        self.video_widget.display_frame(frame)
+    
     def _on_time_update(self, time_pos):
         """Handle time position updates from player"""
         if not self.is_seeking:
@@ -539,14 +544,15 @@ class MainWindow(QMainWindow):
             "<p><b>Features:</b></p>"
             "<ul>"
             "<li>Play video and audio files</li>"
-            "<li>Support for multiple formats</li>"
-            "<li>External subtitle support</li>"
-            "<li>Keyboard shortcuts</li>"
-            "<li>Dark and Light themes</li>"
-            "<li>Double-click for fullscreen</li>"
-            "<li>Click and hold to fast forward</li>"
+            "<li>Support for multiple formats (MP4, MKV, AVI, etc.)</li>"
+            "<li>Mouse click-to-seek on progress bar</li>"
+            "<li>Keyboard shortcuts for easy control</li>"
+            "<li>Dark and Light theme modes</li>"
+            "<li>Double-click video for fullscreen</li>"
+            "<li>Click and hold video to fast forward</li>"
+            "<li>Variable playback speeds (0.5x - 2.0x)</li>"
             "</ul>"
-            "<p>Built with PyQt6 and python-mpv</p>"
+            "<p>Built with PyQt6 and OpenCV</p>"
         )
     
     def _show_shortcuts(self):

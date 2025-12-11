@@ -1,14 +1,15 @@
 """
-Video display widget - renders video content
+Video display widget - renders video content from OpenCV frames
 """
 
-from PyQt6.QtWidgets import QWidget
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal
-from PyQt6.QtGui import QPalette, QColor, QMouseEvent
+import numpy as np
+from PyQt6.QtWidgets import QWidget, QLabel
+from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QSize
+from PyQt6.QtGui import QPalette, QColor, QMouseEvent, QImage, QPixmap
 
 
 class VideoWidget(QWidget):
-    """Widget that displays video content via MPV"""
+    """Widget that displays video content from OpenCV frames"""
     
     # Signals
     double_clicked = pyqtSignal()
@@ -21,6 +22,7 @@ class VideoWidget(QWidget):
         
         self._setup_appearance()
         self._setup_interaction()
+        self._setup_display()
         
     def _setup_appearance(self):
         """Configure widget appearance"""
@@ -40,9 +42,83 @@ class VideoWidget(QWidget):
         self._press_timer.timeout.connect(self._on_long_press)
         self._long_press_threshold = 500  # milliseconds
     
+    def _setup_display(self):
+        """Setup display label for video frames"""
+        self._display_label = QLabel(self)
+        self._display_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._display_label.setScaledContents(False)
+        self._display_label.setStyleSheet("background-color: black;")
+        
+        # Store current frame for display
+        self._current_pixmap = None
+    
     def set_drop_callback(self, callback):
         """Set callback for file drops"""
         self._drop_callback = callback
+    
+    def display_frame(self, frame: np.ndarray):
+        """
+        Display an OpenCV frame
+        
+        Args:
+            frame: OpenCV frame (BGR format)
+        """
+        if frame is None:
+            return
+        
+        try:
+            # Convert BGR to RGB
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # Get frame dimensions
+            height, width, channels = frame_rgb.shape
+            bytes_per_line = channels * width
+            
+            # Create QImage
+            q_image = QImage(
+                frame_rgb.data,
+                width,
+                height,
+                bytes_per_line,
+                QImage.Format.Format_RGB888
+            )
+            
+            # Convert to pixmap
+            pixmap = QPixmap.fromImage(q_image)
+            
+            # Scale to fit widget while maintaining aspect ratio
+            scaled_pixmap = pixmap.scaled(
+                self.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            
+            self._current_pixmap = scaled_pixmap
+            self._display_label.setPixmap(scaled_pixmap)
+            
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"Error displaying frame: {e}")
+    
+    def clear_display(self):
+        """Clear the video display"""
+        self._display_label.clear()
+        self._current_pixmap = None
+    
+    def resizeEvent(self, event):
+        """Handle widget resize"""
+        super().resizeEvent(event)
+        # Resize display label to fill widget
+        self._display_label.resize(self.size())
+        
+        # Rescale current pixmap if available
+        if self._current_pixmap:
+            scaled_pixmap = self._current_pixmap.scaled(
+                self.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            self._display_label.setPixmap(scaled_pixmap)
     
     def dragEnterEvent(self, event):
         """Handle drag enter events"""
@@ -86,3 +162,7 @@ class VideoWidget(QWidget):
         if self._is_mouse_pressed:
             self._is_fast_forwarding = True
             self.fast_forward_started.emit()
+
+
+# Import cv2 at module level for frame conversion
+import cv2
