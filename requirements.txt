@@ -4,10 +4,7 @@
 # GUI Framework
 PyQt6>=6.5.0
 
-# Media Playback Engine (uses OS native codecs)
-PyQt6-Multimedia>=6.5.0
-
-# Subtitle Support
+# Subtitle Support  
 pysrt>=1.1.2
 
 # Build Tool (for creating .exe)

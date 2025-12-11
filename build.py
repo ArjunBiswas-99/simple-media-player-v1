@@ -36,20 +36,30 @@ def check_dependencies():
     """Check if required dependencies are installed"""
     print("🔍 Checking dependencies...")
     
-    required = ['PyQt6', 'mpv', 'pyinstaller']
-    missing = []
+    # Check PyQt6
+    try:
+        __import__('PyQt6')
+        print(f"   ✓ PyQt6 installed")
+    except ImportError:
+        print(f"   ✗ PyQt6 NOT installed")
+        print("\n❌ PyQt6 is required. Install with: pip3 install PyQt6")
+        return False
     
-    for package in required:
-        try:
-            __import__(package if package != 'mpv' else 'mpv')
-            print(f"   ✓ {package} installed")
-        except ImportError:
-            missing.append(package)
-            print(f"   ✗ {package} NOT installed")
-    
-    if missing:
-        print(f"\n❌ Missing dependencies: {', '.join(missing)}")
-        print("Install them with: pip install -r requirements.txt")
+    # Check if pyinstaller command is available (more reliable than import check)
+    try:
+        result = subprocess.run(['pyinstaller', '--version'], 
+                              capture_output=True, 
+                              text=True,
+                              timeout=5)
+        if result.returncode == 0:
+            print(f"   ✓ pyinstaller installed")
+        else:
+            print(f"   ✗ pyinstaller NOT installed")
+            print("\n❌ pyinstaller is required. Install with: pip3 install pyinstaller")
+            return False
+    except (FileNotFoundError, subprocess.TimeoutExpired):
+        print(f"   ✗ pyinstaller NOT installed or not in PATH")
+        print("\n❌ pyinstaller is required. Install with: pip3 install pyinstaller")
         return False
     
     print("✅ All dependencies installed\n")
@@ -73,7 +83,8 @@ def build_executable():
         '--hidden-import=PyQt6.QtCore',
         '--hidden-import=PyQt6.QtGui',
         '--hidden-import=PyQt6.QtWidgets',
-        '--hidden-import=mpv',
+        '--hidden-import=PyQt6.QtMultimedia',
+        '--hidden-import=PyQt6.QtMultimediaWidgets',
         # Entry point
         'src/main.py'
     ]
