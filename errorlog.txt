@@ -1,10 +1,43 @@
-
+e-media-player-v1> python -m  src.main
+2025-12-11 09:01:50,516 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 09:01:50,627 - src.core.player - INFO - MPV player initialized successfully
+2025-12-11 09:01:50,630 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 09:01:51,000 - __main__ - INFO - Application started successfully
+2025-12-11 09:08:52,560 - src.gui.main_window - INFO - Application closed
+2025-12-11 09:08:52,573 - __main__ - INFO - Application exited with code 0
+PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> git pull origin main
+remote: Enumerating objects: 12, done.
+remote: Counting objects: 100% (12/12), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 7 (delta 2), reused 7 (delta 2), pack-reused 0 (from 0)
+Unpacking objects: 100% (7/7), 4.77 KiB | 203.00 KiB/s, done.
+From https://github.com/ArjunBiswas-99/simple-media-player-v1
+ * branch            main       -> FETCH_HEAD
+   5d2a7e0..a1d8f77  main       -> origin/main
+Updating 5d2a7e0..a1d8f77
+Fast-forward
+ src/gui/main_window.py   | 373 +++++++++++++++++++++++++++--------------------
+ src/gui/theme_manager.py | 188 ++++++++++++++++++++++++
+ src/gui/video_widget.py  |  61 ++++++--
+ 3 files changed, 454 insertions(+), 168 deletions(-)
+ create mode 100644 src/gui/theme_manager.py
 PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> python -m  src.main 
-2025-12-11 08:16:42,713 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 08:16:42,808 - src.core.player - INFO - MPV player initialized successfully
-2025-12-11 08:16:42,812 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 08:16:43,129 - __main__ - INFO - Application started successfully
-2025-12-11 08:17:02,496 - src.core.player - ERROR - Failed to load file: ('Invalid value for mpv parameter', -4, (<MpvHandle object at 0x000002112CAF3CC0>, <mpv.LP_MpvNode object at 0x000002112E87F740>, <mpv.LP_MpvNode object at 0x000002112E87F6C0>))
-2025-12-11 08:17:07,865 - src.gui.main_window - INFO - Application closed
-2025-12-11 08:17:07,876 - __main__ - INFO - Application exited with code 0
+2025-12-11 09:08:59,206 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 09:08:59,299 - src.core.player - INFO - MPV player initialized successfully
+Traceback (most recent call last):
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 48, in main
+    window = MainWindow()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 37, in __init__
+    self._setup_ui()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 75, in _setup_ui
+    self._apply_theme()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 336, in _apply_theme
+    self.theme_action.setText("☀️ Light Mode")
+AttributeError: 'MainWindow' object has no attribute 'theme_action'
 PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
