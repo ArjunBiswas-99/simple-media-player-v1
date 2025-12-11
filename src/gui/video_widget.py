@@ -23,6 +23,7 @@ class VideoWidget(QVideoWidget):
     """
     
     # Signals for user interactions
+    single_clicked = pyqtSignal()
     double_clicked = pyqtSignal()
     fast_forward_started = pyqtSignal()
     fast_forward_stopped = pyqtSignal()
@@ -121,20 +122,26 @@ class VideoWidget(QVideoWidget):
     
     def mouseReleaseEvent(self, event: QMouseEvent):
         """
-        Handle mouse release to stop fast forward
+        Handle mouse release to detect single clicks or stop fast forward
         
         Args:
             event: Mouse event with release information
         """
         if event.button() == Qt.MouseButton.LeftButton:
+            was_fast_forwarding = self._is_fast_forwarding
+            
             self._is_mouse_pressed = False
             self._press_timer.stop()
             
             # Stop fast forward if active
-            if self._is_fast_forwarding:
+            if was_fast_forwarding:
                 self._is_fast_forwarding = False
                 self.fast_forward_stopped.emit()
                 logger.debug("Fast forward stopped")
+            else:
+                # It was a single click (not long press)
+                self.single_clicked.emit()
+                logger.debug("Video single-clicked")
         
         super().mouseReleaseEvent(event)
     

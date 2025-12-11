@@ -15,6 +15,7 @@ from PyQt6.QtGui import QAction, QKeySequence
 from .video_widget import VideoWidget
 from .theme_manager import ThemeManager, Theme
 from .fullscreen_overlay import FullscreenMouseOverlay
+from .animations import FeedbackAnimation
 from ..core.player import MediaPlayer
 
 logger = logging.getLogger(__name__)
@@ -369,6 +370,7 @@ class MainWindow(QMainWindow):
     
     def _connect_signals(self):
         """Connect video widget signals"""
+        self.video_widget.single_clicked.connect(self._toggle_play_pause)
         self.video_widget.double_clicked.connect(self._toggle_fullscreen)
         self.video_widget.fast_forward_started.connect(self._start_fast_forward)
         self.video_widget.fast_forward_stopped.connect(self._stop_fast_forward)
@@ -500,6 +502,10 @@ class MainWindow(QMainWindow):
             self.setWindowTitle(f"PyMedia Player - {Path(filepath).name}")
             self.player.play()
             self._update_play_button()
+            
+            # Resize window to match video resolution
+            self._resize_to_video()
+            
             logger.info(f"Playing: {filepath}")
         else:
             QMessageBox.critical(
@@ -507,6 +513,37 @@ class MainWindow(QMainWindow):
                 "Error",
                 f"Failed to load file:\n{filepath}"
             )
+    
+    def _resize_to_video(self):
+        """Resize main window to match video resolution (with reasonable limits)"""
+        try:
+            video_size = self.video_widget.videoSize()
+            if video_size.isValid() and not video_size.isEmpty():
+                # Add control panel height
+                total_height = video_size.height() + self.control_panel.height()
+                
+                # Limit to 90% of screen size
+                from PyQt6.QtGui import QGuiApplication
+                screen = QGuiApplication.primaryScreen().availableGeometry()
+                max_width = int(screen.width() * 0.9)
+                max_height = int(screen.height() * 0.9)
+                
+                # Calculate final size
+                final_width = min(video_size.width(), max_width)
+                final_height = min(total_height, max_height)
+                
+                # Resize and center window
+                self.resize(final_width, final_height)
+                
+                # Center on screen
+                screen_center = screen.center()
+                window_rect = self.frameGeometry()
+                window_rect.moveCenter(screen_center)
+                self.move(window_rect.topLeft())
+                
+                logger.debug(f"Resized window to {final_width}x{final_height}")
+        except Exception as e:
+            logger.warning(f"Could not resize to video: {e}")
     
     def _toggle_play_pause(self):
         """
