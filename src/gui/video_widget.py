@@ -67,6 +67,12 @@ class VideoWidget(QVideoWidget):
         self._click_timer.setSingleShot(True)
         self._click_timer.timeout.connect(self._on_single_click_confirmed)
         self._click_delay = 250  # Wait 250ms to confirm it's not a double-click
+        
+        # Track if we're in a potential double-click scenario
+        self._expecting_double_click = False
+        self._double_click_prevention_timer = QTimer()
+        self._double_click_prevention_timer.setSingleShot(True)
+        self._double_click_prevention_timer.timeout.connect(self._reset_double_click_flag)
     
     def set_drop_callback(self, callback):
         """
@@ -114,6 +120,8 @@ class VideoWidget(QVideoWidget):
             self._is_mouse_pressed = False
             self._press_timer.stop()
             self._click_timer.stop()  # Cancel pending single-click
+            self._double_click_prevention_timer.stop()
+            self._expecting_double_click = False
             
             # Stop any active fast-forward
             if self._is_fast_forwarding:
@@ -133,8 +141,12 @@ class VideoWidget(QVideoWidget):
             event: Mouse event with press information
         """
         if event.button() == Qt.MouseButton.LeftButton:
-            self._is_mouse_pressed = True
-            self._press_timer.start(self._long_press_threshold)
+            # Don't start timer if we're expecting a double-click
+            if not self._expecting_double_click:
+                self._is_mouse_pressed = True
+                self._press_timer.start(self._long_press_threshold)
+            else:
+                logger.debug("Ignoring press - expecting double-click")
         super().mousePressEvent(event)
     
     def mouseReleaseEvent(self, event: QMouseEvent):
@@ -158,6 +170,9 @@ class VideoWidget(QVideoWidget):
             else:
                 # Start timer for single-click detection (wait to see if double-click follows)
                 self._click_timer.start(self._click_delay)
+                # Set flag to prevent next press from starting long-press timer
+                self._expecting_double_click = True
+                self._double_click_prevention_timer.start(self._click_delay)
         
         super().mouseReleaseEvent(event)
     
@@ -185,6 +200,11 @@ class VideoWidget(QVideoWidget):
         self.single_clicked.emit()
         logger.debug("Single click confirmed")
     
+    def _reset_double_click_flag(self):
+        """Reset the double-click expectation flag"""
+        self._expecting_double_click = False
+        logger.debug("Double-click prevention window expired")
+    
     def cancel_pending_interactions(self):
         """
         Cancel any pending mouse interactions (long-press timer, etc.)
@@ -193,6 +213,8 @@ class VideoWidget(QVideoWidget):
         self._is_mouse_pressed = False
         self._press_timer.stop()
         self._click_timer.stop()
+        self._double_click_prevention_timer.stop()
+        self._expecting_double_click = False
         
         # Stop any active fast-forward
         if self._is_fast_forwarding:
