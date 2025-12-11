@@ -79,13 +79,14 @@ class MainWindow(QMainWindow):
         self._apply_theme()
     
     def _create_control_panel(self):
-        """Create the bottom control panel"""
+        """Create the bottom control panel with modern design"""
         panel = QWidget()
-        panel.setFixedHeight(100)
+        panel.setFixedHeight(120)
         panel.setObjectName("controlPanel")
         
         layout = QVBoxLayout(panel)
-        layout.setContentsMargins(10, 5, 10, 5)
+        layout.setContentsMargins(16, 10, 16, 10)
+        layout.setSpacing(12)
         
         layout.addLayout(self._create_progress_bar())
         layout.addLayout(self._create_control_buttons())
@@ -121,35 +122,45 @@ class MainWindow(QMainWindow):
         return progress_layout
     
     def _create_control_buttons(self):
-        """Create control buttons layout"""
+        """Create control buttons layout with modern design"""
         button_layout = QHBoxLayout()
+        button_layout.setSpacing(12)
         
-        # Playback controls
-        self.play_button = self._create_button(
+        # Playback controls (larger icon buttons)
+        self.play_button = self._create_icon_button(
             QStyle.StandardPixmap.SP_MediaPlay,
             self._toggle_play_pause,
             "Play/Pause"
         )
         button_layout.addWidget(self.play_button)
         
-        stop_button = self._create_button(
+        stop_button = self._create_icon_button(
             QStyle.StandardPixmap.SP_MediaStop,
             self._on_stop,
             "Stop"
         )
         button_layout.addWidget(stop_button)
         
-        button_layout.addSpacing(20)
+        button_layout.addSpacing(16)
         
         # Volume controls
         button_layout.addLayout(self._create_volume_controls())
         
-        button_layout.addSpacing(20)
+        button_layout.addSpacing(16)
         
         # Speed control
         button_layout.addLayout(self._create_speed_control())
         
         button_layout.addStretch()
+        
+        # Theme toggle button (prominent)
+        self.theme_toggle_button = QPushButton("🌙")
+        self.theme_toggle_button.clicked.connect(self._toggle_theme)
+        self.theme_toggle_button.setObjectName("themeToggle")
+        self.theme_toggle_button.setToolTip("Toggle Dark/Light Mode")
+        button_layout.addWidget(self.theme_toggle_button)
+        
+        button_layout.addSpacing(8)
         
         # Fullscreen button
         fullscreen_button = QPushButton("Fullscreen")
@@ -167,6 +178,15 @@ class MainWindow(QMainWindow):
         button.setFixedSize(40, 40)
         button.setToolTip(tooltip)
         button.setObjectName("controlButton")
+        return button
+    
+    def _create_icon_button(self, icon: QStyle.StandardPixmap, callback, tooltip: str):
+        """Create a large circular icon button"""
+        button = QPushButton()
+        button.setIcon(self.style().standardIcon(icon))
+        button.clicked.connect(callback)
+        button.setToolTip(tooltip)
+        button.setObjectName("iconButton")
         return button
     
     def _create_volume_controls(self):
@@ -335,11 +355,15 @@ class MainWindow(QMainWindow):
         panel_style = self.theme_manager.get_stylesheet('control_panel')
         self.control_panel.setStyleSheet(panel_style)
         
-        # Update theme action text
+        # Update theme toggle button and menu action
         if self.theme_manager.current_theme == Theme.DARK:
             self.theme_action.setText("☀️ Light Mode")
+            self.theme_toggle_button.setText("🌙")
+            self.theme_toggle_button.setToolTip("Switch to Light Mode")
         else:
             self.theme_action.setText("🌙 Dark Mode")
+            self.theme_toggle_button.setText("☀️")
+            self.theme_toggle_button.setToolTip("Switch to Dark Mode")
     
     def _toggle_theme(self):
         """Toggle between light and dark themes"""
