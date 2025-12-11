@@ -124,7 +124,11 @@ class VideoWidget(QVideoWidget):
             self._press_timer.stop()
             self._click_timer.stop()  # Cancel pending single-click - CRITICAL!
             self._double_click_prevention_timer.stop()
-            self._expecting_double_click = False
+            
+            # SET FLAG TO PREVENT SUBSEQUENT EVENTS (release events come after double-click)
+            self._expecting_double_click = True
+            self._double_click_prevention_timer.start(300)  # Prevent any events for 300ms after double-click
+            logger.info("Set double-click prevention flag to block subsequent events")
             
             # Stop any active fast-forward
             if self._is_fast_forwarding:
