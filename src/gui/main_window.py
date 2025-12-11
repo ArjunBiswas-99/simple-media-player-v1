@@ -13,7 +13,7 @@ from PyQt6.QtCore import Qt, QTimer, QEvent
 from PyQt6.QtGui import QAction, QKeySequence
 
 from .video_widget import VideoWidget
-from .enhanced_theme import EnhancedThemeManager, Theme
+from .theme_manager import ThemeManager, Theme
 from .fullscreen_overlay import FullscreenMouseOverlay
 from .welcome_screen import WelcomeScreen
 from ..core.player import MediaPlayer
@@ -47,7 +47,7 @@ class MainWindow(QMainWindow):
     def _initialize_components(self):
         """Initialize core components"""
         self.player = MediaPlayer()
-        self.theme_manager = EnhancedThemeManager()
+        self.theme_manager = ThemeManager()
         self.current_file = None
         self.is_seeking = False
         self._fast_forward_timer = None
@@ -231,13 +231,17 @@ class MainWindow(QMainWindow):
         
         if icon in icon_map:
             button.setText(icon_map[icon])
-            button.setStyleSheet("font-size: 20px;")
         else:
             button.setIcon(self.style().standardIcon(icon))
         
         button.clicked.connect(callback)
         button.setToolTip(tooltip)
         button.setObjectName("iconButton")
+        
+        # Disable macOS focus rectangle
+        button.setAttribute(Qt.WidgetAttribute.WA_MacShowFocusRect, False)
+        button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        
         return button
     
     def _create_volume_controls(self):

@@ -1,10 +1,9 @@
 """
-Enhanced theme system with Netflix-style aesthetics
-Includes glass morphism, smooth animations, and modern design
+Enhanced theme system with modern aesthetics
+Clean, professional design without UI bugs
 """
 
 from enum import Enum
-from PyQt6.QtGui import QColor
 
 
 class Theme(Enum):
@@ -14,7 +13,7 @@ class Theme(Enum):
 
 
 class EnhancedThemeManager:
-    """Manages enhanced themes with Netflix-style aesthetics"""
+    """Manages enhanced themes with modern aesthetics"""
     
     def __init__(self):
         self._current_theme = Theme.DARK
@@ -32,264 +31,245 @@ class EnhancedThemeManager:
         """Get color palette for current theme"""
         if self._current_theme == Theme.DARK:
             return {
-                'bg_primary': '#0F0F0F',      # Netflix dark
-                'bg_secondary': '#181818',     # Slightly lighter
-                'bg_glass': 'rgba(24, 24, 24, 0.85)',  # Glass effect
-                'text_primary': '#FFFFFF',
-                'text_secondary': '#B3B3B3',
-                'accent': '#E50914',          # Netflix red
-                'accent_hover': '#F40612',
-                'control_bg': 'rgba(20, 20, 20, 0.95)',
-                'slider_bg': 'rgba(255, 255, 255, 0.3)',
-                'slider_active': '#FFFFFF',
-                'button_hover': 'rgba(255, 255, 255, 0.1)',
+                'bg_primary': '#1a1a2e',
+                'bg_secondary': '#16213e',
+                'text_primary': '#e0e0e0',
+                'text_secondary': '#b8c1ec',
+                'accent': '#667eea',
+                'accent_end': '#764ba2',
+                'accent_hover': '#7c94f5',
+                'accent_hover_end': '#8b61b3',
+                'time_color': '#00d4ff',
+                'border_color': 'rgba(102, 126, 234, 0.3)',
             }
         else:
             return {
-                'bg_primary': '#F8F9FA',
-                'bg_secondary': '#FFFFFF',
-                'bg_glass': 'rgba(255, 255, 255, 0.85)',
-                'text_primary': '#212529',
-                'text_secondary': '#6C757D',
-                'accent': '#E50914',
-                'accent_hover': '#F40612',
-                'control_bg': 'rgba(255, 255, 255, 0.98)',
-                'slider_bg': 'rgba(0, 0, 0, 0.15)',
-                'slider_active': '#E50914',
-                'button_hover': 'rgba(229, 9, 20, 0.08)',
+                'bg_primary': '#f5f7fa',
+                'bg_secondary': '#ffffff',
+                'text_primary': '#2c3e50',
+                'text_secondary': '#6c757d',
+                'accent': '#4A90E2',
+                'accent_end': '#5BA3F5',
+                'accent_hover': '#5BA3F5',
+                'accent_hover_end': '#6CB4FF',
+                'time_color': '#4A90E2',
+                'border_color': 'rgba(52, 152, 219, 0.3)',
             }
     
     def get_full_stylesheet(self) -> str:
-        """Get complete stylesheet with Netflix-inspired design"""
+        """Get complete stylesheet for current theme"""
         colors = self.get_colors()
+        
+        if self._current_theme == Theme.DARK:
+            control_bg = """
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 rgba(22, 33, 62, 0.95),
+                            stop:1 rgba(26, 26, 46, 0.95));
+            """
+            main_bg = f"background-color: {colors['bg_primary']};"
+        else:
+            control_bg = """
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 rgba(255, 255, 255, 0.95),
+                            stop:1 rgba(240, 244, 248, 0.95));
+            """
+            main_bg = f"""
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 {colors['bg_primary']},
+                            stop:1 #e8ecf1);
+            """
         
         return f"""
         QMainWindow {{
-            background-color: {colors['bg_primary']};
-        }}
-        
-        /* Glass Morphism Control Panel */
-        QWidget#controlPanel {{
-            background-color: {colors['control_bg']};
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }}
-        
-        /* Modern Buttons with Hover Effects */
-        QPushButton {{
-            background-color: transparent;
+            {main_bg}
             color: {colors['text_primary']};
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', sans-serif;
+        }}
+        
+        #controlPanel {{
+            {control_bg}
+            border-top: 2px solid {colors['border_color']};
+        }}
+        
+        /* Regular Control Buttons */
+        QPushButton#controlButton {{
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 {colors['accent']},
+                        stop:1 {colors['accent_end']});
+            color: white;
             border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-weight: 600;
             font-size: 14px;
-            font-weight: 500;
-            outline: none;
+            min-width: 100px;
         }}
         
-        QPushButton:hover {{
-            background-color: {colors['button_hover']};
+        QPushButton#controlButton:hover {{
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 {colors['accent_hover']},
+                        stop:1 {colors['accent_hover_end']});
+            padding: 12px 22px;
         }}
         
-        QPushButton:pressed {{
-            background-color: {colors['button_hover']};
+        QPushButton#controlButton:pressed {{
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 {colors['accent']},
+                        stop:1 {colors['accent_end']});
         }}
         
-        QPushButton:focus {{
-            outline: none;
-            border: none;
-        }}
-        
-        /* Icon Buttons (Play/Pause/Stop) */
+        /* Icon Buttons (Play/Pause/Stop) - Perfect Circles */
         QPushButton#iconButton {{
-            background-color: rgba(255, 255, 255, 0.1);
-            color: {colors['text_primary']};
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 22px;
-            min-width: 44px;
-            min-height: 44px;
-            max-width: 44px;
-            max-height: 44px;
-            font-size: 20px;
-            outline: none;
+            background: rgba(102, 126, 234, 0.2);
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            border-radius: 24px;
+            min-width: 48px;
+            max-width: 48px;
+            min-height: 48px;
+            max-height: 48px;
+            color: white;
         }}
         
         QPushButton#iconButton:hover {{
-            background-color: {colors['accent']};
-            border-color: {colors['accent']};
-            outline: none;
+            background: rgba(102, 126, 234, 0.4);
+            border: 2px solid rgba(102, 126, 234, 0.6);
         }}
         
         QPushButton#iconButton:pressed {{
-            background-color: {colors['accent_hover']};
-            outline: none;
-        }}
-        
-        QPushButton#iconButton:focus {{
-            outline: none;
-            border: 2px solid {colors['accent']};
+            background: rgba(102, 126, 234, 0.6);
         }}
         
         /* Theme Toggle Button */
         QPushButton#themeToggle {{
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            min-width: 40px;
-            min-height: 40px;
-            max-width: 40px;
-            max-height: 40px;
-            font-size: 18px;
+            background: rgba(0, 212, 255, 0.15);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 24px;
+            min-width: 48px;
+            max-width: 48px;
+            min-height: 48px;
+            max-height: 48px;
+            font-size: 20px;
         }}
         
         QPushButton#themeToggle:hover {{
-            background-color: rgba(255, 255, 255, 0.2);
-            border-color: {colors['accent']};
+            background: rgba(0, 212, 255, 0.3);
+            border: 2px solid rgba(0, 212, 255, 0.5);
         }}
         
-        /* Modern Progress Slider */
-        QSlider#progressSlider {{
-            height: 8px;
-        }}
-        
-        QSlider#progressSlider::groove:horizontal {{
-            background: {colors['slider_bg']};
-            height: 4px;
-            border-radius: 2px;
-        }}
-        
-        QSlider#progressSlider::sub-page:horizontal {{
-            background: {colors['accent']};
-            height: 4px;
-            border-radius: 2px;
-        }}
-        
-        QSlider#progressSlider::handle:horizontal {{
-            background: {colors['slider_active']};
-            width: 14px;
-            height: 14px;
-            margin: -5px 0;
-            border-radius: 7px;
-            border: 2px solid {colors['bg_primary']};
-        }}
-        
-        QSlider#progressSlider::handle:horizontal:hover {{
-            background: {colors['accent']};
-            width: 16px;
-            height: 16px;
-            margin: -6px 0;
-            border-radius: 8px;
-        }}
-        
-        /* Volume Slider */
-        QSlider#volumeSlider {{
-            height: 6px;
-        }}
-        
-        QSlider#volumeSlider::groove:horizontal {{
-            background: {colors['slider_bg']};
-            height: 3px;
-            border-radius: 1.5px;
-        }}
-        
-        QSlider#volumeSlider::sub-page:horizontal {{
-            background: {colors['slider_active']};
-            height: 3px;
-            border-radius: 1.5px;
-        }}
-        
-        QSlider#volumeSlider::handle:horizontal {{
-            background: {colors['slider_active']};
-            width: 12px;
-            height: 12px;
-            margin: -5px 0;
-            border-radius: 6px;
-        }}
-        
-        QSlider#volumeSlider::handle:horizontal:hover {{
-            background: {colors['accent']};
-            width: 14px;
-            height: 14px;
-            margin: -6px 0;
-            border-radius: 7px;
-        }}
-        
-        /* Labels with Better Typography */
-        QLabel {{
-            color: {colors['text_primary']};
-            font-size: 13px;
-            font-weight: 400;
-        }}
-        
+        /* Time Labels */
         QLabel#timeLabel, QLabel#durationLabel {{
+            color: {colors['time_color']};
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 60px;
+        }}
+        
+        QLabel#volumeIcon, QLabel#speedLabel {{
             color: {colors['text_secondary']};
-            font-size: 12px;
             font-weight: 500;
-            min-width: 50px;
+            font-size: 13px;
         }}
         
         QLabel#volumeLabel {{
-            color: {colors['text_secondary']};
-            font-size: 12px;
-            font-weight: 500;
-        }}
-        
-        QLabel#volumeIcon {{
-            font-size: 18px;
-        }}
-        
-        QLabel#speedLabel {{
-            color: {colors['text_secondary']};
+            color: {colors['time_color']};
+            font-weight: 600;
             font-size: 13px;
-            font-weight: 500;
+            min-width: 45px;
+        }}
+        
+        /* Progress Slider */
+        QSlider#progressSlider::groove:horizontal {{
+            border: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }}
+        
+        QSlider#progressSlider::sub-page:horizontal {{
+            background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+                        stop:0 {colors['accent']},
+                        stop:1 {colors['accent_end']});
+            border-radius: 3px;
+        }}
+        
+        QSlider#progressSlider::handle:horizontal {{
+            background: {colors['time_color']};
+            border: 3px solid {colors['bg_primary']};
+            width: 18px;
+            margin: -7px 0;
+            border-radius: 9px;
+        }}
+        
+        QSlider#progressSlider::handle:horizontal:hover {{
+            background: #33ddff;
+            width: 20px;
+            margin: -8px 0;
+            border-radius: 10px;
+        }}
+        
+        /* Volume Slider */
+        QSlider#volumeSlider::groove:horizontal {{
+            border: none;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }}
+        
+        QSlider#volumeSlider::sub-page:horizontal {{
+            background: {colors['time_color']};
+            border-radius: 2px;
+        }}
+        
+        QSlider#volumeSlider::handle:horizontal {{
+            background: {colors['time_color']};
+            border: 2px solid {colors['bg_primary']};
+            width: 14px;
+            margin: -6px 0;
+            border-radius: 7px;
+        }}
+        
+        QSlider#volumeSlider::handle:horizontal:hover {{
+            background: #33ddff;
+            width: 16px;
+            border-radius: 8px;
         }}
         
         /* Menu Bar */
         QMenuBar {{
-            background-color: {colors['bg_secondary']};
+            background-color: {colors['bg_primary']};
             color: {colors['text_primary']};
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-weight: 500;
+            font-size: 13px;
+            spacing: 8px;
             padding: 4px;
         }}
         
         QMenuBar::item {{
-            background-color: transparent;
             padding: 6px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
         }}
         
         QMenuBar::item:selected {{
-            background-color: {colors['button_hover']};
+            background: rgba(102, 126, 234, 0.3);
+            color: {colors['time_color']};
         }}
         
         QMenu {{
             background-color: {colors['bg_secondary']};
             color: {colors['text_primary']};
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid {colors['border_color']};
             border-radius: 8px;
-            padding: 8px 0;
+            padding: 4px;
         }}
         
         QMenu::item {{
-            padding: 8px 24px;
+            padding: 8px 24px 8px 12px;
+            border-radius: 4px;
         }}
         
         QMenu::item:selected {{
-            background-color: {colors['button_hover']};
-        }}
-        
-        /* Control Button Style */
-        QPushButton#controlButton {{
-            background-color: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 6px;
-            padding: 8px 16px;
-            font-size: 13px;
-            font-weight: 500;
-        }}
-        
-        QPushButton#controlButton:hover {{
-            background-color: rgba(255, 255, 255, 0.15);
-            border-color: {colors['accent']};
+            background: rgba(102, 126, 234, 0.4);
+            color: {colors['time_color']};
         }}
         """
     
@@ -298,9 +278,19 @@ class EnhancedThemeManager:
         colors = self.get_colors()
         
         if component == 'control_panel':
-            return f"""
-            background-color: {colors['control_bg']};
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            """
+            if self._current_theme == Theme.DARK:
+                return """
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 rgba(22, 33, 62, 0.95),
+                            stop:1 rgba(26, 26, 46, 0.95));
+                border-top: 2px solid rgba(102, 126, 234, 0.3);
+                """
+            else:
+                return """
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                            stop:0 rgba(255, 255, 255, 0.95),
+                            stop:1 rgba(240, 244, 248, 0.95));
+                border-top: 2px solid rgba(52, 152, 219, 0.3);
+                """
         
         return ""
