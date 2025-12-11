@@ -1,105 +1,27 @@
-e-media-player-v1>pip install -r requirements.txt
-WARNING: Ignoring invalid distribution -ip (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution - (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution -ip (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution - (c:\python310\lib\site-packages)
-Requirement already satisfied: PyQt6==6.5.3 in c:\python310\lib\site-packages (from -r requirements.txt (line 5)) (6.5.3)
-Requirement already satisfied: PyQt6-Qt6==6.5.3 in c:\python310\lib\site-packages (from -r requirements.txt (line 6)) (6.5.3)
-Collecting av==10.0.0
-  Downloading av-10.0.0.tar.gz (2.4 MB)
-     ---------------------------------------- 2.4/2.4 MB 9.1 MB/s eta 0:00:00
-  Installing build dependencies ... done
-  Getting requirements to build wheel ... error
-  error: subprocess-exited-with-error
-
-  × Getting requirements to build wheel did not run successfully.
-  │ exit code: 1
-  ╰─> [70 lines of output]
-      Compiling av\buffer.pyx because it changed.
-      [1/1] Cythonizing av\buffer.pyx
-      Compiling av\bytesource.pyx because it changed.
-      [1/1] Cythonizing av\bytesource.pyx
-      Compiling av\descriptor.pyx because it changed.
-      [1/1] Cythonizing av\descriptor.pyx
-      Compiling av\dictionary.pyx because it changed.
-      [1/1] Cythonizing av\dictionary.pyx
-      warning: av\enum.pyx:321:4: __nonzero__ was removed in Python 3; use __bool__ instead
-      Compiling av\enum.pyx because it changed.
-      [1/1] Cythonizing av\enum.pyx
-      Compiling av\error.pyx because it changed.
-      [1/1] Cythonizing av\error.pyx
-      Compiling av\format.pyx because it changed.
-      [1/1] Cythonizing av\format.pyx
-      Compiling av\frame.pyx because it changed.
-      [1/1] Cythonizing av\frame.pyx
-      performance hint: av\logging.pyx:232:0: Exception check on 'log_callback' will always require the GIL to be acquired.
-      Possible solutions:
-          1. Declare 'log_callback' as 'noexcept' if you control the definition and you're sure you don't want the function to raise exceptions.
-          2. Use an 'int' return type on 'log_callback' to allow an error code to be returned.
-
-      Error compiling Cython file:
-      ------------------------------------------------------------
-      ...
-      cdef const char *log_context_name(void *ptr) nogil:
-          cdef log_context *obj = <log_context*>ptr
-          return obj.name
-
-      cdef lib.AVClass log_class
-      log_class.item_name = log_context_name
-                            ^
-      ------------------------------------------------------------
-      av\logging.pyx:216:22: Cannot assign type 'const char *(void *) except? NULL nogil' to 'const char *(*)(void *) noexcept nogil'. Exception values are incompatible. Suggest adding 'noexcept' to the type of 'log_context_name'.
-
-      Error compiling Cython file:
-      ------------------------------------------------------------
-      ...
-
-      # Start the magic!
-      # We allow the user to fully disable the logging system as it will not play
-      # nicely with subinterpreters due to FFmpeg-created threads.
-      if os.environ.get('PYAV_LOGGING') != 'off':
-          lib.av_log_set_callback(log_callback)
-                                  ^
-      ------------------------------------------------------------
-      av\logging.pyx:351:28: Cannot assign type 'void (void *, int, const char *, va_list) except * nogil' to 'av_log_callback' (alias of 'void (*)(void *, int, const char *, va_list) noexcept nogil'). Exception values are incompatible. Suggest adding 'noexcept' to the type of 'log_callback'.
-      Compiling av\logging.pyx because it changed.
-      [1/1] Cythonizing av\logging.pyx
-      Traceback (most recent call last):
-        File "C:\Python310\lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 363, in <module>
-          main()
-        File "C:\Python310\lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 345, in main
-          json_out['return_val'] = hook(**hook_input['kwargs'])
-        File "C:\Python310\lib\site-packages\pip\_vendor\pep517\in_process\_in_process.py", line 130, in get_requires_for_build_wheel
-          return hook(config_settings)
-        File "C:\Users\arjun\AppData\Local\Temp\pip-build-env-hubcsg41\overlay\Lib\site-packages\setuptools\build_meta.py", line 331, in get_requires_for_build_wheel
-          return self._get_build_requires(config_settings, requirements=[])
-        File "C:\Users\arjun\AppData\Local\Temp\pip-build-env-hubcsg41\overlay\Lib\site-packages\setuptools\build_meta.py", line 301, in _get_build_requires
-          self.run_setup()
-        File "C:\Users\arjun\AppData\Local\Temp\pip-build-env-hubcsg41\overlay\Lib\site-packages\setuptools\build_meta.py", line 512, in run_setup
-          super().run_setup(setup_script=setup_script)
-        File "C:\Users\arjun\AppData\Local\Temp\pip-build-env-hubcsg41\overlay\Lib\site-packages\setuptools\build_meta.py", line 317, in run_setup
-          exec(code, locals())
-        File "<string>", line 157, in <module>
-        File "C:\Users\arjun\AppData\Local\Temp\pip-build-env-hubcsg41\overlay\Lib\site-packages\Cython\Build\Dependencies.py", line 1153, in cythonize
-          cythonize_one(*args)
-        File "C:\Users\arjun\AppData\Local\Temp\pip-build-env-hubcsg41\overlay\Lib\site-packages\Cython\Build\Dependencies.py", line 1297, in cythonize_one
-          raise CompileError(None, pyx_file)
-      Cython.Compiler.Errors.CompileError: av\logging.pyx
-      [end of output]
-
-  note: This error originates from a subprocess, and is likely not a problem with pip.
-error: subprocess-exited-with-error
-
-× Getting requirements to build wheel did not run successfully.
-│ exit code: 1
-╰─> See above for output.
-
-note: This error originates from a subprocess, and is likely not a problem with pip.
-WARNING: Ignoring invalid distribution -ip (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution - (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution -ip (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution - (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution -ip (c:\python310\lib\site-packages)
-WARNING: Ignoring invalid distribution - (c:\python310\lib\site-packages)
-
-C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1>
+\Test\simple-media-player-v1> python -m src.main  
+pygame 2.5.2 (SDL 2.28.3, Python 3.10.8)
+Hello from the pygame community. https://www.pygame.org/contribute.html
+2025-12-11 11:49:19,581 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 11:49:20,274 - src.core.audio_player - INFO - Audio player initialized with pygame mixer
+2025-12-11 11:49:20,274 - src.core.player - INFO - Media player initialized with PyAV + PyQt6 audio
+2025-12-11 11:49:20,295 - src.core.player - INFO - Player initialized with video widget
+2025-12-11 11:49:20,308 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 11:49:20,740 - __main__ - INFO - Application started successfully
+2025-12-11 11:49:26,859 - src.core.player - INFO - Playback stopped
+2025-12-11 11:49:27,482 - src.core.audio_player - ERROR - Failed to load audio: ModPlug_Load failed
+2025-12-11 11:49:27,482 - src.core.player - WARNING - Audio track not found or failed to load
+2025-12-11 11:49:27,482 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 11:49:27,482 - src.core.player - INFO - Duration: 7220.17s, FPS: 1947498750/81226927
+2025-12-11 11:49:27,484 - src.core.audio_player - WARNING - No audio loaded
+2025-12-11 11:49:27,485 - src.core.player - INFO - Video playback loop started
+2025-12-11 11:49:27,485 - src.core.player - INFO - Playback started
+2025-12-11 11:49:27,489 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 11:51:28,430 - src.gui.main_window - INFO - Fast forward stopped
+2025-12-11 11:51:28,452 - src.core.player - INFO - Video playback completed
+2025-12-11 11:51:28,452 - src.core.player - INFO - Video playback loop ended
+2025-12-11 11:51:28,453 - src.core.player - INFO - Playback stopped
+2025-12-11 11:51:28,513 - src.core.audio_player - INFO - Audio player shut down
+2025-12-11 11:51:28,514 - src.core.player - INFO - Player shut down
+2025-12-11 11:51:28,514 - src.gui.main_window - INFO - Application closed
+2025-12-11 11:51:28,530 - src.gui.main_window - INFO - Playback ended
+2025-12-11 11:51:28,530 - __main__ - INFO - Application exited with code 0
