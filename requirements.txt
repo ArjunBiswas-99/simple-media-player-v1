@@ -6,8 +6,11 @@ PyQt6==6.5.3
 PyQt6-Qt6==6.5.3
 
 # Media Playback Engine
-opencv-python==4.8.1.78
+av==10.0.0
 numpy==1.24.3
+
+# Audio Support
+pygame==2.5.2
 
 # Subtitle Support
 pysrt==1.1.2

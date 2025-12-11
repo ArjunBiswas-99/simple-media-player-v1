@@ -354,8 +354,8 @@ class MainWindow(QMainWindow):
     
     def eventFilter(self, obj, event):
         """Filter events for custom slider behavior and video widget mouse moves"""
-        # Handle progress slider clicks
-        if obj == self.progress_slider and event.type() == QEvent.Type.MouseButtonPress:
+        # Handle progress slider clicks (only if slider exists)
+        if hasattr(self, 'progress_slider') and obj == self.progress_slider and event.type() == QEvent.Type.MouseButtonPress:
             if event.button() == Qt.MouseButton.LeftButton:
                 # Calculate click position and seek
                 value = QStyle.sliderValueFromPosition(
@@ -373,7 +373,7 @@ class MainWindow(QMainWindow):
                 return True
         
         # Handle video widget mouse movements in fullscreen
-        if obj == self.video_widget and event.type() == QEvent.Type.MouseMove:
+        if hasattr(self, 'video_widget') and obj == self.video_widget and event.type() == QEvent.Type.MouseMove:
             if self.isFullScreen():
                 if self._cursor_hidden:
                     self._show_controls()
