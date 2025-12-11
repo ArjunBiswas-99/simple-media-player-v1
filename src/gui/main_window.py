@@ -34,8 +34,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         
         self._initialize_components()
-        self._setup_ui()
         self._create_menu()
+        self._setup_ui()
         self._setup_shortcuts()
         self._setup_timer()
         self._connect_signals()
