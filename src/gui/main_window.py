@@ -311,7 +311,7 @@ class MainWindow(QMainWindow):
                 value = QStyle.sliderValueFromPosition(
                     self.progress_slider.minimum(),
                     self.progress_slider.maximum(),
-                    event.position().x(),
+                    int(event.position().x()),
                     self.progress_slider.width()
                 )
                 self.progress_slider.setValue(value)
