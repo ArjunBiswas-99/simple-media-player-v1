@@ -24,6 +24,8 @@
 
 ### Light Theme  
 *Clean, professional light mode for daytime use*
+<img width="802" height="632" alt="image" src="https://github.com/user-attachments/assets/68d03cc0-6f5d-4a88-a266-1dcf073d73d3" />
+
 
 ### Fullscreen Mode
 *Immersive fullscreen with auto-hiding controls*
