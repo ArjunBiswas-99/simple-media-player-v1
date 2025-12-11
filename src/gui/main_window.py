@@ -83,9 +83,10 @@ class MainWindow(QMainWindow):
         self.player.initialize(self.video_widget)
         
         # Connect player signals for thread-safe communication
-        self.player.signals.frame_ready.connect(self._on_frame_update)
         self.player.signals.time_update.connect(self._on_time_update)
+        self.player.signals.duration_changed.connect(self._on_duration_changed)
         self.player.signals.playback_ended.connect(self._on_playback_ended)
+        self.player.signals.error_occurred.connect(self._on_player_error)
         
         self._apply_theme()
     
@@ -633,6 +634,19 @@ class MainWindow(QMainWindow):
             
             self.time_label.setText(self._format_time(time_pos))
     
+    def _on_duration_changed(self, duration):
+        """Handle duration change when file loads"""
+        self.duration_label.setText(self._format_time(duration))
+    
+    def _on_player_error(self, error_message):
+        """Handle player errors"""
+        QMessageBox.critical(
+            self,
+            "Playback Error",
+            f"An error occurred during playback:\n\n{error_message}"
+        )
+        logger.error(f"Player error: {error_message}")
+    
     def _on_playback_ended(self):
         """Handle playback end"""
         self._update_play_button()
@@ -676,7 +690,7 @@ class MainWindow(QMainWindow):
             "<li>Click and hold video to fast forward</li>"
             "<li>Variable playback speeds (0.5x - 2.0x)</li>"
             "</ul>"
-            "<p>Built with PyQt6 and OpenCV</p>"
+            "<p>Built with PyQt6 Multimedia</p>"
         )
     
     def _show_shortcuts(self):

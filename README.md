@@ -122,8 +122,7 @@ Built following software design best practices:
 ```
 src/
 ├── core/
-│   ├── player.py        # Main media player coordinator
-│   ├── audio_player.py  # Audio playback component
+│   ├── player.py        # Unified media player (audio + video)
 │   └── __init__.py
 ├── gui/
 │   ├── main_window.py   # Main application window
@@ -136,51 +135,42 @@ src/
 ### Technologies
 
 - **PyQt6** - Modern Qt6 bindings for Python, providing the GUI framework
-- **PyAV** - Python bindings for FFmpeg, handles video decoding with excellent format support
-- **PyQt6-Multimedia** - Audio playback engine with native OS integration
-- **NumPy** - Efficient array operations for video frame handling
-- **Threading** - Smooth video playback without blocking UI
+- **PyQt6-Multimedia** - Qt's native multimedia framework for unified audio/video playback
+- Uses OS-native codecs (Windows Media Foundation, AVFoundation on macOS, GStreamer on Linux)
 
-### Why PyAV + PyQt6 Multimedia?
+### Why PyQt6 Multimedia?
 
-**PyAV for Video:**
-- Excellent codec support (uses FFmpeg)
-- Pure Python solution - no system dependencies
-- Cross-platform compatibility
-- Frame-accurate seeking
-- Efficient memory usage
+**Unified Media Framework:**
+- Single library handles both audio and video
+- Leverages OS-native media frameworks for optimal performance
+- Automatic codec support through system codecs
+- Hardware acceleration where available
 
-**PyQt6 Multimedia for Audio:**
-- Native OS audio integration
-- Low latency playback
-- Built-in volume and speed control
-- Robust error handling
-- Already included with PyQt6
+**OS Integration:**
+- **Windows**: Uses Windows Media Foundation (WMF)
+- **macOS**: Uses AVFoundation framework
+- **Linux**: Uses GStreamer pipeline
 
-**Benefits of This Approach:**
-- Full audio/video synchronization
-- No external libraries or DLLs needed
-- Easy installation
-- Reliable cross-platform playback
-- Professional media player capabilities
+**Key Benefits:**
+- **Instant playback** - No audio extraction or preprocessing needed
+- **Zero external dependencies** - Uses codecs already on your system
+- **Perfect synchronization** - Qt handles audio/video sync automatically
+- **Professional quality** - Same framework used by major Qt applications
+- **Simple codebase** - One unified player instead of separate audio/video components
 
-### Audio/Video Synchronization
+### How It Works
 
-The player uses presentation timestamps (PTS) to synchronize video frames with audio:
+The player uses Qt's QMediaPlayer which provides:
 
-1. Audio plays continuously via QMediaPlayer
-2. Video frames are decoded and displayed based on their timestamps
-3. Frame timing is adjusted to match audio position
-4. Seeking updates both audio and video positions atomically
+1. **Unified playback** - QMediaPlayer handles both audio and video streams from the same file
+2. **QVideoWidget** - Renders video frames directly to the GUI
+3. **QAudioOutput** - Routes audio to system audio devices
+4. **Automatic sync** - Qt's media framework keeps audio and video synchronized
+5. **Native performance** - Leverages OS codecs for optimal playback
 
-This ensures lip-sync accuracy and smooth playback at any speed.
+No manual frame timing or audio extraction required!
 
 ## Troubleshooting
-
-**"No module named 'av'"**
-```bash
-pip install av
-```
 
 **"No module named 'PyQt6'"**
 ```bash
@@ -225,5 +215,4 @@ Feel free to submit issues or pull requests to improve the player!
 
 Built with modern Python technologies:
 - PyQt6 for the beautiful, responsive UI
-- PyAV (FFmpeg) for professional-grade video decoding
-- PyQt6 Multimedia for high-quality audio playback
+- PyQt6 Multimedia for native audio/video playback using OS frameworks
