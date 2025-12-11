@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round">
+    <!-- Speedometer arc -->
+    <path d="M10 30 A 14 14 0 0 1 38 30"/>
+    
+    <!-- Needle pointing to right (1x speed) -->
+    <line x1="24" y1="30" x2="32" y2="22" stroke-width="3"/>
+    
+    <!-- Center dot -->
+    <circle cx="24" cy="30" r="2" fill="currentColor"/>
+  </g>
+</svg>

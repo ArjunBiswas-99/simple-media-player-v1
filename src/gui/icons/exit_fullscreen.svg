@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Top-left corner (inward) -->
+    <polyline points="18,10 18,18 10,18"/>
+    
+    <!-- Top-right corner (inward) -->
+    <polyline points="30,18 38,18 38,10"/>
+    
+    <!-- Bottom-right corner (inward) -->
+    <polyline points="38,30 30,30 30,38"/>
+    
+    <!-- Bottom-left corner (inward) -->
+    <polyline points="10,30 18,30 18,38"/>
+  </g>
+</svg>

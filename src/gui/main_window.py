@@ -20,7 +20,7 @@ from PyQt6.QtWidgets import (
     QPushButton, QSlider, QLabel, QFileDialog, QStyle,
     QMessageBox, QMenuBar, QMenu
 )
-from PyQt6.QtCore import Qt, QTimer, QEvent
+from PyQt6.QtCore import Qt, QTimer, QEvent, QSize
 from PyQt6.QtGui import QAction, QKeySequence
 
 from .video_widget import VideoWidget
@@ -29,6 +29,7 @@ from .fullscreen_overlay import FullscreenMouseOverlay
 from .welcome_screen import WelcomeScreen
 from .buffering_widget import BufferingWidget
 from .network_stream_dialog import NetworkStreamDialog
+from .icon_manager import IconManager
 from ..core.player import MediaPlayer
 from ..core.network_stream_handler import NetworkStreamHandler
 from ..core.preferences import Preferences
@@ -82,6 +83,7 @@ class MainWindow(QMainWindow):
         self.player = MediaPlayer()
         self.theme_manager = ThemeManager()
         self.stream_handler = NetworkStreamHandler()
+        self.icon_manager = IconManager()
         
         # Initialize preferences manager
         self.preferences = Preferences()
@@ -267,20 +269,20 @@ class MainWindow(QMainWindow):
         button_layout = QHBoxLayout()
         button_layout.setSpacing(8)
         
-        # Playback controls (larger icon buttons)
+        # Playback controls (SVG icon buttons)
         self.play_button = self._create_icon_button(
-            QStyle.StandardPixmap.SP_MediaPlay,
+            "play",
             self._toggle_play_pause,
             "Play/Pause"
         )
         button_layout.addWidget(self.play_button)
         
-        stop_button = self._create_icon_button(
-            QStyle.StandardPixmap.SP_MediaStop,
+        self.stop_button = self._create_icon_button(
+            "stop",
             self._on_stop,
             "Stop"
         )
-        button_layout.addWidget(stop_button)
+        button_layout.addWidget(self.stop_button)
         
         button_layout.addSpacing(12)
         
@@ -299,23 +301,30 @@ class MainWindow(QMainWindow):
         
         button_layout.addStretch()
         
-        # Theme toggle button
-        self.theme_toggle_button = QPushButton("🌙")
+        # Theme toggle button (SVG icon)
+        is_dark = self.theme_manager.current_theme == Theme.DARK
+        icon_color = self.icon_manager.get_themed_color(is_dark)
+        theme_icon = self.icon_manager.get_theme_icon(is_dark, icon_color, 40)
+        
+        self.theme_toggle_button = QPushButton()
+        self.theme_toggle_button.setIcon(theme_icon)
+        self.theme_toggle_button.setIconSize(QSize(40, 40))
         self.theme_toggle_button.clicked.connect(self._toggle_theme)
         self.theme_toggle_button.setObjectName("themeToggle")
         self.theme_toggle_button.setToolTip("Toggle Dark/Light Mode")
+        self.theme_toggle_button.setAttribute(Qt.WidgetAttribute.WA_MacShowFocusRect, False)
+        self.theme_toggle_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         button_layout.addWidget(self.theme_toggle_button)
         
         button_layout.addSpacing(4)
         
-        # Fullscreen button (icon-only for Netflix style)
-        fullscreen_button = QPushButton("⛶")
-        fullscreen_button.setObjectName("iconButton")
-        fullscreen_button.clicked.connect(self._toggle_fullscreen)
-        fullscreen_button.setToolTip("Fullscreen (F)")
-        fullscreen_button.setAttribute(Qt.WidgetAttribute.WA_MacShowFocusRect, False)
-        fullscreen_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        button_layout.addWidget(fullscreen_button)
+        # Fullscreen button (SVG icon)
+        self.fullscreen_button = self._create_icon_button(
+            "fullscreen",
+            self._toggle_fullscreen,
+            "Fullscreen (F)"
+        )
+        button_layout.addWidget(self.fullscreen_button)
         
         return button_layout
     
@@ -329,12 +338,12 @@ class MainWindow(QMainWindow):
         button.setObjectName("controlButton")
         return button
     
-    def _create_icon_button(self, icon: QStyle.StandardPixmap, callback, tooltip: str):
+    def _create_icon_button(self, icon_name: str, callback, tooltip: str):
         """
-        Create a circular icon button with Netflix styling
+        Create a circular icon button with Netflix styling using SVG icons
         
         Args:
-            icon: Qt standard icon identifier
+            icon_name: Name of the SVG icon (e.g., 'play', 'pause', 'stop')
             callback: Function to call on button click
             tooltip: Tooltip text for the button
             
@@ -343,17 +352,14 @@ class MainWindow(QMainWindow):
         """
         button = QPushButton()
         
-        # Map standard icons to Unicode symbols for better color control
-        icon_map = {
-            QStyle.StandardPixmap.SP_MediaPlay: "▶",
-            QStyle.StandardPixmap.SP_MediaPause: "⏸",
-            QStyle.StandardPixmap.SP_MediaStop: "⏹"
-        }
+        # Get icon color based on current theme
+        is_dark = self.theme_manager.current_theme == Theme.DARK
+        icon_color = self.icon_manager.get_themed_color(is_dark)
         
-        if icon in icon_map:
-            button.setText(icon_map[icon])
-        else:
-            button.setIcon(self.style().standardIcon(icon))
+        # Load SVG icon
+        icon = self.icon_manager.get_icon(icon_name, icon_color, 40)
+        button.setIcon(icon)
+        button.setIconSize(QSize(40, 40))
         
         button.clicked.connect(callback)
         button.setToolTip(tooltip)
@@ -649,7 +655,7 @@ class MainWindow(QMainWindow):
         return super().eventFilter(obj, event)
     
     def _apply_theme(self):
-        """Apply current theme to the application"""
+        """Apply current theme to the application and refresh all icons"""
         stylesheet = self.theme_manager.get_full_stylesheet()
         self.setStyleSheet(stylesheet)
         
@@ -663,14 +669,42 @@ class MainWindow(QMainWindow):
             welcome_style = self.welcome_screen.get_stylesheet(is_dark)
             self.welcome_screen.setStyleSheet(welcome_style)
         
-        # Update theme toggle button and menu action
+        # Clear icon cache and refresh all icons with new theme colors
+        self.icon_manager.clear_cache()
+        self._refresh_all_icons()
+        
+        # Update theme action menu text
         if self.theme_manager.current_theme == Theme.DARK:
             self.theme_action.setText("☀️ Light Mode")
-            self.theme_toggle_button.setText("🌙")
-            self.theme_toggle_button.setToolTip("Switch to Light Mode")
         else:
             self.theme_action.setText("🌙 Dark Mode")
-            self.theme_toggle_button.setText("☀️")
+    
+    def _refresh_all_icons(self):
+        """Refresh all button icons with current theme colors"""
+        is_dark = self.theme_manager.current_theme == Theme.DARK
+        icon_color = self.icon_manager.get_themed_color(is_dark)
+        
+        # Update play/pause button
+        self._update_play_button()
+        
+        # Update stop button
+        stop_icon = self.icon_manager.get_stop_icon(icon_color, 40)
+        self.stop_button.setIcon(stop_icon)
+        self.stop_button.setIconSize(QSize(40, 40))
+        
+        # Update fullscreen button
+        fullscreen_icon = self.icon_manager.get_fullscreen_icon(icon_color, 40)
+        self.fullscreen_button.setIcon(fullscreen_icon)
+        self.fullscreen_button.setIconSize(QSize(40, 40))
+        
+        # Update theme toggle button
+        theme_icon = self.icon_manager.get_theme_icon(is_dark, icon_color, 40)
+        self.theme_toggle_button.setIcon(theme_icon)
+        self.theme_toggle_button.setIconSize(QSize(40, 40))
+        
+        if is_dark:
+            self.theme_toggle_button.setToolTip("Switch to Light Mode")
+        else:
             self.theme_toggle_button.setToolTip("Switch to Dark Mode")
     
     def _toggle_theme(self):
@@ -961,11 +995,17 @@ class MainWindow(QMainWindow):
         self._update_quality_selector_visibility()
     
     def _update_play_button(self):
-        """Update play/pause button icon"""
+        """Update play/pause button icon dynamically based on playback state"""
+        is_dark = self.theme_manager.current_theme == Theme.DARK
+        icon_color = self.icon_manager.get_themed_color(is_dark)
+        
         if self.player.is_playing:
-            self.play_button.setText("⏸")
+            icon = self.icon_manager.get_pause_icon(icon_color, 40)
         else:
-            self.play_button.setText("▶")
+            icon = self.icon_manager.get_play_icon(icon_color, 40)
+        
+        self.play_button.setIcon(icon)
+        self.play_button.setIconSize(QSize(40, 40))
     
     def _on_volume_changed(self, value):
         """Handle volume slider change"""

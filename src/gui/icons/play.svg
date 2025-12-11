@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="48" height="48" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <!-- Circular background (optional, can be styled via CSS) -->
+    <circle cx="24" cy="24" r="22" fill="none" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+    
+    <!-- Rounded play triangle -->
+    <path d="M18 12 L18 36 L36 24 Z" 
+          fill="currentColor" 
+          stroke="currentColor" 
+          stroke-width="1.5" 
+          stroke-linejoin="round" 
+          stroke-linecap="round"/>
+  </g>
+</svg>
