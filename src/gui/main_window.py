@@ -72,6 +72,8 @@ class MainWindow(QMainWindow):
         self.video_widget = VideoWidget()
         self.video_widget.setMouseTracking(True)
         self.video_widget.set_drop_callback(self._on_file_dropped)
+        # Install event filter on video widget to capture mouse moves
+        self.video_widget.installEventFilter(self)
         main_layout.addWidget(self.video_widget, stretch=1)
         
         self.control_panel = self._create_control_panel()
@@ -351,7 +353,8 @@ class MainWindow(QMainWindow):
         self.video_widget.fast_forward_stopped.connect(self._stop_fast_forward)
     
     def eventFilter(self, obj, event):
-        """Filter events for custom slider behavior"""
+        """Filter events for custom slider behavior and video widget mouse moves"""
+        # Handle progress slider clicks
         if obj == self.progress_slider and event.type() == QEvent.Type.MouseButtonPress:
             if event.button() == Qt.MouseButton.LeftButton:
                 # Calculate click position and seek
@@ -368,6 +371,15 @@ class MainWindow(QMainWindow):
                 if duration > 0:
                     self.player.seek(position * duration)
                 return True
+        
+        # Handle video widget mouse movements in fullscreen
+        if obj == self.video_widget and event.type() == QEvent.Type.MouseMove:
+            if self.isFullScreen():
+                if self._cursor_hidden:
+                    self._show_controls()
+                else:
+                    self._start_hide_timer()
+        
         return super().eventFilter(obj, event)
     
     def _apply_theme(self):
