@@ -1,115 +1,56 @@
-
-PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> python -m src.main  
-2025-12-11 13:54:25,542 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 13:54:26,270 - src.core.player - INFO - Media player initialized with PyQt6 Multimedia
-2025-12-11 13:54:26,290 - src.core.player - INFO - Player initialized with video widget
-2025-12-11 13:54:26,301 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 13:54:26,714 - __main__ - INFO - Application started successfully
-2025-12-11 13:54:36,833 - src.core.player - INFO - Playback stopped
-2025-12-11 13:54:36,875 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 13:54:36,902 - src.core.player - INFO - Playback started
-2025-12-11 13:54:36,909 - src.gui.main_window - INFO - Resized window to 1728x928 (video: 1920x800)
-2025-12-11 13:54:36,909 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 13:54:36,926 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:36,926 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:36,927 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:36,927 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:36,927 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:36,927 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
-2025-12-11 13:54:36,927 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: True
-2025-12-11 13:54:36,927 - src.gui.video_widget - INFO - Ignoring press - expecting double-click
-2025-12-11 13:54:36,975 - src.gui.main_window - INFO - Resized window to 1728x928 (video: 1920x800)
-2025-12-11 13:54:36,994 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:36,994 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:36,994 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:36,995 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
+)
+PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> python -m src.main
+2025-12-11 13:57:38,556 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 13:57:39,286 - src.core.player - INFO - Media player initialized with PyQt6 Multimedia
+2025-12-11 13:57:39,305 - src.core.player - INFO - Player initialized with video widget
+2025-12-11 13:57:39,314 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 13:57:39,717 - __main__ - INFO - Application started successfully
+2025-12-11 13:57:46,191 - src.core.player - INFO - Playback stopped
+2025-12-11 13:57:46,233 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 13:57:46,258 - src.core.player - INFO - Playback started
+2025-12-11 13:57:46,266 - src.gui.main_window - INFO - Resized window to 1728x928 (video: 1920x800)
+2025-12-11 13:57:46,267 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 13:57:46,333 - src.gui.main_window - INFO - Resized window to 1728x928 (video: 1920x800)
     failed to get textures for frame; format: 172 textureConverter null
-2025-12-11 13:54:37,104 - src.gui.video_widget - INFO - === DOUBLE-CLICK EVENT ===
-2025-12-11 13:54:37,104 - src.gui.video_widget - INFO - Timers before cancel - press: False, click: True, prevention: True
-2025-12-11 13:54:37,104 - src.gui.video_widget - INFO - All timers cancelled - emitting double_clicked signal
-2025-12-11 13:54:37,119 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:37,119 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:37,328 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:37,328 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:37,328 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:37,328 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
-2025-12-11 13:54:37,576 - src.gui.video_widget - INFO - Double-click prevention window expired
-2025-12-11 13:54:37,576 - src.gui.video_widget - INFO - !!! SINGLE CLICK CONFIRMED - emitting signal (will toggle pause) !!!
-2025-12-11 13:54:37,576 - src.core.player - INFO - Playback paused
-2025-12-11 13:54:37,915 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:37,915 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:38,088 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:38,089 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:38,089 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:38,089 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
-2025-12-11 13:54:38,144 - src.gui.video_widget - INFO - === DOUBLE-CLICK EVENT ===
-2025-12-11 13:54:38,144 - src.gui.video_widget - INFO - Timers before cancel - press: False, click: True, prevention: True
-2025-12-11 13:54:38,144 - src.gui.video_widget - INFO - All timers cancelled - emitting double_clicked signal
-2025-12-11 13:54:38,144 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 13:54:38,145 - src.gui.video_widget - INFO - === CANCEL PENDING INTERACTIONS ===
-2025-12-11 13:54:38,145 - src.gui.video_widget - INFO - Active timers - press: False, click: False, prevention: False
-2025-12-11 13:54:38,145 - src.gui.video_widget - INFO - All pending interactions cancelled
-2025-12-11 13:54:38,167 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:38,167 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:38,680 - src.gui.main_window - INFO - Fast forward started
-2025-12-11 13:54:38,680 - src.gui.video_widget - INFO - !!! FAST FORWARD STARTED (long-press timer fired) !!!
-2025-12-11 13:54:41,558 - src.core.player - INFO - Playback started
-2025-12-11 13:54:42,043 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:42,043 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:42,260 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: True
-2025-12-11 13:54:42,260 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:42,260 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 13:54:42,260 - src.gui.video_widget - INFO - Fast forward stopped
-2025-12-11 13:54:42,574 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:42,574 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:42,793 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:42,793 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:42,793 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:42,793 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
-2025-12-11 13:54:43,044 - src.gui.video_widget - INFO - Double-click prevention window expired
-2025-12-11 13:54:43,044 - src.gui.video_widget - INFO - !!! SINGLE CLICK CONFIRMED - emitting signal (will toggle pause) !!!
-2025-12-11 13:54:43,044 - src.core.player - INFO - Playback paused
-2025-12-11 13:54:45,491 - src.core.player - INFO - Playback started
-2025-12-11 13:54:47,054 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:47,054 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:47,211 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:47,212 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:47,212 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:47,212 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
-2025-12-11 13:54:47,272 - src.gui.video_widget - INFO - === DOUBLE-CLICK EVENT ===
-2025-12-11 13:54:47,272 - src.gui.video_widget - INFO - Timers before cancel - press: False, click: True, prevention: True
-2025-12-11 13:54:47,272 - src.gui.video_widget - INFO - All timers cancelled - emitting double_clicked signal
-2025-12-11 13:54:47,284 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:47,284 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:47,428 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:47,428 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:47,428 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:47,428 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
-2025-12-11 13:54:47,668 - src.gui.video_widget - INFO - Double-click prevention window expired
-2025-12-11 13:54:47,668 - src.gui.video_widget - INFO - !!! SINGLE CLICK CONFIRMED - emitting signal (will toggle pause) !!!
-2025-12-11 13:54:47,668 - src.core.player - INFO - Playback paused
-2025-12-11 13:54:48,607 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:48,607 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:48,757 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
-2025-12-11 13:54:48,757 - src.gui.video_widget - INFO - Stopped long-press timer
-2025-12-11 13:54:48,758 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
-2025-12-11 13:54:48,758 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
-2025-12-11 13:54:48,813 - src.gui.video_widget - INFO - === DOUBLE-CLICK EVENT ===
-2025-12-11 13:54:48,813 - src.gui.video_widget - INFO - Timers before cancel - press: False, click: True, prevention: True
-2025-12-11 13:54:48,813 - src.gui.video_widget - INFO - All timers cancelled - emitting double_clicked signal
-2025-12-11 13:54:48,813 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 13:54:48,813 - src.gui.video_widget - INFO - === CANCEL PENDING INTERACTIONS ===
-2025-12-11 13:54:48,813 - src.gui.video_widget - INFO - Active timers - press: False, click: False, prevention: False
-2025-12-11 13:54:48,815 - src.gui.video_widget - INFO - All pending interactions cancelled
-2025-12-11 13:54:48,834 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
-2025-12-11 13:54:48,834 - src.gui.video_widget - INFO - Started long-press timer (500ms)
-2025-12-11 13:54:49,327 - src.gui.main_window - INFO - Fast forward started
-2025-12-11 13:54:49,333 - src.gui.video_widget - INFO - !!! FAST FORWARD STARTED (long-press timer fired) !!!
-2025-12-11 13:54:50,818 - src.core.player - INFO - Playback started
-2025-12-11 13:54:51,445 - src.core.player - INFO - Playback paused
-2025-12-11 13:54:53,339 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 13:54:53,340 - src.core.player - INFO - Playback stopped
-2025-12-11 13:54:53,352 - src.core.player - INFO - Player shut down
-2025-12-11 13:54:53,352 - src.gui.main_window - INFO - Application closed
-2025-12-11 13:54:53,378 - __main__ - INFO - Application exited with code 0
-PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
+2025-12-11 13:57:51,341 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
+2025-12-11 13:57:51,341 - src.gui.video_widget - INFO - Started long-press timer (500ms)
+2025-12-11 13:57:51,507 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
+2025-12-11 13:57:51,508 - src.gui.video_widget - INFO - Stopped long-press timer
+2025-12-11 13:57:51,508 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
+2025-12-11 13:57:51,508 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
+2025-12-11 13:57:51,560 - src.gui.video_widget - INFO - === DOUBLE-CLICK EVENT ===
+2025-12-11 13:57:51,560 - src.gui.video_widget - INFO - Timers before cancel - press: False, click: True, prevention: True
+2025-12-11 13:57:51,560 - src.gui.video_widget - INFO - Set double-click prevention flag to block subsequent events
+2025-12-11 13:57:51,561 - src.gui.video_widget - INFO - All timers cancelled - emitting double_clicked signal
+2025-12-11 13:57:51,571 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: True
+2025-12-11 13:57:51,572 - src.gui.video_widget - INFO - Ignoring press - expecting double-click
+2025-12-11 13:57:51,732 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
+2025-12-11 13:57:51,732 - src.gui.video_widget - INFO - Stopped long-press timer
+2025-12-11 13:57:51,732 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
+2025-12-11 13:57:51,732 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
+2025-12-11 13:57:51,980 - src.gui.video_widget - INFO - Double-click prevention window expired
+2025-12-11 13:57:51,980 - src.gui.video_widget - INFO - !!! SINGLE CLICK CONFIRMED - emitting signal (will toggle pause) !!!
+2025-12-11 13:57:51,980 - src.core.player - INFO - Playback paused
+2025-12-11 13:57:53,253 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
+2025-12-11 13:57:53,253 - src.gui.video_widget - INFO - Started long-press timer (500ms)
+2025-12-11 13:57:53,409 - src.gui.video_widget - INFO - === MOUSE RELEASE === was_fast_forwarding: False
+2025-12-11 13:57:53,409 - src.gui.video_widget - INFO - Stopped long-press timer
+2025-12-11 13:57:53,409 - src.gui.video_widget - INFO - Started click confirmation timer (250ms)
+2025-12-11 13:57:53,414 - src.gui.video_widget - INFO - Set double-click prevention flag (expires in 250ms)
+2025-12-11 13:57:53,480 - src.gui.video_widget - INFO - === DOUBLE-CLICK EVENT ===
+2025-12-11 13:57:53,480 - src.gui.video_widget - INFO - Timers before cancel - press: False, click: True, prevention: True
+2025-12-11 13:57:53,480 - src.gui.video_widget - INFO - Set double-click prevention flag to block subsequent events
+2025-12-11 13:57:53,480 - src.gui.video_widget - INFO - All timers cancelled - emitting double_clicked signal
+2025-12-11 13:57:53,480 - src.gui.main_window - INFO - Fast forward stopped
+2025-12-11 13:57:53,480 - src.gui.video_widget - INFO - === CANCEL PENDING INTERACTIONS ===
+2025-12-11 13:57:53,480 - src.gui.video_widget - INFO - Active timers - press: False, click: False, prevention: True
+2025-12-11 13:57:53,480 - src.gui.video_widget - INFO - All pending interactions cancelled
+2025-12-11 13:57:53,500 - src.gui.video_widget - INFO - === MOUSE PRESS === expecting_double_click: False
+2025-12-11 13:57:53,500 - src.gui.video_widget - INFO - Started long-press timer (500ms)
+2025-12-11 13:57:54,010 - src.gui.main_window - INFO - Fast forward started
+2025-12-11 13:57:54,010 - src.gui.video_widget - INFO - !!! FAST FORWARD STARTED (long-press timer fired) !!!
+2025-12-11 13:57:57,026 - src.gui.main_window - INFO - Fast forward stopped
+2025-12-11 13:57:57,028 - src.core.player - INFO - Playback stopped
+2025-12-11 13:57:57,069 - src.core.player - INFO - Player shut down
+2025-12-11 13:57:57,069 - src.gui.main_window - INFO - Application closed
+2025-12-11 13:57:57,084 - __main__ - INFO - Application exited with code 0
