@@ -345,8 +345,9 @@ class MainWindow(QMainWindow):
         help_menu.addAction(shortcuts_action)
     
     def _setup_shortcuts(self):
-        """Set up keyboard shortcuts"""
+        """Set up keyboard shortcuts - work even in fullscreen"""
         shortcuts = {
+            "Space": self._toggle_play_pause,  # Add Space here for fullscreen
             "F": self._toggle_fullscreen,
             "M": self._toggle_mute,
             "Right": lambda: self.player.seek(5, relative=True),
@@ -621,6 +622,7 @@ class MainWindow(QMainWindow):
         """
         if self.isFullScreen():
             # Exit fullscreen
+            self._stop_fast_forward()  # Stop any fast-forward in progress
             self.showNormal()
             self.menuBar().show()
             self.control_panel.show()
