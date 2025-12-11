@@ -54,6 +54,7 @@ class MainWindow(QMainWindow):
         # Fullscreen auto-hide
         self._fullscreen_hide_timer = None
         self._cursor_hidden = False
+        self._controls_visible = True
         self.setMouseTracking(True)
     
     def _setup_ui(self):
@@ -550,13 +551,24 @@ class MainWindow(QMainWindow):
             # Restart hide timer
             self._start_hide_timer()
     
+    def event(self, event):
+        """Handle all events including mouse movements"""
+        if event.type() == QEvent.Type.MouseMove and self.isFullScreen():
+            if self._cursor_hidden:
+                self._show_controls()
+            else:
+                # Reset hide timer on mouse movement
+                self._start_hide_timer()
+        return super().event(event)
+    
     def mouseMoveEvent(self, event):
         """Handle mouse movement in fullscreen"""
-        if self.isFullScreen() and self._cursor_hidden:
-            self._show_controls()
-        elif self.isFullScreen():
-            # Reset hide timer on mouse movement
-            self._start_hide_timer()
+        if self.isFullScreen():
+            if self._cursor_hidden:
+                self._show_controls()
+            else:
+                # Reset hide timer on mouse movement
+                self._start_hide_timer()
         super().mouseMoveEvent(event)
     
     def _cycle_speed(self):
