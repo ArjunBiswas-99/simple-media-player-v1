@@ -13,8 +13,9 @@ from PyQt6.QtCore import Qt, QTimer, QEvent
 from PyQt6.QtGui import QAction, QKeySequence
 
 from .video_widget import VideoWidget
-from .theme_manager import ThemeManager, Theme
+from .enhanced_theme import EnhancedThemeManager, Theme
 from .fullscreen_overlay import FullscreenMouseOverlay
+from .welcome_screen import WelcomeScreen
 from ..core.player import MediaPlayer
 
 logger = logging.getLogger(__name__)
@@ -46,7 +47,7 @@ class MainWindow(QMainWindow):
     def _initialize_components(self):
         """Initialize core components"""
         self.player = MediaPlayer()
-        self.theme_manager = ThemeManager()
+        self.theme_manager = EnhancedThemeManager()
         self.current_file = None
         self.is_seeking = False
         self._fast_forward_timer = None
@@ -91,6 +92,11 @@ class MainWindow(QMainWindow):
         self.video_widget.set_main_window(self)
         self.video_widget.set_drop_callback(self._on_file_dropped)
         main_layout.addWidget(self.video_widget, stretch=1)
+        
+        # Create welcome screen overlay (shown when no video is loaded)
+        self.welcome_screen = WelcomeScreen(self.video_widget)
+        self.welcome_screen.setGeometry(self.video_widget.rect())
+        self.welcome_screen.show()
         
         # Create fullscreen overlay (hidden by default, activated when paused in fullscreen)
         self.fullscreen_overlay = FullscreenMouseOverlay(self.video_widget)
@@ -425,6 +431,12 @@ class MainWindow(QMainWindow):
         panel_style = self.theme_manager.get_stylesheet('control_panel')
         self.control_panel.setStyleSheet(panel_style)
         
+        # Update welcome screen styling
+        if hasattr(self, 'welcome_screen'):
+            is_dark = self.theme_manager.current_theme == Theme.DARK
+            welcome_style = self.welcome_screen.get_stylesheet(is_dark)
+            self.welcome_screen.setStyleSheet(welcome_style)
+        
         # Update theme toggle button and menu action
         if self.theme_manager.current_theme == Theme.DARK:
             self.theme_action.setText("☀️ Light Mode")
@@ -500,6 +512,11 @@ class MainWindow(QMainWindow):
         if self.player.load_file(filepath):
             self.current_file = filepath
             self.setWindowTitle(f"PyMedia Player - {Path(filepath).name}")
+            
+            # Hide welcome screen when video loads
+            if hasattr(self, 'welcome_screen'):
+                self.welcome_screen.hide()
+            
             self.player.play()
             self._update_play_button()
             
