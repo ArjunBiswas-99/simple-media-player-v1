@@ -1,0 +1,10 @@
+
+PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> python -m  src.main 
+2025-12-11 08:16:42,713 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 08:16:42,808 - src.core.player - INFO - MPV player initialized successfully
+2025-12-11 08:16:42,812 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 08:16:43,129 - __main__ - INFO - Application started successfully
+2025-12-11 08:17:02,496 - src.core.player - ERROR - Failed to load file: ('Invalid value for mpv parameter', -4, (<MpvHandle object at 0x000002112CAF3CC0>, <mpv.LP_MpvNode object at 0x000002112E87F740>, <mpv.LP_MpvNode object at 0x000002112E87F6C0>))
+2025-12-11 08:17:07,865 - src.gui.main_window - INFO - Application closed
+2025-12-11 08:17:07,876 - __main__ - INFO - Application exited with code 0
+PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
