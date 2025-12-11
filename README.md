@@ -21,6 +21,7 @@
 
 ### Dark Theme
 *Modern dark interface perfect for nighttime viewing*
+<img width="1041" height="804" alt="image" src="https://github.com/user-attachments/assets/e2036ea1-7a5b-4121-b4cb-9f86b1e7058e" />
 
 ### Light Theme  
 *Clean, professional light mode for daytime use*
