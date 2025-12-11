@@ -1,17 +1,15 @@
-simple-media-player-v1> python -m src.main
-2025-12-11 10:27:04,035 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 10:27:04,067 - src.core.player - INFO - OpenCV media player initialized
-2025-12-11 10:27:04,090 - src.core.player - INFO - Player initialized with video widget
-2025-12-11 10:27:04,102 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 10:27:04,779 - __main__ - INFO - Application started successfully
-2025-12-11 10:27:11,999 - src.core.player - INFO - Playback stopped
-2025-12-11 10:27:12,039 - src.core.player - INFO - Loaded video: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 10:27:12,039 - src.core.player - INFO - Properties - Frames: 173111, FPS: 23.976023976023978
-2025-12-11 10:27:12,039 - src.core.player - INFO - Playback loop started
-2025-12-11 10:27:12,039 - src.core.player - INFO - Playback started
-2025-12-11 10:27:12,043 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
-Traceback (most recent call last):
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 311, in eventFilter
-    value = QStyle.sliderValueFromPosition(
-TypeError: sliderValueFromPosition(min: int, max: int, position: int, span: int, upsideDown: bool = False): argument 3 has unexpected type 'float'
-PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
+yer-v1> python -m src.main
+2025-12-11 10:29:43,321 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 10:29:43,355 - src.core.player - INFO - OpenCV media player initialized
+2025-12-11 10:29:43,363 - src.core.player - INFO - Player initialized with video widget
+2025-12-11 10:29:43,387 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 10:29:44,055 - __main__ - INFO - Application started successfully
+2025-12-11 10:29:52,137 - src.core.player - INFO - Playback stopped
+2025-12-11 10:29:52,174 - src.core.player - INFO - Loaded video: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 10:29:52,174 - src.core.player - INFO - Properties - Frames: 173111, FPS: 23.976023976023978
+2025-12-11 10:29:52,175 - src.core.player - INFO - Playback loop started
+2025-12-11 10:29:52,175 - src.core.player - INFO - Playback started
+2025-12-11 10:29:52,176 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
+Assertion fctx->async_lock failed at libavcodec/pthread_frame.c:173
+QObject::killTimer: Timers cannot be stopped from another thread
+QObject::~QObject: Timers cannot be stopped from another thread
