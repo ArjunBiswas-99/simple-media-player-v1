@@ -1,25 +1,1017 @@
-eDrive\Desktop\Test\simple-media-player-v1> python -m src.main  
-2025-12-11 13:07:12,337 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 13:07:13,071 - src.core.player - INFO - Media player initialized with PyQt6 Multimedia
-2025-12-11 13:07:13,087 - src.core.player - INFO - Player initialized with video widget
-2025-12-11 13:07:13,099 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 13:07:13,594 - __main__ - INFO - Application started successfully
-2025-12-11 13:07:20,477 - src.core.player - INFO - Playback stopped
-2025-12-11 13:07:20,527 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 13:07:20,552 - src.core.player - INFO - Playback started
-2025-12-11 13:07:20,552 - src.gui.main_window - WARNING - Could not resize to video: 'VideoWidget' object has no attribute 'videoSize'     
-2025-12-11 13:07:20,552 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 13:07:20,626 - src.gui.main_window - WARNING - Could not resize to video: 'VideoWidget' object has no attribute 'videoSize'
-    failed to get textures for frame; format: 172 textureConverter null
-2025-12-11 13:07:26,920 - src.core.player - INFO - Playback paused
-2025-12-11 13:07:27,145 - src.core.player - INFO - Playback started
-2025-12-11 13:07:39,871 - src.gui.main_window - INFO - Fast forward started
-2025-12-11 13:07:40,815 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 13:07:45,610 - src.core.player - INFO - Playback paused
-2025-12-11 13:07:46,185 - src.gui.main_window - INFO - Fast forward started
-2025-12-11 13:07:47,587 - src.gui.main_window - INFO - Fast forward stopped
-2025-12-11 13:07:47,588 - src.core.player - INFO - Playback stopped
-2025-12-11 13:07:47,598 - src.core.player - INFO - Player shut down
-2025-12-11 13:07:47,598 - src.gui.main_window - INFO - Application closed
-2025-12-11 13:07:47,624 - __main__ - INFO - Application exited with code 0
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 614, in _volume_up
+    self.volume_slider.setValue(new_volume)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 609, in _on_volume_changed
+    self.animations.show_volume(value)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 81, in show_volume
+    self._show_feedback(f"{icon}\n{volume}%", 56)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '🔊\n70%' (size: 56)"
+Arguments: ()
+2025-12-11 13:16:43,116 - src.gui.animations - INFO - Animation positioned at (863, 365) size (193x229)
+2025-12-11 13:16:43,116 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:16:43,116 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:43,280 - src.gui.animations - INFO - Showing volume animation: 75%
+2025-12-11 13:16:43,280 - src.gui.animations - INFO - Displaying animation: '🔊
+75%' (size: 56)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f50a' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 614, in _volume_up
+    self.volume_slider.setValue(new_volume)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 609, in _on_volume_changed
+    self.animations.show_volume(value)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 81, in show_volume
+    self._show_feedback(f"{icon}\n{volume}%", 56)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '🔊\n75%' (size: 56)"
+Arguments: ()
+2025-12-11 13:16:43,281 - src.gui.animations - INFO - Animation positioned at (863, 365) size (193x229)
+2025-12-11 13:16:43,282 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:16:43,282 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:43,443 - src.gui.animations - INFO - Showing volume animation: 80%
+2025-12-11 13:16:43,444 - src.gui.animations - INFO - Displaying animation: '🔊
+80%' (size: 56)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f50a' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 614, in _volume_up
+    self.volume_slider.setValue(new_volume)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 609, in _on_volume_changed
+    self.animations.show_volume(value)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 81, in show_volume
+    self._show_feedback(f"{icon}\n{volume}%", 56)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '🔊\n80%' (size: 56)"
+Arguments: ()
+2025-12-11 13:16:43,445 - src.gui.animations - INFO - Animation positioned at (863, 365) size (193x229)
+2025-12-11 13:16:43,445 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:16:43,445 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:43,610 - src.gui.animations - INFO - Showing volume animation: 85%
+2025-12-11 13:16:43,610 - src.gui.animations - INFO - Displaying animation: '🔊
+85%' (size: 56)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f50a' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 614, in _volume_up
+    self.volume_slider.setValue(new_volume)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 609, in _on_volume_changed
+    self.animations.show_volume(value)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 81, in show_volume
+    self._show_feedback(f"{icon}\n{volume}%", 56)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '🔊\n85%' (size: 56)"
+Arguments: ()
+2025-12-11 13:16:43,612 - src.gui.animations - INFO - Animation positioned at (863, 365) size (193x229)
+2025-12-11 13:16:43,612 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:16:43,613 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:43,797 - src.gui.animations - INFO - Showing volume animation: 90%
+2025-12-11 13:16:43,797 - src.gui.animations - INFO - Displaying animation: '🔊
+90%' (size: 56)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f50a' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 614, in _volume_up
+    self.volume_slider.setValue(new_volume)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 609, in _on_volume_changed
+    self.animations.show_volume(value)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 81, in show_volume
+    self._show_feedback(f"{icon}\n{volume}%", 56)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '🔊\n90%' (size: 56)"
+Arguments: ()
+2025-12-11 13:16:43,799 - src.gui.animations - INFO - Animation positioned at (863, 365) size (193x229)
+2025-12-11 13:16:43,799 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:16:43,799 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:43,972 - src.gui.animations - INFO - Showing volume animation: 95%
+2025-12-11 13:16:43,972 - src.gui.animations - INFO - Displaying animation: '🔊
+95%' (size: 56)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f50a' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 614, in _volume_up
+    self.volume_slider.setValue(new_volume)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 609, in _on_volume_changed
+    self.animations.show_volume(value)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 81, in show_volume
+    self._show_feedback(f"{icon}\n{volume}%", 56)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '🔊\n95%' (size: 56)"
+Arguments: ()
+2025-12-11 13:16:43,974 - src.gui.animations - INFO - Animation positioned at (863, 365) size (193x229)
+2025-12-11 13:16:43,974 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:16:43,974 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:50,165 - src.gui.animations - INFO - Showing volume animation: 100%
+2025-12-11 13:16:50,165 - src.gui.animations - INFO - Displaying animation: '🔊
+100%' (size: 56)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f50a' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 614, in _volume_up
+    self.volume_slider.setValue(new_volume)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 609, in _on_volume_changed
+    self.animations.show_volume(value)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 81, in show_volume
+    self._show_feedback(f"{icon}\n{volume}%", 56)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '🔊\n100%' (size: 56)"
+Arguments: ()
+2025-12-11 13:16:50,168 - src.gui.animations - INFO - Animation positioned at (847, 425) size (225x229)
+2025-12-11 13:16:50,168 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:50,168 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:53,938 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:53,938 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:53,940 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:53,940 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:53,940 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,439 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,439 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,441 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,441 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,441 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,468 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,470 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,471 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,471 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,472 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,500 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,500 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,502 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,502 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,502 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,530 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,531 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,532 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,532 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,532 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,561 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,561 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,564 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,564 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,564 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,591 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,591 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,593 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,593 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,593 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,622 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,625 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,635 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,637 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,638 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,651 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,652 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,655 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,655 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,656 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,680 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,680 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,683 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,683 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,684 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,711 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,711 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,714 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,714 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,714 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,741 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,741 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,744 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,744 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,744 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,771 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,771 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,773 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,774 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,774 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,801 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,803 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,805 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,805 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,805 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:16:54,832 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:16:54,832 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:16:54,834 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:16:54,834 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:16:54,834 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:17:01,005 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:17:01,005 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:17:01,007 - src.gui.animations - INFO - Animation positioned at (870, 451) size (180x177)
+2025-12-11 13:17:01,007 - src.gui.animations - INFO - Parent size: 1920x1080
+2025-12-11 13:17:01,007 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:17:16,679 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:17:16,679 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:17:16,681 - src.gui.animations - INFO - Animation positioned at (870, 391) size (180x177)
+2025-12-11 13:17:16,681 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:17:16,681 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:17:26,813 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:17:26,813 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:17:26,815 - src.gui.animations - INFO - Animation positioned at (870, 391) size (180x177)
+2025-12-11 13:17:26,815 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:17:26,816 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:17:27,071 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:17:27,071 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:17:27,074 - src.gui.animations - INFO - Animation positioned at (870, 391) size (180x177)
+2025-12-11 13:17:27,074 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:17:27,074 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:01,252 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:18:01,254 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:01,256 - src.gui.animations - INFO - Animation positioned at (870, 391) size (180x177)
+2025-12-11 13:18:01,256 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:18:01,256 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:01,588 - src.gui.animations - INFO - Showing seek forward animation
+2025-12-11 13:18:01,590 - src.gui.animations - INFO - Displaying animation: '⏩' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23e9' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 356, in <lambda>
+    "Right": lambda: (self.player.seek(5, relative=True), self.animations.show_seek_forward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 63, in show_seek_forward
+    self._show_feedback("⏩", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏩' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:01,591 - src.gui.animations - INFO - Animation positioned at (870, 391) size (180x177)
+2025-12-11 13:18:01,591 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:18:01,591 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:04,992 - src.core.player - INFO - Playback paused
+2025-12-11 13:18:04,992 - src.gui.animations - INFO - Showing play animation
+2025-12-11 13:18:04,992 - src.gui.animations - INFO - Displaying animation: '▶' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u25b6' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\video_widget.py", line 143, in mouseReleaseEvent
+    self.single_clicked.emit()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 574, in _toggle_play_pause
+    self.animations.show_play_pause(self.player.is_playing)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 58, in show_play_pause
+    self._show_feedback(icon, 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '▶' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:04,995 - src.gui.animations - INFO - Animation positioned at (901, 392) size (117x176)
+2025-12-11 13:18:04,995 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:18:04,995 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:05,574 - src.gui.main_window - INFO - Fast forward started
+2025-12-11 13:18:06,458 - src.core.player - INFO - Playback started
+2025-12-11 13:18:06,458 - src.gui.animations - INFO - Showing pause animation
+2025-12-11 13:18:06,458 - src.gui.animations - INFO - Displaying animation: '⏸' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23f8' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 574, in _toggle_play_pause
+    self.animations.show_play_pause(self.player.is_playing)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 58, in show_play_pause
+    self._show_feedback(icon, 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏸' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:06,459 - src.gui.animations - INFO - Animation positioned at (774, 296) size (180x177)
+2025-12-11 13:18:06,460 - src.gui.animations - INFO - Parent size: 1728x770
+2025-12-11 13:18:06,460 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:08,123 - src.gui.animations - INFO - Showing seek backward animation
+2025-12-11 13:18:08,124 - src.gui.animations - INFO - Displaying animation: '⏪' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23ea' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 357, in <lambda>
+    "Left": lambda: (self.player.seek(-5, relative=True), self.animations.show_seek_backward()),
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 68, in show_seek_backward
+    self._show_feedback("⏪", 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏪' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:08,126 - src.gui.animations - INFO - Animation positioned at (774, 296) size (180x177)
+2025-12-11 13:18:08,126 - src.gui.animations - INFO - Parent size: 1728x770
+2025-12-11 13:18:08,126 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:09,122 - src.core.player - INFO - Playback paused
+2025-12-11 13:18:09,122 - src.gui.animations - INFO - Showing play animation
+2025-12-11 13:18:09,122 - src.gui.animations - INFO - Displaying animation: '▶' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u25b6' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 574, in _toggle_play_pause
+    self.animations.show_play_pause(self.player.is_playing)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 58, in show_play_pause
+    self._show_feedback(icon, 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '▶' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:09,124 - src.gui.animations - INFO - Animation positioned at (805, 297) size (117x176)
+2025-12-11 13:18:09,124 - src.gui.animations - INFO - Parent size: 1728x770
+2025-12-11 13:18:09,124 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:10,575 - src.gui.main_window - INFO - Fast forward stopped
+2025-12-11 13:18:10,791 - src.core.player - INFO - Playback started
+2025-12-11 13:18:10,791 - src.gui.animations - INFO - Showing pause animation
+2025-12-11 13:18:10,792 - src.gui.animations - INFO - Displaying animation: '⏸' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u23f8' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\video_widget.py", line 143, in mouseReleaseEvent
+    self.single_clicked.emit()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 574, in _toggle_play_pause
+    self.animations.show_play_pause(self.player.is_playing)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 58, in show_play_pause
+    self._show_feedback(icon, 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '⏸' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:10,794 - src.gui.animations - INFO - Animation positioned at (870, 391) size (180x177)
+2025-12-11 13:18:10,794 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:18:10,794 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:12,436 - src.core.player - INFO - Playback paused
+2025-12-11 13:18:12,436 - src.gui.animations - INFO - Showing play animation
+2025-12-11 13:18:12,436 - src.gui.animations - INFO - Displaying animation: '▶' (size: 72)
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
+    stream.write(msg + self.terminator)
+  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u25b6' in position 77: character maps to <undefined>
+Call stack:
+  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "C:\Python310\lib\runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
+    sys.exit(main())
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
+    exit_code = app.exec()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\video_widget.py", line 143, in mouseReleaseEvent
+    self.single_clicked.emit()
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 574, in _toggle_play_pause
+    self.animations.show_play_pause(self.player.is_playing)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 58, in show_play_pause
+    self._show_feedback(icon, 72)
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\animations.py", line 97, in _show_feedback
+    logger.info(f"Displaying animation: '{text}' (size: {font_size})")
+Message: "Displaying animation: '▶' (size: 72)"
+Arguments: ()
+2025-12-11 13:18:12,439 - src.gui.animations - INFO - Animation positioned at (901, 392) size (117x176)
+2025-12-11 13:18:12,439 - src.gui.animations - INFO - Parent size: 1920x960
+2025-12-11 13:18:12,439 - src.gui.animations - INFO - Label visible: True
+2025-12-11 13:18:13,031 - src.gui.main_window - INFO - Fast forward started
+2025-12-11 13:18:14,460 - src.gui.main_window - INFO - Fast forward stopped
+2025-12-11 13:18:14,460 - src.core.player - INFO - Playback stopped
+2025-12-11 13:18:14,470 - src.core.player - INFO - Player shut down
+2025-12-11 13:18:14,471 - src.gui.main_window - INFO - Application closed
+2025-12-11 13:18:14,495 - __main__ - INFO - Application exited with code 0
 PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
