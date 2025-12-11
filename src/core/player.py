@@ -364,8 +364,8 @@ class MediaPlayer:
                     if self._stop_flag.is_set() or not self._is_playing:
                         break
                     
-                    # Convert frame to numpy array (RGB format)
-                    img = frame.to_ndarray(format='rgb24')
+                    # Convert frame to numpy array (BGR format for Qt compatibility)
+                    img = frame.to_ndarray(format='bgr24')
                     
                     # Calculate frame timing
                     frame_pts = float(frame.pts * self._video_time_base) if frame.pts else 0
@@ -374,9 +374,12 @@ class MediaPlayer:
                     current_time = self.time_pos
                     time_diff = frame_pts - current_time
                     
-                    # Wait if we're ahead of schedule
-                    if time_diff > 0:
-                        time.sleep(time_diff / self._playback_speed)
+                    # Wait if we're ahead of schedule (with better sync)
+                    if time_diff > 0.001:  # Only sync if more than 1ms ahead
+                        sleep_time = min(time_diff / self._playback_speed, 0.1)  # Cap at 100ms
+                        time.sleep(sleep_time)
+                    elif time_diff < -0.5:  # If more than 500ms behind, skip frame
+                        continue
                     
                     # Emit frame for display
                     self.signals.frame_ready.emit(img)

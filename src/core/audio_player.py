@@ -4,6 +4,7 @@ Handles audio stream extraction and synchronized playback
 """
 
 import logging
+import time
 from pathlib import Path
 import pygame.mixer
 import threading
@@ -87,13 +88,20 @@ class AudioPlayer:
             # If paused, unpause. Otherwise start from beginning
             if pygame.mixer.music.get_busy() and self._pause_position > 0:
                 pygame.mixer.music.unpause()
+                logger.info("Audio unpaused")
             else:
                 pygame.mixer.music.play(start=self._start_position)
+                logger.info(f"Audio playback started from {self._start_position}s")
             
-            logger.debug("Audio playback started")
+            # Verify playback started
+            time.sleep(0.1)
+            if pygame.mixer.music.get_busy():
+                logger.info("Audio is playing")
+            else:
+                logger.error("Audio failed to start - mixer not busy")
             
         except Exception as e:
-            logger.error(f"Failed to start audio playback: {e}")
+            logger.error(f"Failed to start audio playback: {e}", exc_info=True)
     
     def pause(self):
         """Pause audio playback"""
