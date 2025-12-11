@@ -1,6 +1,6 @@
-# Contributing to PyMedia Player 🎬
+# Contributing to Simple Media Player 🎬
 
-First off, thank you for considering contributing to PyMedia Player! It's people like you that make this project great.
+First off, thank you for considering contributing to Simple Media Player! It's people like you that make this project great.
 
 ## 🌟 How Can I Contribute?
 
@@ -351,6 +351,6 @@ Feel free to open an issue or discussion if you have questions!
 
 ---
 
-**Thank you for contributing to PyMedia Player!** 🎉
+**Thank you for contributing to Simple Media Player!** 🎉
 
 Every contribution, no matter how small, makes a difference.

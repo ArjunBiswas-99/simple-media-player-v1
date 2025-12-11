@@ -1,4 +1,5 @@
-# 🎬 PyMedia Player
+# 🎬 Simple Media Player
+### *by Arjun Biswas*
 
 [![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![PyQt6](https://img.shields.io/badge/PyQt6-6.0+-green.svg)](https://pypi.org/project/PyQt6/)
@@ -7,7 +8,7 @@
 
 > A modern, lightweight, cross-platform video player built with Python and PyQt6. Perfect for developers learning GUI programming or users seeking a simple, elegant media player.
 
-## ✨ Why PyMedia Player?
+## ✨ Why Simple Media Player?
 
 - 🚀 **Zero configuration** - Works out of the box with system codecs
 - 🎨 **Beautiful UI** - Modern dark/light themes with smooth animations
@@ -83,7 +84,7 @@ python -m src.main
 python3 -m src.main
 ```
 
-**That's it!** 🎉 No system dependencies, no complex setup.
+**That's it!** 🎉 No system dependencies, no complex setup, just pure Python goodness.
 
 ### Opening a Video
 
@@ -139,7 +140,7 @@ Output: `dist/PyMediaPlayer.exe`
 **Cross-platform:**
 ```bash
 pip install pyinstaller
-pyinstaller --name="PyMedia Player" --windowed src/main.py
+pyinstaller --name="Simple Media Player" --windowed src/main.py
 ```
 
 ## 🔧 Technology Stack
@@ -290,8 +291,8 @@ If you find this project useful, please consider giving it a star! ⭐
 
 <div align="center">
 
-**Made with ❤️ using Python and PyQt6**
+**Made by Arjun Biswas**
 
-[⬆ Back to Top](#-pymedia-player)
+[⬆ Back to Top](#-simple-media-player)
 
 </div>
