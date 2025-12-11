@@ -620,10 +620,12 @@ class MainWindow(QMainWindow):
         Toggle fullscreen mode with automatic control hiding
         Manages overlay state based on playback status
         """
+        # Activate transition lock FIRST to block any trailing mouse events
+        self.video_widget.start_fullscreen_transition()
+        
         if self.isFullScreen():
             # Exit fullscreen
             self._stop_fast_forward()  # Stop any fast-forward in progress
-            self.video_widget.cancel_pending_interactions()  # Cancel any pending timers in video widget
             self.showNormal()
             self.menuBar().show()
             self.control_panel.show()
