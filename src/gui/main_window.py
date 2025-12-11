@@ -102,8 +102,11 @@ class MainWindow(QMainWindow):
         Creates the main window structure with video display area and control panel.
         Uses composition pattern to build complex UI from simpler components.
         """
-        self.setWindowTitle("PyMedia Player")
+        self.setWindowTitle("Simple Media Player by Arjun Biswas")
         self.setMinimumSize(800, 600)
+        
+        # Set application icon
+        self._set_window_icon()
         
         # Custom widget for fullscreen mouse tracking (Inner class following SRP)
         class MouseTrackingWidget(QWidget):
@@ -259,12 +262,12 @@ class MainWindow(QMainWindow):
         button_layout.addSpacing(4)
         
         # Fullscreen button (icon-only for Netflix style)
-        fullscreen_button = self._create_icon_button(
-            QStyle.StandardPixmap.SP_TitleBarMaxButton,
-            self._toggle_fullscreen,
-            "Fullscreen (F)"
-        )
-        fullscreen_button.setText("⛶")
+        fullscreen_button = QPushButton("⛶")
+        fullscreen_button.setObjectName("iconButton")
+        fullscreen_button.clicked.connect(self._toggle_fullscreen)
+        fullscreen_button.setToolTip("Fullscreen (F)")
+        fullscreen_button.setAttribute(Qt.WidgetAttribute.WA_MacShowFocusRect, False)
+        fullscreen_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         button_layout.addWidget(fullscreen_button)
         
         return button_layout
@@ -329,27 +332,31 @@ class MainWindow(QMainWindow):
         """
         layout = QHBoxLayout()
         layout.setSpacing(6)
-        layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         
-        # Volume icon button (mute toggle)
+        # Volume icon button (mute toggle) - centered vertically
         self.volume_icon_button = QPushButton("🔊")
         self.volume_icon_button.setObjectName("iconButton")
         self.volume_icon_button.clicked.connect(self._toggle_mute)
         self.volume_icon_button.setToolTip("Mute/Unmute (M)")
-        layout.addWidget(self.volume_icon_button, alignment=Qt.AlignmentFlag.AlignVCenter)
+        layout.addWidget(self.volume_icon_button)
         
+        # Volume slider - centered vertically
         self.volume_slider = QSlider(Qt.Orientation.Horizontal)
         self.volume_slider.setRange(0, 100)
         self.volume_slider.setValue(100)
         self.volume_slider.setFixedWidth(80)
+        self.volume_slider.setFixedHeight(40)
         self.volume_slider.setObjectName("volumeSlider")
         self.volume_slider.valueChanged.connect(self._on_volume_changed)
-        layout.addWidget(self.volume_slider, alignment=Qt.AlignmentFlag.AlignVCenter)
+        layout.addWidget(self.volume_slider)
         
+        # Volume percentage label - centered vertically
         self.volume_label = QLabel("100%")
         self.volume_label.setFixedWidth(35)
+        self.volume_label.setFixedHeight(40)
+        self.volume_label.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
         self.volume_label.setObjectName("volumeLabel")
-        layout.addWidget(self.volume_label, alignment=Qt.AlignmentFlag.AlignVCenter)
+        layout.addWidget(self.volume_label)
         
         return layout
     
@@ -364,19 +371,45 @@ class MainWindow(QMainWindow):
         """
         layout = QHBoxLayout()
         layout.setSpacing(6)
-        layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         
+        # Speed label - centered vertically
         speed_label = QLabel("Speed:")
+        speed_label.setFixedHeight(40)
+        speed_label.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
         speed_label.setObjectName("speedLabel")
-        layout.addWidget(speed_label, alignment=Qt.AlignmentFlag.AlignVCenter)
+        layout.addWidget(speed_label)
         
+        # Speed button - matches icon button height
         self.speed_button = QPushButton("1.0x")
         self.speed_button.clicked.connect(self._cycle_speed)
         self.speed_button.setFixedWidth(55)
         self.speed_button.setObjectName("iconButton")
-        layout.addWidget(self.speed_button, alignment=Qt.AlignmentFlag.AlignVCenter)
+        layout.addWidget(self.speed_button)
         
         return layout
+    
+    def _set_window_icon(self):
+        """Set the window icon from the icons directory"""
+        try:
+            from PyQt6.QtGui import QIcon
+            from pathlib import Path
+            
+            # Get path to icon file
+            icon_dir = Path(__file__).parent / 'icons'
+            
+            # Try PNG first (cross-platform), then ICO (Windows)
+            icon_path = icon_dir / 'icon_256x256.png'
+            if not icon_path.exists():
+                icon_path = icon_dir / 'app_icon.ico'
+            
+            if icon_path.exists():
+                icon = QIcon(str(icon_path))
+                self.setWindowIcon(icon)
+                logger.info(f"Window icon set: {icon_path.name}")
+            else:
+                logger.warning("Icon file not found")
+        except Exception as e:
+            logger.warning(f"Could not set window icon: {e}")
     
     def _create_menu(self):
         """Create the menu bar"""
@@ -608,7 +641,7 @@ class MainWindow(QMainWindow):
         """Load and play a media file"""
         if self.player.load_file(filepath):
             self.current_file = filepath
-            self.setWindowTitle(f"PyMedia Player - {Path(filepath).name}")
+            self.setWindowTitle(f"Simple Media Player - {Path(filepath).name} | by Arjun Biswas")
             
             # Hide welcome screen when video loads
             if hasattr(self, 'welcome_screen'):
@@ -950,9 +983,10 @@ class MainWindow(QMainWindow):
         """Show about dialog"""
         QMessageBox.about(
             self,
-            "About PyMedia Player",
-            "<h3>PyMedia Player v1.0.0</h3>"
-            "<p>A simple, lightweight media player built with Python.</p>"
+            "About Simple Media Player",
+            "<h3>Simple Media Player v1.0.0</h3>"
+            "<p>by Arjun Biswas</p>"
+            "<p>A modern, lightweight media player with Netflix-inspired design.</p>"
             "<p><b>Features:</b></p>"
             "<ul>"
             "<li>Play video and audio files</li>"

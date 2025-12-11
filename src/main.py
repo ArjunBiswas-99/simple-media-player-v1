@@ -39,7 +39,7 @@ def main():
     setup_logging()
     logger = logging.getLogger(__name__)
     
-    logger.info("Starting PyMedia Player v1.0.0")
+    logger.info("Starting Simple Media Player v1.0.0")
     
     # Enable high DPI support
     QApplication.setHighDpiScaleFactorRoundingPolicy(
@@ -48,9 +48,25 @@ def main():
     
     # Create application
     app = QApplication(sys.argv)
-    app.setApplicationName("PyMedia Player")
+    app.setApplicationName("Simple Media Player")
     app.setApplicationVersion("1.0.0")
-    app.setOrganizationName("PyMedia")
+    app.setOrganizationName("Arjun Biswas")
+    
+    # Set application-wide icon
+    try:
+        from PyQt6.QtGui import QIcon
+        from pathlib import Path
+        
+        icon_dir = Path(__file__).parent / 'gui' / 'icons'
+        icon_path = icon_dir / 'icon_256x256.png'
+        
+        if icon_path.exists():
+            app.setWindowIcon(QIcon(str(icon_path)))
+            logger.info(f"Application icon set: {icon_path.name}")
+        else:
+            logger.warning("Application icon not found")
+    except Exception as e:
+        logger.warning(f"Could not set application icon: {e}")
     
     # Create and show main window
     window = MainWindow()
