@@ -1,5 +1,13 @@
 """
-Theme manager for handling light and dark themes with modern design
+Theme Manager Module
+
+Manages application-wide theme configuration and styling with Netflix-inspired aesthetics.
+Provides dark and light theme options with consistent color schemes across all UI components.
+
+Design Principles:
+    - Open/Closed Principle: Easy to extend with new themes without modifying existing code
+    - Single Responsibility: Only handles theme-related styling and configuration
+    - Interface Segregation: Provides specific methods for different styling needs
 """
 
 from enum import Enum
@@ -13,7 +21,17 @@ class Theme(Enum):
 
 
 class ThemeManager:
-    """Manages application themes with modern, beautiful styling"""
+    """
+    Manages application themes with Netflix-inspired styling
+    
+    Provides a centralized theme management system that can be easily extended
+    with new themes. Follows Open/Closed Principle - open for extension (new themes),
+    closed for modification (existing theme logic).
+    
+    Attributes:
+        _current_theme: Currently active theme (Dark or Light)
+        _theme_styles: Dictionary mapping themes to their style configurations
+    """
     
     def __init__(self):
         """Initialize theme manager with dark theme as default"""
@@ -28,154 +46,159 @@ class ThemeManager:
         }
     
     def _get_dark_theme(self) -> Dict[str, str]:
-        """Modern dark theme with gradient accent"""
+        """
+        Netflix-inspired dark theme configuration
+        
+        Colors:
+            - Background: Pure black (#000000) - Netflix signature
+            - Text: Pure white (#FFFFFF) for maximum contrast
+            - Accent: Netflix red (#E50914) for interactive elements
+            - Control Panel: Gradient overlay (transparent → 95% black)
+            
+        Returns:
+            Dict[str, str]: Component name to stylesheet mapping
+        """
         return {
             'main_window': """
                 QMainWindow {
-                    background-color: #1a1a2e;
-                    color: #e0e0e0;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', sans-serif;
+                    background-color: #000000;
+                    color: #FFFFFF;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Netflix Sans', 'Helvetica Neue', sans-serif;
                 }
             """,
             'control_panel': """
                 #controlPanel {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 rgba(22, 33, 62, 0.95),
-                                stop:1 rgba(26, 26, 46, 0.95));
-                    border-top: 2px solid rgba(102, 126, 234, 0.3);
+                                stop:0 rgba(0, 0, 0, 0.0),
+                                stop:0.3 rgba(0, 0, 0, 0.3),
+                                stop:1 rgba(0, 0, 0, 0.95));
+                    border: none;
                 }
             """,
             'button': """
                 QPushButton#controlButton {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #667eea,
-                                stop:1 #764ba2);
+                    background: #E50914;
                     color: white;
                     border: none;
-                    border-radius: 12px;
-                    padding: 12px 20px;
+                    border-radius: 4px;
+                    padding: 10px 24px;
                     font-weight: 600;
                     font-size: 14px;
                     min-width: 100px;
                 }
                 QPushButton#controlButton:hover {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #7c94f5,
-                                stop:1 #8b61b3);
-                    padding: 12px 22px;
+                    background: #F40612;
                 }
                 QPushButton#controlButton:pressed {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5568d3,
-                                stop:1 #653a91);
+                    background: #B20710;
                 }
                 QPushButton#iconButton {
-                    background: rgba(102, 126, 234, 0.2);
-                    border: 2px solid rgba(102, 126, 234, 0.4);
-                    border-radius: 24px;
-                    min-width: 48px;
-                    max-width: 48px;
-                    min-height: 48px;
-                    max-height: 48px;
+                    background: transparent;
+                    border: none;
+                    border-radius: 20px;
+                    min-width: 40px;
+                    max-width: 40px;
+                    min-height: 40px;
+                    max-height: 40px;
                     color: white;
+                    font-size: 18px;
                 }
                 QPushButton#iconButton:hover {
-                    background: rgba(102, 126, 234, 0.4);
-                    border: 2px solid rgba(102, 126, 234, 0.6);
+                    background: rgba(255, 255, 255, 0.1);
                 }
                 QPushButton#iconButton:pressed {
-                    background: rgba(102, 126, 234, 0.6);
-                }
-                QPushButton#iconButton::icon {
-                    color: white;
+                    background: rgba(255, 255, 255, 0.2);
                 }
                 QPushButton#themeToggle {
-                    background: rgba(0, 212, 255, 0.15);
-                    border: 2px solid rgba(0, 212, 255, 0.3);
-                    border-radius: 24px;
-                    min-width: 48px;
-                    max-width: 48px;
-                    min-height: 48px;
-                    max-height: 48px;
-                    font-size: 20px;
+                    background: transparent;
+                    border: 1px solid rgba(255, 255, 255, 0.3);
+                    border-radius: 20px;
+                    min-width: 40px;
+                    max-width: 40px;
+                    min-height: 40px;
+                    max-height: 40px;
+                    font-size: 16px;
                 }
                 QPushButton#themeToggle:hover {
-                    background: rgba(0, 212, 255, 0.3);
-                    border: 2px solid rgba(0, 212, 255, 0.5);
+                    background: rgba(255, 255, 255, 0.1);
+                    border: 1px solid rgba(255, 255, 255, 0.5);
                 }
             """,
             'label': """
                 QLabel#timeLabel, QLabel#durationLabel {
-                    color: #00d4ff;
-                    font-weight: 600;
-                    font-size: 14px;
+                    color: #FFFFFF;
+                    font-weight: 500;
+                    font-size: 13px;
                     min-width: 60px;
                 }
                 QLabel#volumeIcon, QLabel#speedLabel {
-                    color: #b8c1ec;
-                    font-weight: 500;
+                    color: #B3B3B3;
+                    font-weight: 400;
                     font-size: 13px;
                 }
                 QLabel#volumeLabel {
-                    color: #00d4ff;
-                    font-weight: 600;
-                    font-size: 13px;
-                    min-width: 45px;
+                    color: #FFFFFF;
+                    font-weight: 500;
+                    font-size: 12px;
+                    min-width: 40px;
                 }
             """,
             'slider': """
                 QSlider#progressSlider::groove:horizontal {
                     border: none;
-                    height: 6px;
-                    background: rgba(255, 255, 255, 0.1);
-                    border-radius: 3px;
+                    height: 3px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 2px;
                 }
                 QSlider#progressSlider::sub-page:horizontal {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #667eea,
-                                stop:1 #764ba2);
-                    border-radius: 3px;
+                    background: #E50914;
+                    border-radius: 2px;
                 }
                 QSlider#progressSlider::handle:horizontal {
-                    background: #00d4ff;
-                    border: 3px solid #1a1a2e;
-                    width: 18px;
-                    margin: -7px 0;
-                    border-radius: 9px;
+                    background: #E50914;
+                    border: none;
+                    width: 12px;
+                    height: 12px;
+                    margin: -5px 0;
+                    border-radius: 6px;
                 }
                 QSlider#progressSlider::handle:horizontal:hover {
-                    background: #33ddff;
-                    width: 20px;
-                    margin: -8px 0;
-                    border-radius: 10px;
-                }
-                QSlider#volumeSlider::groove:horizontal {
-                    border: none;
-                    height: 4px;
-                    background: rgba(255, 255, 255, 0.1);
-                    border-radius: 2px;
-                }
-                QSlider#volumeSlider::sub-page:horizontal {
-                    background: #00d4ff;
-                    border-radius: 2px;
-                }
-                QSlider#volumeSlider::handle:horizontal {
-                    background: #00d4ff;
-                    border: 2px solid #1a1a2e;
+                    background: #F40612;
                     width: 14px;
+                    height: 14px;
                     margin: -6px 0;
                     border-radius: 7px;
                 }
+                QSlider#volumeSlider::groove:horizontal {
+                    border: none;
+                    height: 3px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 2px;
+                }
+                QSlider#volumeSlider::sub-page:horizontal {
+                    background: #FFFFFF;
+                    border-radius: 2px;
+                }
+                QSlider#volumeSlider::handle:horizontal {
+                    background: #FFFFFF;
+                    border: none;
+                    width: 12px;
+                    height: 12px;
+                    margin: -5px 0;
+                    border-radius: 6px;
+                }
                 QSlider#volumeSlider::handle:horizontal:hover {
-                    background: #33ddff;
-                    width: 16px;
-                    border-radius: 8px;
+                    background: #FFFFFF;
+                    width: 14px;
+                    height: 14px;
+                    margin: -6px 0;
+                    border-radius: 7px;
                 }
             """,
             'menubar': """
                 QMenuBar {
-                    background-color: #1a1a2e;
-                    color: #e0e0e0;
+                    background-color: #000000;
+                    color: #FFFFFF;
                     font-weight: 500;
                     font-size: 13px;
                     spacing: 8px;
@@ -183,178 +206,182 @@ class ThemeManager:
                 }
                 QMenuBar::item {
                     padding: 6px 12px;
-                    border-radius: 6px;
+                    border-radius: 4px;
                 }
                 QMenuBar::item:selected {
-                    background: rgba(102, 126, 234, 0.3);
-                    color: #00d4ff;
+                    background: rgba(255, 255, 255, 0.1);
                 }
                 QMenu {
-                    background-color: #16213e;
-                    color: #e0e0e0;
-                    border: 2px solid rgba(102, 126, 234, 0.3);
-                    border-radius: 8px;
+                    background-color: #141414;
+                    color: #FFFFFF;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 4px;
                     padding: 4px;
                 }
                 QMenu::item {
                     padding: 8px 24px 8px 12px;
-                    border-radius: 4px;
+                    border-radius: 2px;
                 }
                 QMenu::item:selected {
-                    background: rgba(102, 126, 234, 0.4);
-                    color: #00d4ff;
+                    background: rgba(229, 9, 20, 0.8);
                 }
             """
         }
     
     def _get_light_theme(self) -> Dict[str, str]:
-        """Modern light theme with professional colors"""
+        """
+        Netflix-inspired light theme configuration
+        
+        Colors:
+            - Background: Pure white (#FFFFFF)
+            - Text: Dark gray (#141414) for readability
+            - Accent: Netflix red (#E50914) consistent with dark theme
+            - Control Panel: Gradient overlay (transparent → 98% white)
+            
+        Returns:
+            Dict[str, str]: Component name to stylesheet mapping
+        """
         return {
             'main_window': """
                 QMainWindow {
-                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 #f5f7fa,
-                                stop:1 #e8ecf1);
-                    color: #2c3e50;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', sans-serif;
+                    background-color: #FFFFFF;
+                    color: #141414;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Netflix Sans', 'Helvetica Neue', sans-serif;
                 }
             """,
             'control_panel': """
                 #controlPanel {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 rgba(255, 255, 255, 0.95),
-                                stop:1 rgba(240, 244, 248, 0.95));
-                    border-top: 2px solid rgba(52, 152, 219, 0.3);
+                                stop:0 rgba(255, 255, 255, 0.0),
+                                stop:0.3 rgba(255, 255, 255, 0.5),
+                                stop:1 rgba(255, 255, 255, 0.98));
+                    border: none;
                 }
             """,
             'button': """
                 QPushButton#controlButton {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4A90E2,
-                                stop:1 #5BA3F5);
+                    background: #E50914;
                     color: white;
                     border: none;
-                    border-radius: 12px;
-                    padding: 12px 20px;
+                    border-radius: 4px;
+                    padding: 10px 24px;
                     font-weight: 600;
                     font-size: 14px;
                     min-width: 100px;
                 }
                 QPushButton#controlButton:hover {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #5BA3F5,
-                                stop:1 #6CB4FF);
-                    padding: 12px 22px;
+                    background: #F40612;
                 }
                 QPushButton#controlButton:pressed {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #3A7DC2,
-                                stop:1 #4B8ED5);
+                    background: #B20710;
                 }
                 QPushButton#iconButton {
-                    background: rgba(74, 144, 226, 0.1);
-                    border: 2px solid rgba(74, 144, 226, 0.3);
-                    border-radius: 24px;
-                    min-width: 48px;
-                    max-width: 48px;
-                    min-height: 48px;
-                    max-height: 48px;
-                    color: #2c3e50;
+                    background: transparent;
+                    border: none;
+                    border-radius: 20px;
+                    min-width: 40px;
+                    max-width: 40px;
+                    min-height: 40px;
+                    max-height: 40px;
+                    color: #141414;
+                    font-size: 18px;
                 }
                 QPushButton#iconButton:hover {
-                    background: rgba(74, 144, 226, 0.2);
-                    border: 2px solid rgba(74, 144, 226, 0.5);
+                    background: rgba(0, 0, 0, 0.05);
                 }
                 QPushButton#iconButton:pressed {
-                    background: rgba(74, 144, 226, 0.3);
+                    background: rgba(0, 0, 0, 0.1);
                 }
                 QPushButton#themeToggle {
-                    background: rgba(255, 107, 107, 0.1);
-                    border: 2px solid rgba(255, 107, 107, 0.3);
-                    border-radius: 24px;
-                    min-width: 48px;
-                    max-width: 48px;
-                    min-height: 48px;
-                    max-height: 48px;
-                    font-size: 20px;
+                    background: transparent;
+                    border: 1px solid rgba(0, 0, 0, 0.3);
+                    border-radius: 20px;
+                    min-width: 40px;
+                    max-width: 40px;
+                    min-height: 40px;
+                    max-height: 40px;
+                    font-size: 16px;
                 }
                 QPushButton#themeToggle:hover {
-                    background: rgba(255, 107, 107, 0.2);
-                    border: 2px solid rgba(255, 107, 107, 0.5);
+                    background: rgba(0, 0, 0, 0.05);
+                    border: 1px solid rgba(0, 0, 0, 0.5);
                 }
             """,
             'label': """
                 QLabel#timeLabel, QLabel#durationLabel {
-                    color: #4A90E2;
-                    font-weight: 600;
-                    font-size: 14px;
+                    color: #141414;
+                    font-weight: 500;
+                    font-size: 13px;
                     min-width: 60px;
                 }
                 QLabel#volumeIcon, QLabel#speedLabel {
-                    color: #6c757d;
-                    font-weight: 500;
+                    color: #6C6C6C;
+                    font-weight: 400;
                     font-size: 13px;
                 }
                 QLabel#volumeLabel {
-                    color: #4A90E2;
-                    font-weight: 600;
-                    font-size: 13px;
-                    min-width: 45px;
+                    color: #141414;
+                    font-weight: 500;
+                    font-size: 12px;
+                    min-width: 40px;
                 }
             """,
             'slider': """
                 QSlider#progressSlider::groove:horizontal {
                     border: none;
-                    height: 6px;
-                    background: rgba(0, 0, 0, 0.1);
-                    border-radius: 3px;
+                    height: 3px;
+                    background: rgba(0, 0, 0, 0.2);
+                    border-radius: 2px;
                 }
                 QSlider#progressSlider::sub-page:horizontal {
-                    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
-                                stop:0 #4A90E2,
-                                stop:1 #5BA3F5);
-                    border-radius: 3px;
+                    background: #E50914;
+                    border-radius: 2px;
                 }
                 QSlider#progressSlider::handle:horizontal {
-                    background: #FF6B6B;
-                    border: 3px solid white;
-                    width: 18px;
-                    margin: -7px 0;
-                    border-radius: 9px;
+                    background: #E50914;
+                    border: none;
+                    width: 12px;
+                    height: 12px;
+                    margin: -5px 0;
+                    border-radius: 6px;
                 }
                 QSlider#progressSlider::handle:horizontal:hover {
-                    background: #ff8585;
-                    width: 20px;
-                    margin: -8px 0;
-                    border-radius: 10px;
-                }
-                QSlider#volumeSlider::groove:horizontal {
-                    border: none;
-                    height: 4px;
-                    background: rgba(0, 0, 0, 0.1);
-                    border-radius: 2px;
-                }
-                QSlider#volumeSlider::sub-page:horizontal {
-                    background: #4A90E2;
-                    border-radius: 2px;
-                }
-                QSlider#volumeSlider::handle:horizontal {
-                    background: #4A90E2;
-                    border: 2px solid white;
+                    background: #F40612;
                     width: 14px;
+                    height: 14px;
                     margin: -6px 0;
                     border-radius: 7px;
                 }
+                QSlider#volumeSlider::groove:horizontal {
+                    border: none;
+                    height: 3px;
+                    background: rgba(0, 0, 0, 0.2);
+                    border-radius: 2px;
+                }
+                QSlider#volumeSlider::sub-page:horizontal {
+                    background: #141414;
+                    border-radius: 2px;
+                }
+                QSlider#volumeSlider::handle:horizontal {
+                    background: #141414;
+                    border: none;
+                    width: 12px;
+                    height: 12px;
+                    margin: -5px 0;
+                    border-radius: 6px;
+                }
                 QSlider#volumeSlider::handle:horizontal:hover {
-                    background: #5BA3F5;
-                    width: 16px;
-                    border-radius: 8px;
+                    background: #141414;
+                    width: 14px;
+                    height: 14px;
+                    margin: -6px 0;
+                    border-radius: 7px;
                 }
             """,
             'menubar': """
                 QMenuBar {
-                    background-color: #ffffff;
-                    color: #2c3e50;
+                    background-color: #FFFFFF;
+                    color: #141414;
                     font-weight: 500;
                     font-size: 13px;
                     spacing: 8px;
@@ -362,51 +389,81 @@ class ThemeManager:
                 }
                 QMenuBar::item {
                     padding: 6px 12px;
-                    border-radius: 6px;
+                    border-radius: 4px;
                 }
                 QMenuBar::item:selected {
-                    background: rgba(74, 144, 226, 0.15);
-                    color: #4A90E2;
+                    background: rgba(0, 0, 0, 0.05);
                 }
                 QMenu {
-                    background-color: white;
-                    color: #2c3e50;
-                    border: 2px solid rgba(74, 144, 226, 0.2);
-                    border-radius: 8px;
+                    background-color: #F5F5F5;
+                    color: #141414;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    border-radius: 4px;
                     padding: 4px;
                 }
                 QMenu::item {
                     padding: 8px 24px 8px 12px;
-                    border-radius: 4px;
+                    border-radius: 2px;
                 }
                 QMenu::item:selected {
-                    background: rgba(74, 144, 226, 0.15);
-                    color: #4A90E2;
+                    background: rgba(229, 9, 20, 0.8);
+                    color: white;
                 }
             """
         }
     
     @property
     def current_theme(self) -> Theme:
-        """Get current theme"""
+        """
+        Get the currently active theme
+        
+        Returns:
+            Theme: Current theme (DARK or LIGHT)
+        """
         return self._current_theme
     
     def toggle_theme(self) -> Theme:
-        """Toggle between light and dark themes"""
+        """
+        Toggle between light and dark themes
+        
+        Returns:
+            Theme: The newly activated theme
+        """
         self._current_theme = (
             Theme.LIGHT if self._current_theme == Theme.DARK else Theme.DARK
         )
         return self._current_theme
     
     def set_theme(self, theme: Theme):
-        """Set specific theme"""
+        """
+        Set a specific theme
+        
+        Args:
+            theme: The theme to activate (DARK or LIGHT)
+        """
         self._current_theme = theme
     
     def get_stylesheet(self, component: str) -> str:
-        """Get stylesheet for specific component"""
+        """
+        Get stylesheet for a specific UI component
+        
+        Args:
+            component: Component identifier (e.g., 'control_panel', 'button')
+            
+        Returns:
+            str: CSS stylesheet for the specified component
+        """
         return self._theme_styles[self._current_theme].get(component, "")
     
     def get_full_stylesheet(self) -> str:
-        """Get complete stylesheet for current theme"""
+        """
+        Get complete stylesheet for current theme
+        
+        Combines all component stylesheets into a single string for
+        application-wide styling.
+        
+        Returns:
+            str: Complete CSS stylesheet for all components
+        """
         theme_config = self._theme_styles[self._current_theme]
         return "\n".join(theme_config.values())

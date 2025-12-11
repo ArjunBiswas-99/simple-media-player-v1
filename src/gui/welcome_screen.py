@@ -82,31 +82,33 @@ class WelcomeScreen(QWidget):
             return """
             QLabel#welcomeTitle {
                 color: #FFFFFF;
+                font-weight: 700;
             }
             QLabel#welcomeSubtitle {
                 color: #B3B3B3;
             }
             QLabel#welcomeInstruction {
-                color: #E0E0E0;
-                padding: 5px;
+                color: #FFFFFF;
+                padding: 8px;
             }
             QLabel#welcomeFormats {
-                color: #888888;
+                color: #808080;
             }
             """
         else:
             return """
             QLabel#welcomeTitle {
-                color: #212529;
+                color: #141414;
+                font-weight: 700;
             }
             QLabel#welcomeSubtitle {
-                color: #6C757D;
+                color: #6C6C6C;
             }
             QLabel#welcomeInstruction {
-                color: #495057;
-                padding: 5px;
+                color: #141414;
+                padding: 8px;
             }
             QLabel#welcomeFormats {
-                color: #ADB5BD;
+                color: #808080;
             }
             """

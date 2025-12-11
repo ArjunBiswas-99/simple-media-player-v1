@@ -1,5 +1,16 @@
 """
-Main application window with controls and menu
+Main Application Window Module
+
+This module defines the MainWindow class which serves as the primary UI controller
+for the media player application. It coordinates between the video display, playback
+controls, and user interactions while maintaining a Netflix-inspired aesthetic.
+
+Responsibilities:
+    - UI layout and widget management
+    - User input handling (keyboard, mouse)
+    - Theme application and switching
+    - Fullscreen mode management
+    - File operations (open, drop)
 """
 
 import logging
@@ -22,8 +33,19 @@ logger = logging.getLogger(__name__)
 
 
 class MainWindow(QMainWindow):
-    """Main application window"""
+    """
+    Main application window with Netflix-inspired UI
     
+    This class coordinates all UI components and handles user interactions.
+    It follows the Single Responsibility Principle by delegating specific tasks
+    to specialized components (MediaPlayer for playback, ThemeManager for styling).
+    
+    Attributes:
+        VIDEO_EXTENSIONS: Supported video file formats
+        SUBTITLE_EXTENSIONS: Supported subtitle file formats
+    """
+    
+    # Supported file formats
     VIDEO_EXTENSIONS = (
         "*.mp4", "*.mkv", "*.avi", "*.mov", "*.wmv",
         "*.flv", "*.webm", "*.m4v", "*.mpg", "*.mpeg"
@@ -45,28 +67,47 @@ class MainWindow(QMainWindow):
         logger.info("Main window initialized")
     
     def _initialize_components(self):
-        """Initialize core components"""
+        """
+        Initialize core application components and state variables
+        
+        Sets up the media player, theme manager, and fullscreen control system.
+        Follows Dependency Inversion Principle by depending on abstractions
+        (MediaPlayer, ThemeManager) rather than concrete implementations.
+        """
+        # Core components (abstractions following DIP)
         self.player = MediaPlayer()
         self.theme_manager = ThemeManager()
+        
+        # Playback state
         self.current_file = None
         self.is_seeking = False
+        
+        # Fast forward feature state
         self._fast_forward_timer = None
         self._is_fast_forwarding = False
         
-        # Fullscreen control hiding system
+        # Fullscreen control auto-hide system
         self._fullscreen_hide_timer = None
         self._cursor_hidden = False
         self._controls_visible = True
-        self._last_mouse_pos = None  # For frame-based detection
+        self._last_mouse_pos = None  # For frame-based mouse detection
+        
+        # Enable mouse tracking for fullscreen interactions
         self.setMouseTracking(True)
     
     def _setup_ui(self):
-        """Set up the user interface"""
+        """
+        Configure and build the user interface layout
+        
+        Creates the main window structure with video display area and control panel.
+        Uses composition pattern to build complex UI from simpler components.
+        """
         self.setWindowTitle("PyMedia Player")
         self.setMinimumSize(800, 600)
         
-        # Create a custom central widget that tracks mouse
+        # Custom widget for fullscreen mouse tracking (Inner class following SRP)
         class MouseTrackingWidget(QWidget):
+            """Specialized widget that tracks mouse movement for fullscreen mode"""
             def __init__(self, parent_window):
                 super().__init__()
                 self.parent_window = parent_window
@@ -117,14 +158,19 @@ class MainWindow(QMainWindow):
         self._apply_theme()
     
     def _create_control_panel(self):
-        """Create the bottom control panel with modern design"""
+        """
+        Create the bottom control panel with Netflix-style gradient overlay
+        
+        Returns:
+            QWidget: Configured control panel with progress bar and buttons
+        """
         panel = QWidget()
-        panel.setFixedHeight(110)
+        panel.setFixedHeight(90)
         panel.setObjectName("controlPanel")
         
         layout = QVBoxLayout(panel)
-        layout.setContentsMargins(16, 8, 16, 10)
-        layout.setSpacing(10)
+        layout.setContentsMargins(20, 10, 20, 12)
+        layout.setSpacing(8)
         
         layout.addLayout(self._create_progress_bar())
         layout.addLayout(self._create_control_buttons())
@@ -132,7 +178,12 @@ class MainWindow(QMainWindow):
         return panel
     
     def _create_progress_bar(self):
-        """Create progress bar with time labels"""
+        """
+        Create ultra-thin Netflix-style progress bar with time display
+        
+        Returns:
+            QHBoxLayout: Layout containing time label, slider, and duration
+        """
         progress_layout = QHBoxLayout()
         
         self.time_label = QLabel("00:00")
@@ -160,9 +211,16 @@ class MainWindow(QMainWindow):
         return progress_layout
     
     def _create_control_buttons(self):
-        """Create control buttons layout with modern design"""
+        """
+        Create control buttons with Netflix minimalist design
+        
+        Layout: [Play] [Stop] | [Volume] | [Speed] | [stretch] | [Theme] [Fullscreen]
+        
+        Returns:
+            QHBoxLayout: Layout containing all control buttons
+        """
         button_layout = QHBoxLayout()
-        button_layout.setSpacing(12)
+        button_layout.setSpacing(8)
         
         # Playback controls (larger icon buttons)
         self.play_button = self._create_icon_button(
@@ -179,31 +237,34 @@ class MainWindow(QMainWindow):
         )
         button_layout.addWidget(stop_button)
         
-        button_layout.addSpacing(16)
+        button_layout.addSpacing(12)
         
         # Volume controls
         button_layout.addLayout(self._create_volume_controls())
         
-        button_layout.addSpacing(16)
+        button_layout.addSpacing(12)
         
         # Speed control
         button_layout.addLayout(self._create_speed_control())
         
         button_layout.addStretch()
         
-        # Theme toggle button (prominent)
+        # Theme toggle button
         self.theme_toggle_button = QPushButton("🌙")
         self.theme_toggle_button.clicked.connect(self._toggle_theme)
         self.theme_toggle_button.setObjectName("themeToggle")
         self.theme_toggle_button.setToolTip("Toggle Dark/Light Mode")
         button_layout.addWidget(self.theme_toggle_button)
         
-        button_layout.addSpacing(8)
+        button_layout.addSpacing(4)
         
-        # Fullscreen button
-        fullscreen_button = QPushButton("Fullscreen")
-        fullscreen_button.clicked.connect(self._toggle_fullscreen)
-        fullscreen_button.setObjectName("controlButton")
+        # Fullscreen button (icon-only for Netflix style)
+        fullscreen_button = self._create_icon_button(
+            QStyle.StandardPixmap.SP_TitleBarMaxButton,
+            self._toggle_fullscreen,
+            "Fullscreen (F)"
+        )
+        fullscreen_button.setText("⛶")
         button_layout.addWidget(fullscreen_button)
         
         return button_layout
@@ -219,7 +280,17 @@ class MainWindow(QMainWindow):
         return button
     
     def _create_icon_button(self, icon: QStyle.StandardPixmap, callback, tooltip: str):
-        """Create a large circular icon button"""
+        """
+        Create a circular icon button with Netflix styling
+        
+        Args:
+            icon: Qt standard icon identifier
+            callback: Function to call on button click
+            tooltip: Tooltip text for the button
+            
+        Returns:
+            QPushButton: Configured icon button (40px circular, transparent background)
+        """
         button = QPushButton()
         
         # Map standard icons to Unicode symbols for better color control
@@ -245,43 +316,65 @@ class MainWindow(QMainWindow):
         return button
     
     def _create_volume_controls(self):
-        """Create volume control widgets"""
-        layout = QHBoxLayout()
-        layout.setSpacing(8)
+        """
+        Create Netflix-style volume control with dynamic icon and inline slider
         
-        volume_icon = QLabel("🔊")
-        volume_icon.setObjectName("volumeIcon")
-        volume_icon.setFixedWidth(25)
-        layout.addWidget(volume_icon)
+        Features:
+            - Clickable volume icon for mute/unmute
+            - Dynamic icon updates based on volume level
+            - Compact inline slider (80px width)
+            
+        Returns:
+            QHBoxLayout: Layout containing volume icon, slider, and percentage label
+        """
+        layout = QHBoxLayout()
+        layout.setSpacing(6)
+        layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+        
+        # Volume icon button (mute toggle)
+        self.volume_icon_button = QPushButton("🔊")
+        self.volume_icon_button.setObjectName("iconButton")
+        self.volume_icon_button.clicked.connect(self._toggle_mute)
+        self.volume_icon_button.setToolTip("Mute/Unmute (M)")
+        layout.addWidget(self.volume_icon_button, alignment=Qt.AlignmentFlag.AlignVCenter)
         
         self.volume_slider = QSlider(Qt.Orientation.Horizontal)
         self.volume_slider.setRange(0, 100)
         self.volume_slider.setValue(100)
-        self.volume_slider.setFixedWidth(100)
+        self.volume_slider.setFixedWidth(80)
         self.volume_slider.setObjectName("volumeSlider")
         self.volume_slider.valueChanged.connect(self._on_volume_changed)
-        layout.addWidget(self.volume_slider)
+        layout.addWidget(self.volume_slider, alignment=Qt.AlignmentFlag.AlignVCenter)
         
         self.volume_label = QLabel("100%")
-        self.volume_label.setFixedWidth(45)
+        self.volume_label.setFixedWidth(35)
         self.volume_label.setObjectName("volumeLabel")
-        layout.addWidget(self.volume_label)
+        layout.addWidget(self.volume_label, alignment=Qt.AlignmentFlag.AlignVCenter)
         
         return layout
     
     def _create_speed_control(self):
-        """Create speed control widgets"""
+        """
+        Create speed control for cycling through playback rates
+        
+        Cycles through: 0.5x → 1.0x → 1.5x → 2.0x
+        
+        Returns:
+            QHBoxLayout: Layout containing speed label and cycle button
+        """
         layout = QHBoxLayout()
+        layout.setSpacing(6)
+        layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
         
         speed_label = QLabel("Speed:")
         speed_label.setObjectName("speedLabel")
-        layout.addWidget(speed_label)
+        layout.addWidget(speed_label, alignment=Qt.AlignmentFlag.AlignVCenter)
         
         self.speed_button = QPushButton("1.0x")
         self.speed_button.clicked.connect(self._cycle_speed)
-        self.speed_button.setFixedWidth(60)
-        self.speed_button.setObjectName("controlButton")
-        layout.addWidget(self.speed_button)
+        self.speed_button.setFixedWidth(55)
+        self.speed_button.setObjectName("iconButton")
+        layout.addWidget(self.speed_button, alignment=Qt.AlignmentFlag.AlignVCenter)
         
         return layout
     
@@ -621,6 +714,7 @@ class MainWindow(QMainWindow):
         """Handle volume slider change"""
         self.player.volume = value
         self.volume_label.setText(f"{value}%")
+        self._update_volume_icon()
     
     def _volume_up(self):
         """Increase volume by 5%"""
@@ -633,8 +727,22 @@ class MainWindow(QMainWindow):
         self.volume_slider.setValue(new_volume)
     
     def _toggle_mute(self):
-        """Toggle mute state"""
+        """Toggle mute state and update volume icon"""
         self.player.toggle_mute()
+        self._update_volume_icon()
+    
+    def _update_volume_icon(self):
+        """Update volume icon based on mute state and volume level"""
+        if self.player.muted:
+            self.volume_icon_button.setText("🔇")
+        else:
+            volume = self.volume_slider.value()
+            if volume == 0:
+                self.volume_icon_button.setText("🔇")
+            elif volume < 50:
+                self.volume_icon_button.setText("🔉")
+            else:
+                self.volume_icon_button.setText("🔊")
     
     def _toggle_fullscreen(self):
         """
