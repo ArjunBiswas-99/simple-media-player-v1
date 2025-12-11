@@ -138,10 +138,8 @@ class VideoWidget(QVideoWidget):
                 self._is_fast_forwarding = False
                 self.fast_forward_stopped.emit()
                 logger.debug("Fast forward stopped")
-            else:
-                # It was a single click (not long press)
-                self.single_clicked.emit()
-                logger.debug("Video single-clicked")
+            # Don't emit single click here - it interferes with double-click
+            # The single click should only happen if no double-click follows
         
         super().mouseReleaseEvent(event)
     
