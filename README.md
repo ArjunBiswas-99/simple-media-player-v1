@@ -145,7 +145,7 @@ Create a standalone application:
 
 **Windows:**
 ```bash
-python build.py
+python scripts/build.py
 ```
 Output: `dist/PyMediaPlayer.exe`
 
@@ -202,18 +202,34 @@ pyinstaller --name="Simple Media Player" --windowed src/main.py
 
 ```
 simple-media-player/
-├── src/
-│   ├── main.py              # Application entry point
+├── README.md                    # Project documentation
+├── LICENSE                      # MIT License
+├── requirements.txt             # Python dependencies
+│
+├── src/                         # Source code
+│   ├── main.py                  # Application entry point
 │   ├── core/
-│   │   └── player.py        # Media playback engine
+│   │   └── player.py            # Media playback engine
 │   └── gui/
-│       ├── main_window.py   # Main application window
-│       ├── video_widget.py  # Video display & interactions
-│       ├── theme_manager.py # Theme system
-│       └── fullscreen_overlay.py
-├── requirements.txt         # Python dependencies
-├── build.py                # Executable builder
-└── README.md               # You are here!
+│       ├── main_window.py       # Main window & UI
+│       ├── video_widget.py      # Video display widget
+│       ├── theme_manager.py     # Theme management
+│       └── fullscreen_overlay.py # Fullscreen controls
+│
+├── docs/                        # Documentation
+│   ├── CHANGELOG.md             # Version history
+│   ├── CONTRIBUTING.md          # Contribution guidelines
+│   └── development/             # Developer docs
+│       ├── HOW_TO_RELEASE.md    # Release process
+│       └── RELEASE_NOTES_v1.0.0.md
+│
+├── scripts/                     # Build & utility scripts
+│   ├── build.py                 # Executable builder
+│   └── BUILD-EXE.bat            # Windows build script
+│
+└── archive/                     # Archived files
+    ├── errorlog.txt
+    └── media-player-requirements.md
 ```
 
 ## 🐛 Troubleshooting
@@ -252,7 +268,9 @@ python --version  # Must be 3.10 or higher
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here's how you can help:
+Contributions are welcome! See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
+
+Quick start:
 
 1. 🍴 Fork the repository
 2. 🌟 Create a feature branch (`git checkout -b feature/AmazingFeature`)
