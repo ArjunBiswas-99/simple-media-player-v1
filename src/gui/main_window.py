@@ -369,9 +369,12 @@ class MainWindow(QMainWindow):
     
     def _on_mouse_move_fullscreen(self):
         """Handle mouse movement in fullscreen from video widget"""
+        logger.debug(f"Mouse move signal received - cursor_hidden: {self._cursor_hidden}")
         if self._cursor_hidden:
+            logger.debug("Showing controls due to mouse movement")
             self._show_controls()
         else:
+            logger.debug("Restarting hide timer")
             self._start_hide_timer()
     
     def eventFilter(self, obj, event):

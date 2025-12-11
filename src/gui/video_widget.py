@@ -146,6 +146,7 @@ class VideoWidget(QVideoWidget):
             event: Mouse event with movement information
         """
         if self._main_window and self._main_window.isFullScreen():
+            logger.debug("Mouse moved in fullscreen - emitting signal")
             self.mouse_moved_in_fullscreen.emit()
         super().mouseMoveEvent(event)
     
