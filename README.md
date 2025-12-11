@@ -53,38 +53,50 @@
 - ⏯️ **Playback control** - Play, pause, stop, seek
 - 🖼️ **Click-to-seek** - Jump anywhere instantly
 
-## 🚀 Quick Start
+## 📥 Download & Installation
 
-### Prerequisites
+### Option 1: Windows Executable (Easiest!) ⭐
+
+**No Python installation required!**
+
+1. Go to [Releases](https://github.com/ArjunBiswas-99/simple-media-player/releases)
+2. Download `SimpleMediaPlayer.exe`
+3. Double-click to run
+4. That's it! 🎉
+
+### Option 2: From Source (macOS/Linux/Windows)
+
+**Prerequisites:**
 - Python 3.10 or higher
 - pip (Python package installer)
 
-### Installation
+**Installation Steps:**
 
-**1. Clone the repository:**
+**Download from Release:**
+1. Go to [Releases](https://github.com/ArjunBiswas-99/simple-media-player/releases)
+2. Download **Source code (zip)**
+3. Extract the ZIP file
+4. Open Terminal/Command Prompt in the extracted folder
+5. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+6. Run the player:
+   ```bash
+   # Windows
+   python -m src.main
+   
+   # macOS/Linux
+   python3 -m src.main
+   ```
+
+**Or Clone from Git:**
 ```bash
 git clone https://github.com/ArjunBiswas-99/simple-media-player.git
 cd simple-media-player
-```
-
-**2. Install dependencies:**
-```bash
 pip install -r requirements.txt
-```
-
-**3. Run the player:**
-
-*Windows:*
-```bash
 python -m src.main
 ```
-
-*macOS/Linux:*
-```bash
-python3 -m src.main
-```
-
-**That's it!** 🎉 No system dependencies, no complex setup, just pure Python goodness.
 
 ### Opening a Video
 
