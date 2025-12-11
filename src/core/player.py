@@ -78,7 +78,8 @@ class MediaPlayer:
             return False
         
         try:
-            self.player.loadfile(filepath)
+            # Use the command method with 'loadfile' to properly load the file
+            self.player.command('loadfile', filepath)
             logger.info(f"Loaded file: {filepath}")
             return True
         except Exception as e:
