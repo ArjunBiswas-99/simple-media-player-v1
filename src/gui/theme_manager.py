@@ -208,11 +208,13 @@ class ThemeManager:
         }
     
     def _get_light_theme(self) -> Dict[str, str]:
-        """Modern light theme with vibrant accent"""
+        """Modern light theme with professional colors"""
         return {
             'main_window': """
                 QMainWindow {
-                    background-color: #ffffff;
+                    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                stop:0 #f5f7fa,
+                                stop:1 #e8ecf1);
                     color: #2c3e50;
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'SF Pro Display', sans-serif;
                 }
@@ -220,9 +222,9 @@ class ThemeManager:
             'control_panel': """
                 #controlPanel {
                     background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                stop:0 rgba(248, 249, 250, 0.98),
-                                stop:1 rgba(233, 236, 239, 0.98));
-                    border-top: 2px solid rgba(74, 144, 226, 0.2);
+                                stop:0 rgba(255, 255, 255, 0.95),
+                                stop:1 rgba(240, 244, 248, 0.95));
+                    border-top: 2px solid rgba(52, 152, 219, 0.3);
                 }
             """,
             'button': """

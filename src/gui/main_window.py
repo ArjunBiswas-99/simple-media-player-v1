@@ -50,6 +50,11 @@ class MainWindow(QMainWindow):
         self.is_seeking = False
         self._fast_forward_timer = None
         self._is_fast_forwarding = False
+        
+        # Fullscreen auto-hide
+        self._fullscreen_hide_timer = None
+        self._cursor_hidden = False
+        self.setMouseTracking(True)
     
     def _setup_ui(self):
         """Set up the user interface"""
@@ -496,11 +501,60 @@ class MainWindow(QMainWindow):
         self.player.toggle_mute()
     
     def _toggle_fullscreen(self):
-        """Toggle fullscreen mode"""
+        """Toggle fullscreen mode with auto-hide controls"""
         if self.isFullScreen():
             self.showNormal()
+            # Show menu bar and controls when exiting fullscreen
+            self.menuBar().show()
+            self.control_panel.show()
+            self._stop_hide_timer()
+            self.setCursor(Qt.CursorShape.ArrowCursor)
         else:
             self.showFullScreen()
+            # Hide menu bar in fullscreen
+            self.menuBar().hide()
+            # Start auto-hide for controls
+            self._start_hide_timer()
+    
+    def _start_hide_timer(self):
+        """Start timer to hide controls after inactivity"""
+        if self._fullscreen_hide_timer:
+            self._fullscreen_hide_timer.stop()
+        
+        self._fullscreen_hide_timer = QTimer()
+        self._fullscreen_hide_timer.timeout.connect(self._hide_controls)
+        self._fullscreen_hide_timer.start(3000)  # Hide after 3 seconds of inactivity
+    
+    def _stop_hide_timer(self):
+        """Stop the hide timer"""
+        if self._fullscreen_hide_timer:
+            self._fullscreen_hide_timer.stop()
+            self._fullscreen_hide_timer = None
+    
+    def _hide_controls(self):
+        """Hide controls and cursor in fullscreen"""
+        if self.isFullScreen():
+            self.control_panel.hide()
+            self.setCursor(Qt.CursorShape.BlankCursor)
+            self._cursor_hidden = True
+    
+    def _show_controls(self):
+        """Show controls and cursor in fullscreen"""
+        if self.isFullScreen():
+            self.control_panel.show()
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            self._cursor_hidden = False
+            # Restart hide timer
+            self._start_hide_timer()
+    
+    def mouseMoveEvent(self, event):
+        """Handle mouse movement in fullscreen"""
+        if self.isFullScreen() and self._cursor_hidden:
+            self._show_controls()
+        elif self.isFullScreen():
+            # Reset hide timer on mouse movement
+            self._start_hide_timer()
+        super().mouseMoveEvent(event)
     
     def _cycle_speed(self):
         """Cycle through playback speeds"""
