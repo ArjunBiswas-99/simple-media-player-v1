@@ -1,48 +1,16 @@
-Test\simple-media-player-v1> python -m src.main
-pygame 2.5.2 (SDL 2.28.3, Python 3.10.8)
-Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-12-11 11:59:32,631 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 11:59:33,348 - src.core.audio_player - INFO - Audio player initialized with pygame mixer
-2025-12-11 11:59:33,348 - src.core.player - INFO - Media player initialized with PyAV + PyQt6 audio
-2025-12-11 11:59:33,367 - src.core.player - INFO - Player initialized with video widget
-2025-12-11 11:59:33,376 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 11:59:33,796 - __main__ - INFO - Application started successfully
-2025-12-11 11:59:38,795 - src.core.player - INFO - Playback stopped
-2025-12-11 11:59:39,386 - src.core.audio_player - INFO - Direct load failed, extracting audio track...
-2025-12-11 12:00:22,887 - src.core.audio_player - INFO - Extracted 338446 audio frames
-2025-12-11 12:00:23,265 - src.core.audio_player - INFO - Audio extracted and loaded: C:\Users\arjun\Downloads\The Heat.mp4
-2025-12-11 12:00:23,266 - src.core.player - INFO - Loaded media: C:/Users/arjun/Downloads/The Heat.mp4
-2025-12-11 12:00:23,267 - src.core.player - INFO - Duration: 7220.17s, FPS: 1947498750/81226927
-2025-12-11 12:00:23,268 - src.core.audio_player - INFO - Audio playback started from 0s
-2025-12-11 12:00:23,368 - src.core.audio_player - INFO - ✓ Audio is playing successfully
---- Logging error ---
-Traceback (most recent call last):
-  File "C:\Python310\lib\logging\__init__.py", line 1103, in emit
-    stream.write(msg + self.terminator)
-  File "C:\Python310\lib\encodings\cp1252.py", line 19, in encode
-    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
-UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 57: character maps to <undefined>
-Call stack:
-  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-  File "C:\Python310\lib\runpy.py", line 86, in _run_code
-    exec(code, run_globals)
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
-    sys.exit(main())
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 60, in main
-    exit_code = app.exec()
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 482, in _toggle_play_pause
-    self._on_open_file()
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 440, in _on_open_file
-    self._load_file(filename)
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 469, in _load_file
-    self.player.play()
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\core\player.py", line 160, in play
-    self._audio_player.play()
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\core\audio_player.py", line 203, in play
-    logger.info("✓ Audio is playing successfully")
-Message: '✓ Audio is playing successfully'
-Arguments: ()
-2025-12-11 12:00:23,671 - src.core.player - INFO - Video playback loop started
-2025-12-11 12:00:23,671 - src.core.player - INFO - Playback started
-2025-12-11 12:00:23,728 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
+\Desktop\Test\simple-media-player-v1> python -m src.main
+2025-12-11 12:22:33,561 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 12:22:33,706 - src.core.player - INFO - Media player initialized with PyQt6 Multimedia
+2025-12-11 12:22:33,723 - src.core.player - INFO - Player initialized with video widget
+2025-12-11 12:22:33,733 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 12:22:34,133 - __main__ - INFO - Application started successfully
+2025-12-11 12:22:47,490 - src.core.player - INFO - Playback stopped
+2025-12-11 12:22:47,596 - src.core.player - INFO - Loaded media: D:/TV/Detective,Thriller/Byomkesh Bakshi/Byomkesh Bakshi- Ep#2- Rastey Ka Kanta - YouTube.mp4
+2025-12-11 12:22:47,623 - src.core.player - INFO - Playback started
+2025-12-11 12:22:47,624 - src.gui.main_window - INFO - Playing: D:/TV/Detective,Thriller/Byomkesh Bakshi/Byomkesh Bakshi- Ep#2- Rastey Ka Kanta - YouTube.mp4
+    failed to get textures for frame; format: 172 textureConverter null
+2025-12-11 12:23:05,312 - src.gui.main_window - INFO - Fast forward stopped
+2025-12-11 12:23:05,313 - src.core.player - INFO - Playback stopped
+2025-12-11 12:23:05,322 - src.core.player - INFO - Player shut down
+2025-12-11 12:23:05,322 - src.gui.main_window - INFO - Application closed
+2025-12-11 12:23:05,333 - __main__ - INFO - Application exited with code 0
