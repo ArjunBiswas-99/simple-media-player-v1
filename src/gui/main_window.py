@@ -86,6 +86,11 @@ class MainWindow(QMainWindow):
         self.current_file = None
         self.is_seeking = False
         
+        # Network stream state
+        self.is_network_stream = False
+        self.network_stream_url = None
+        self.current_quality = '480p'
+        
         # Fast forward feature state
         self._fast_forward_timer = None
         self._is_fast_forwarding = False
@@ -259,6 +264,11 @@ class MainWindow(QMainWindow):
         # Speed control
         button_layout.addLayout(self._create_speed_control())
         
+        button_layout.addSpacing(12)
+        
+        # Quality selector (for network streams only)
+        button_layout.addLayout(self._create_quality_selector())
+        
         button_layout.addStretch()
         
         # Theme toggle button
@@ -394,6 +404,47 @@ class MainWindow(QMainWindow):
         self.speed_button.setFixedWidth(55)
         self.speed_button.setObjectName("iconButton")
         layout.addWidget(self.speed_button)
+        
+        return layout
+    
+    def _create_quality_selector(self):
+        """
+        Create quality selector dropdown for network streams
+        
+        Only visible when playing network streams (YouTube, etc.).
+        Hidden for local files to avoid confusion.
+        
+        Returns:
+            QHBoxLayout: Layout containing quality label and dropdown
+        """
+        from PyQt6.QtWidgets import QComboBox
+        
+        layout = QHBoxLayout()
+        layout.setSpacing(6)
+        
+        # Quality label
+        self.quality_label = QLabel("Quality:")
+        self.quality_label.setFixedHeight(40)
+        self.quality_label.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
+        self.quality_label.setObjectName("speedLabel")
+        self.quality_label.hide()  # Initially hidden
+        layout.addWidget(self.quality_label)
+        
+        # Quality dropdown
+        self.quality_combo = QComboBox()
+        self.quality_combo.addItems([
+            "360p",
+            "480p",
+            "720p",
+            "1080p"
+        ])
+        self.quality_combo.setCurrentText("480p")
+        self.quality_combo.currentTextChanged.connect(self._on_quality_changed)
+        self.quality_combo.setObjectName("iconButton")
+        self.quality_combo.setFixedWidth(80)
+        self.quality_combo.setFixedHeight(40)
+        self.quality_combo.hide()  # Initially hidden
+        layout.addWidget(self.quality_combo)
         
         return layout
     
@@ -680,16 +731,17 @@ class MainWindow(QMainWindow):
         # Use QTimer to run extraction without blocking
         QTimer.singleShot(100, lambda: self._perform_stream_extraction(url))
     
-    def _perform_stream_extraction(self, url: str):
+    def _perform_stream_extraction(self, url: str, quality: str = '480p'):
         """
         Perform stream extraction and load into player
         
         Args:
             url: The network stream URL
+            quality: Quality to extract (default: 480p)
         """
         try:
-            # Extract stream information
-            stream_info = self.stream_handler.extract_stream_info(url)
+            # Extract stream information at specified quality
+            stream_info = self.stream_handler.extract_stream_info(url, quality)
             
             if not stream_info:
                 self.buffering_widget.hide_loading()
@@ -713,6 +765,12 @@ class MainWindow(QMainWindow):
                 # Update window title
                 self.setWindowTitle(f"Simple Media Player - {stream_info['title']} | by Arjun Biswas")
                 
+                # Set network stream state
+                self.current_file = stream_info['title']
+                self.is_network_stream = True
+                self.network_stream_url = url
+                self.current_quality = quality
+                
                 # Hide welcome screen
                 if hasattr(self, 'welcome_screen'):
                     self.welcome_screen.hide()
@@ -721,10 +779,13 @@ class MainWindow(QMainWindow):
                 self.player.play()
                 self._update_play_button()
                 
+                # Show quality selector for network streams (after playback starts)
+                QTimer.singleShot(100, self._update_quality_selector_visibility)
+                
                 # Hide buffering widget after short delay
                 QTimer.singleShot(1000, self.buffering_widget.hide_loading)
                 
-                logger.info(f"Playing network stream: {stream_info['title']} ({stream_info['platform']})")
+                logger.info(f"Playing network stream: {stream_info['title']} ({stream_info['platform']}) at {quality}")
             else:
                 self.buffering_widget.hide_loading()
                 QMessageBox.critical(
@@ -748,6 +809,8 @@ class MainWindow(QMainWindow):
         """Load and play a media file"""
         if self.player.load_file(filepath):
             self.current_file = filepath
+            self.is_network_stream = False
+            self.network_stream_url = None
             self.setWindowTitle(f"Simple Media Player - {Path(filepath).name} | by Arjun Biswas")
             
             # Hide welcome screen when video loads
@@ -756,6 +819,9 @@ class MainWindow(QMainWindow):
             
             self.player.play()
             self._update_play_button()
+            
+            # Hide quality selector for local files
+            self._update_quality_selector_visibility()
             
             # Resize window to match video resolution
             self._resize_to_video()
@@ -820,6 +886,9 @@ class MainWindow(QMainWindow):
         self.player.toggle_pause()
         self._update_play_button()
         self._update_overlay_state()
+        
+        # Update quality selector visibility when play/pause changes
+        self._update_quality_selector_visibility()
     
     def _update_overlay_state(self):
         """
@@ -842,6 +911,9 @@ class MainWindow(QMainWindow):
         """Handle stop button"""
         self.player.stop()
         self._update_play_button()
+        
+        # Hide quality selector when stopped
+        self._update_quality_selector_visibility()
     
     def _update_play_button(self):
         """Update play/pause button icon"""
@@ -975,6 +1047,112 @@ class MainWindow(QMainWindow):
         new_speed = speeds[next_index]
         self.player.set_speed(new_speed)
         self.speed_button.setText(f"{new_speed}x")
+    
+    def _update_quality_selector_visibility(self):
+        """Show/hide quality selector based on stream state"""
+        should_show = (
+            self.is_network_stream and 
+            self.current_file is not None and
+            (self.player.is_playing or self.player.is_paused)
+        )
+        
+        self.quality_label.setVisible(should_show)
+        self.quality_combo.setVisible(should_show)
+        
+        logger.info(f"Quality selector visibility: {should_show} (is_network_stream={self.is_network_stream}, current_file={self.current_file is not None}, playing={self.player.is_playing}, paused={self.player.is_paused})")
+    
+    def _on_quality_changed(self, quality_text):
+        """Handle quality selection change"""
+        if not self.is_network_stream or not self.network_stream_url:
+            return
+        
+        new_quality = quality_text  # Already just "480p", "720p", etc.
+        
+        if new_quality == self.current_quality:
+            return  # No change
+        
+        logger.info(f"Changing quality from {self.current_quality} to {new_quality}")
+        
+        # Save current position and playback state
+        current_pos = self.player.time_pos
+        was_playing = self.player.is_playing
+        
+        # Show buffering with quality info
+        self.buffering_widget.show_loading(f"Switching to {quality_text}...")
+        
+        # Re-extract and load at new quality
+        QTimer.singleShot(100, lambda: self._reload_stream_with_quality(
+            self.network_stream_url,
+            new_quality,
+            current_pos,
+            was_playing
+        ))
+    
+    def _reload_stream_with_quality(self, url: str, quality: str, seek_to: float, auto_play: bool):
+        """
+        Reload network stream with different quality
+        
+        Args:
+            url: Original network stream URL
+            quality: New quality to load
+            seek_to: Position to seek to after loading
+            auto_play: Whether to auto-play after loading
+        """
+        try:
+            logger.info(f"Reloading stream at {quality}")
+            
+            # Extract with new quality
+            stream_info = self.stream_handler.extract_stream_info(url, quality)
+            
+            if not stream_info:
+                self.buffering_widget.hide_loading()
+                QMessageBox.warning(
+                    self,
+                    "Quality Change Failed",
+                    f"Could not load stream at {quality}.\n"
+                    "Keeping current quality."
+                )
+                # Revert dropdown selection
+                self.quality_combo.setCurrentText(self.current_quality)
+                return
+            
+            # Load new stream
+            if self.player.load_network_stream(stream_info['url'], stream_info['title']):
+                self.current_quality = quality
+                
+                # Seek to previous position
+                if seek_to > 0:
+                    QTimer.singleShot(500, lambda: self.player.seek(seek_to))
+                
+                # Resume playback if was playing
+                if auto_play:
+                    QTimer.singleShot(600, self.player.play)
+                    self._update_play_button()
+                
+                self.buffering_widget.hide_loading()
+                logger.info(f"Successfully changed to {quality}")
+            else:
+                self.buffering_widget.hide_loading()
+                QMessageBox.warning(
+                    self,
+                    "Quality Change Failed",
+                    f"Failed to load stream at {quality}.\n"
+                    "Keeping current quality."
+                )
+                # Revert dropdown selection
+                self.quality_combo.setCurrentText(self.current_quality)
+                
+        except Exception as e:
+            self.buffering_widget.hide_loading()
+            logger.error(f"Error changing quality: {e}", exc_info=True)
+            QMessageBox.warning(
+                self,
+                "Quality Change Failed",
+                f"An error occurred:\n{str(e)}\n\n"
+                "Keeping current quality."
+            )
+            # Revert dropdown selection
+            self.quality_combo.setCurrentText(self.current_quality)
     
     def _on_slider_pressed(self):
         """Handle slider press"""

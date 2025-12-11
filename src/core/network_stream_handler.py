@@ -129,13 +129,7 @@ class NetworkStreamHandler:
             
             # Configure yt-dlp options
             ydl_opts = {
-                'format': self._get_format_string(quality),
-                'quiet': True,
-                'no_warnings': True,
-                'extract_flat': False,
-                'no_check_certificate': True,
-                # Prefer formats that work well with QMediaPlayer
-                'format_sort': ['res', 'ext:mp4:m4a'],
+                'format': 'best',  # Simple: just get the best available format
             }
             
             # Extract video information
@@ -156,7 +150,21 @@ class NetworkStreamHandler:
                     'webpage_url': info.get('webpage_url', url),
                 }
                 
+                # Debug logging for stream format
+                format_id = info.get('format_id', 'unknown')
+                vcodec = info.get('vcodec', 'none')
+                acodec = info.get('acodec', 'none')
+                has_video = vcodec != 'none'
+                has_audio = acodec != 'none'
+                
                 logger.info(f"Successfully extracted: {result['title']} ({result['platform']})")
+                logger.info(f"Format ID: {format_id} | Video: {has_video} ({vcodec}) | Audio: {has_audio} ({acodec})")
+                
+                if not has_video:
+                    logger.warning("⚠️  AUDIO-ONLY stream detected! Video will not play.")
+                elif not has_audio:
+                    logger.warning("⚠️  VIDEO-ONLY stream detected! Audio will not play.")
+                
                 return result
                 
         except ImportError:
@@ -166,28 +174,6 @@ class NetworkStreamHandler:
             logger.error(f"Error extracting stream: {e}")
             return None
     
-    def _get_format_string(self, quality: str) -> str:
-        """
-        Get yt-dlp format string for quality preference
-        
-        Args:
-            quality: Quality preference string
-            
-        Returns:
-            Format string for yt-dlp
-        """
-        quality_map = {
-            'best': 'best',
-            'worst': 'worst',
-            '2160p': 'bestvideo[height<=2160]+bestaudio/best[height<=2160]',
-            '1440p': 'bestvideo[height<=1440]+bestaudio/best[height<=1440]',
-            '1080p': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]',
-            '720p': 'bestvideo[height<=720]+bestaudio/best[height<=720]',
-            '480p': 'bestvideo[height<=480]+bestaudio/best[height<=480]',
-            '360p': 'bestvideo[height<=360]+bestaudio/best[height<=360]',
-        }
-        
-        return quality_map.get(quality.lower(), 'best')
     
     def get_platform_name(self, platform: StreamPlatform) -> str:
         """Get display name for platform"""
