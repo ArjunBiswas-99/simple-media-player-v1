@@ -19,6 +19,9 @@ class PlayerSignals(QObject):
     duration_changed = pyqtSignal(float)  # Total duration in seconds
     playback_ended = pyqtSignal()     # Playback completed
     error_occurred = pyqtSignal(str)  # Error message
+    buffering_started = pyqtSignal(str)  # Buffering started with status message
+    buffering_progress = pyqtSignal(int)  # Buffering progress (0-100)
+    buffering_finished = pyqtSignal()  # Buffering completed
 
 
 class MediaPlayer:
@@ -153,6 +156,52 @@ class MediaPlayer:
             
         except Exception as e:
             logger.error(f"Failed to load file: {e}", exc_info=True)
+            return False
+    
+    def load_network_stream(self, stream_url: str, title: str = "Network Stream") -> bool:
+        """
+        Load a network stream URL for playback
+        
+        This method loads direct stream URLs extracted from platforms like
+        YouTube, Dailymotion, etc. The URL should be a direct video stream
+        that QMediaPlayer can handle.
+        
+        Args:
+            stream_url: Direct stream URL (e.g., from yt-dlp extraction)
+            title: Display title for the stream
+            
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            if not stream_url:
+                logger.error("Empty stream URL provided")
+                return False
+            
+            # Stop any current playback
+            self.stop()
+            
+            # Create QUrl from network stream
+            url = QUrl(stream_url)
+            
+            if not url.isValid():
+                logger.error(f"Invalid stream URL: {stream_url}")
+                return False
+            
+            logger.info(f"Loading network stream: {title}")
+            logger.debug(f"Stream URL: {stream_url[:100]}...")
+            
+            # Set the source
+            self._media_player.setSource(url)
+            
+            # Store as current "file" (even though it's a stream)
+            self._current_file = title
+            
+            logger.info(f"Network stream loaded: {title}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to load network stream: {e}", exc_info=True)
             return False
     
     def play(self):

@@ -27,7 +27,10 @@ from .video_widget import VideoWidget
 from .theme_manager import ThemeManager, Theme
 from .fullscreen_overlay import FullscreenMouseOverlay
 from .welcome_screen import WelcomeScreen
+from .buffering_widget import BufferingWidget
+from .network_stream_dialog import NetworkStreamDialog
 from ..core.player import MediaPlayer
+from ..core.network_stream_handler import NetworkStreamHandler
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +80,7 @@ class MainWindow(QMainWindow):
         # Core components (abstractions following DIP)
         self.player = MediaPlayer()
         self.theme_manager = ThemeManager()
+        self.stream_handler = NetworkStreamHandler()
         
         # Playback state
         self.current_file = None
@@ -141,6 +145,11 @@ class MainWindow(QMainWindow):
         self.welcome_screen = WelcomeScreen(self.video_widget)
         self.welcome_screen.setGeometry(self.video_widget.rect())
         self.welcome_screen.show()
+        
+        # Create buffering widget overlay (shown during stream extraction/buffering)
+        self.buffering_widget = BufferingWidget(self.video_widget)
+        self.buffering_widget.setGeometry(self.video_widget.rect())
+        self.buffering_widget.hide()
         
         # Create fullscreen overlay (hidden by default, activated when paused in fullscreen)
         self.fullscreen_overlay = FullscreenMouseOverlay(self.video_widget)
@@ -429,6 +438,14 @@ class MainWindow(QMainWindow):
         open_action.triggered.connect(self._on_open_file)
         file_menu.addAction(open_action)
         
+        # Network stream action
+        open_stream_action = QAction("Open &Network Stream...", self)
+        open_stream_action.setShortcut("Ctrl+N")
+        open_stream_action.triggered.connect(self._on_open_network_stream)
+        file_menu.addAction(open_stream_action)
+        
+        file_menu.addSeparator()
+        
         open_subtitle_action = QAction("Open &Subtitle...", self)
         open_subtitle_action.setShortcut("Ctrl+S")
         open_subtitle_action.triggered.connect(self._on_open_subtitle)
@@ -636,6 +653,96 @@ class MainWindow(QMainWindow):
     def _on_file_dropped(self, filepath):
         """Handle file dropped on video widget"""
         self._load_file(filepath)
+    
+    def _on_open_network_stream(self):
+        """Handle open network stream action"""
+        dialog = NetworkStreamDialog(self)
+        dialog.url_accepted.connect(self._load_network_stream)
+        dialog.exec()
+    
+    def _load_network_stream(self, url: str):
+        """
+        Load and play a network stream from URL
+        
+        Args:
+            url: The network stream URL (YouTube, Dailymotion, etc.)
+        """
+        from PyQt6.QtCore import QThread, QTimer
+        
+        # Show buffering widget immediately
+        self.buffering_widget.show_loading("Extracting video stream...")
+        
+        # Extract stream in background to avoid UI freeze
+        def extract_stream():
+            """Background thread function for stream extraction"""
+            return self.stream_handler.extract_stream_info(url)
+        
+        # Use QTimer to run extraction without blocking
+        QTimer.singleShot(100, lambda: self._perform_stream_extraction(url))
+    
+    def _perform_stream_extraction(self, url: str):
+        """
+        Perform stream extraction and load into player
+        
+        Args:
+            url: The network stream URL
+        """
+        try:
+            # Extract stream information
+            stream_info = self.stream_handler.extract_stream_info(url)
+            
+            if not stream_info:
+                self.buffering_widget.hide_loading()
+                QMessageBox.critical(
+                    self,
+                    "Stream Extraction Failed",
+                    "Failed to extract video stream from the provided URL.\n\n"
+                    "Possible reasons:\n"
+                    "• Invalid or unsupported URL\n"
+                    "• Video is private or restricted\n"
+                    "• Network connection issue\n"
+                    "• Platform blocked access"
+                )
+                return
+            
+            # Update buffering message
+            self.buffering_widget.set_status("Loading stream...")
+            
+            # Load stream into player
+            if self.player.load_network_stream(stream_info['url'], stream_info['title']):
+                # Update window title
+                self.setWindowTitle(f"Simple Media Player - {stream_info['title']} | by Arjun Biswas")
+                
+                # Hide welcome screen
+                if hasattr(self, 'welcome_screen'):
+                    self.welcome_screen.hide()
+                
+                # Start playback
+                self.player.play()
+                self._update_play_button()
+                
+                # Hide buffering widget after short delay
+                QTimer.singleShot(1000, self.buffering_widget.hide_loading)
+                
+                logger.info(f"Playing network stream: {stream_info['title']} ({stream_info['platform']})")
+            else:
+                self.buffering_widget.hide_loading()
+                QMessageBox.critical(
+                    self,
+                    "Playback Error",
+                    f"Failed to load video stream.\n\n"
+                    f"Title: {stream_info['title']}\n"
+                    f"Platform: {stream_info['platform']}"
+                )
+        
+        except Exception as e:
+            self.buffering_widget.hide_loading()
+            logger.error(f"Error loading network stream: {e}", exc_info=True)
+            QMessageBox.critical(
+                self,
+                "Error",
+                f"An error occurred while loading the stream:\n\n{str(e)}"
+            )
     
     def _load_file(self, filepath):
         """Load and play a media file"""

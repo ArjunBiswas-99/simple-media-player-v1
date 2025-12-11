@@ -1,11 +1,2 @@
-# Simple Media Player - Core Dependencies
-# Python 3.10+ required
-
-# GUI Framework
-PyQt6>=6.5.0
-
-# Subtitle Support  
-pysrt>=1.1.2
-
-# Build Tool (for creating .exe)
-pyinstaller>=6.0.0
+PyQt6>=6.4.0
+yt-dlp>=2023.12.30
