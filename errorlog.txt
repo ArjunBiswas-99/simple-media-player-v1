@@ -1,43 +1,17 @@
-e-media-player-v1> python -m  src.main
-2025-12-11 09:01:50,516 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 09:01:50,627 - src.core.player - INFO - MPV player initialized successfully
-2025-12-11 09:01:50,630 - src.gui.main_window - INFO - Main window initialized
-2025-12-11 09:01:51,000 - __main__ - INFO - Application started successfully
-2025-12-11 09:08:52,560 - src.gui.main_window - INFO - Application closed
-2025-12-11 09:08:52,573 - __main__ - INFO - Application exited with code 0
-PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> git pull origin main
-remote: Enumerating objects: 12, done.
-remote: Counting objects: 100% (12/12), done.
-remote: Compressing objects: 100% (5/5), done.
-remote: Total 7 (delta 2), reused 7 (delta 2), pack-reused 0 (from 0)
-Unpacking objects: 100% (7/7), 4.77 KiB | 203.00 KiB/s, done.
-From https://github.com/ArjunBiswas-99/simple-media-player-v1
- * branch            main       -> FETCH_HEAD
-   5d2a7e0..a1d8f77  main       -> origin/main
-Updating 5d2a7e0..a1d8f77
-Fast-forward
- src/gui/main_window.py   | 373 +++++++++++++++++++++++++++--------------------
- src/gui/theme_manager.py | 188 ++++++++++++++++++++++++
- src/gui/video_widget.py  |  61 ++++++--
- 3 files changed, 454 insertions(+), 168 deletions(-)
- create mode 100644 src/gui/theme_manager.py
-PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> python -m  src.main 
-2025-12-11 09:08:59,206 - __main__ - INFO - Starting PyMedia Player v1.0.0
-2025-12-11 09:08:59,299 - src.core.player - INFO - MPV player initialized successfully
+simple-media-player-v1> python -m src.main
+2025-12-11 10:27:04,035 - __main__ - INFO - Starting PyMedia Player v1.0.0
+2025-12-11 10:27:04,067 - src.core.player - INFO - OpenCV media player initialized
+2025-12-11 10:27:04,090 - src.core.player - INFO - Player initialized with video widget
+2025-12-11 10:27:04,102 - src.gui.main_window - INFO - Main window initialized
+2025-12-11 10:27:04,779 - __main__ - INFO - Application started successfully
+2025-12-11 10:27:11,999 - src.core.player - INFO - Playback stopped
+2025-12-11 10:27:12,039 - src.core.player - INFO - Loaded video: C:/Users/arjun/Downloads/The Heat.mp4
+2025-12-11 10:27:12,039 - src.core.player - INFO - Properties - Frames: 173111, FPS: 23.976023976023978
+2025-12-11 10:27:12,039 - src.core.player - INFO - Playback loop started
+2025-12-11 10:27:12,039 - src.core.player - INFO - Playback started
+2025-12-11 10:27:12,043 - src.gui.main_window - INFO - Playing: C:/Users/arjun/Downloads/The Heat.mp4
 Traceback (most recent call last):
-  File "C:\Python310\lib\runpy.py", line 196, in _run_module_as_main
-    return _run_code(code, main_globals, None,
-  File "C:\Python310\lib\runpy.py", line 86, in _run_code
-    exec(code, run_globals)
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 67, in <module>
-    sys.exit(main())
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\main.py", line 48, in main
-    window = MainWindow()
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 37, in __init__
-    self._setup_ui()
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 75, in _setup_ui
-    self._apply_theme()
-  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 336, in _apply_theme
-    self.theme_action.setText("☀️ Light Mode")
-AttributeError: 'MainWindow' object has no attribute 'theme_action'
+  File "C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1\src\gui\main_window.py", line 311, in eventFilter
+    value = QStyle.sliderValueFromPosition(
+TypeError: sliderValueFromPosition(min: int, max: int, position: int, span: int, upsideDown: bool = False): argument 3 has unexpected type 'float'
 PS C:\Users\arjun\OneDrive\Desktop\Test\simple-media-player-v1> 
