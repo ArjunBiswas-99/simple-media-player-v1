@@ -14,6 +14,7 @@ from PyQt6.QtGui import QAction, QKeySequence
 
 from .video_widget import VideoWidget
 from .theme_manager import ThemeManager, Theme
+from .fullscreen_overlay import FullscreenMouseOverlay
 from ..core.player import MediaPlayer
 
 logger = logging.getLogger(__name__)
@@ -51,10 +52,11 @@ class MainWindow(QMainWindow):
         self._fast_forward_timer = None
         self._is_fast_forwarding = False
         
-        # Fullscreen auto-hide
+        # Fullscreen control hiding system
         self._fullscreen_hide_timer = None
         self._cursor_hidden = False
         self._controls_visible = True
+        self._last_mouse_pos = None  # For frame-based detection
         self.setMouseTracking(True)
     
     def _setup_ui(self):
@@ -83,11 +85,16 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         
+        # Video widget for displaying media
         self.video_widget = VideoWidget()
         self.video_widget.setMouseTracking(True)
         self.video_widget.set_main_window(self)
         self.video_widget.set_drop_callback(self._on_file_dropped)
         main_layout.addWidget(self.video_widget, stretch=1)
+        
+        # Create fullscreen overlay (hidden by default, activated when paused in fullscreen)
+        self.fullscreen_overlay = FullscreenMouseOverlay(self.video_widget)
+        self.fullscreen_overlay.mouse_moved.connect(self._on_overlay_mouse_move)
         
         self.control_panel = self._create_control_panel()
         self.control_panel.setMouseTracking(True)
@@ -502,13 +509,34 @@ class MainWindow(QMainWindow):
             )
     
     def _toggle_play_pause(self):
-        """Toggle play/pause state"""
+        """
+        Toggle play/pause state
+        Manages overlay activation based on playback state
+        """
         if not self.current_file:
             self._on_open_file()
             return
         
         self.player.toggle_pause()
         self._update_play_button()
+        self._update_overlay_state()
+    
+    def _update_overlay_state(self):
+        """
+        Update overlay visibility based on playback and fullscreen state
+        Overlay is active when paused in fullscreen, inactive when playing
+        """
+        if not self.isFullScreen():
+            self.fullscreen_overlay.deactivate()
+            return
+        
+        if self.player.is_playing:
+            # Video playing: use frame-based detection, hide overlay
+            self.fullscreen_overlay.deactivate()
+        else:
+            # Video paused: activate overlay to catch mouse movements
+            self.fullscreen_overlay.setGeometry(self.video_widget.rect())
+            self.fullscreen_overlay.activate()
     
     def _on_stop(self):
         """Handle stop button"""
@@ -542,20 +570,25 @@ class MainWindow(QMainWindow):
         self.player.toggle_mute()
     
     def _toggle_fullscreen(self):
-        """Toggle fullscreen mode with auto-hide controls"""
+        """
+        Toggle fullscreen mode with automatic control hiding
+        Manages overlay state based on playback status
+        """
         if self.isFullScreen():
+            # Exit fullscreen
             self.showNormal()
-            # Show menu bar and controls when exiting fullscreen
             self.menuBar().show()
             self.control_panel.show()
             self._stop_hide_timer()
             self.setCursor(Qt.CursorShape.ArrowCursor)
+            self._cursor_hidden = False
+            self.fullscreen_overlay.deactivate()
         else:
+            # Enter fullscreen
             self.showFullScreen()
-            # Hide menu bar in fullscreen
             self.menuBar().hide()
-            # Start auto-hide for controls
             self._start_hide_timer()
+            self._update_overlay_state()
     
     def _start_hide_timer(self):
         """Start timer to hide controls after inactivity"""
@@ -649,7 +682,10 @@ class MainWindow(QMainWindow):
         self.video_widget.display_frame(frame)
     
     def _on_time_update(self, time_pos):
-        """Handle time position updates from player"""
+        """
+        Handle time position updates from player
+        Also performs frame-based mouse detection when video is playing
+        """
         if not self.is_seeking:
             duration = self.player.duration
             if duration > 0:
@@ -657,6 +693,39 @@ class MainWindow(QMainWindow):
                 self.progress_slider.setValue(position)
             
             self.time_label.setText(self._format_time(time_pos))
+        
+        # Frame-based mouse detection (when video is playing in fullscreen)
+        self._check_mouse_movement_while_playing()
+    
+    def _check_mouse_movement_while_playing(self):
+        """
+        Check for mouse movement while video is playing
+        This provides mouse detection when QVideoWidget doesn't emit events
+        """
+        if not self.isFullScreen() or not self.player.is_playing:
+            return
+        
+        from PyQt6.QtGui import QCursor
+        current_pos = QCursor.pos()
+        
+        # Check if mouse has moved since last check
+        if self._last_mouse_pos is not None and current_pos != self._last_mouse_pos:
+            if self._cursor_hidden:
+                self._show_controls()
+            else:
+                self._start_hide_timer()
+        
+        self._last_mouse_pos = current_pos
+    
+    def _on_overlay_mouse_move(self):
+        """
+        Handle mouse movement from overlay widget (when paused)
+        Overlay is only active when video is paused in fullscreen
+        """
+        if self._cursor_hidden:
+            self._show_controls()
+        else:
+            self._start_hide_timer()
     
     def _on_duration_changed(self, duration):
         """Handle duration change when file loads"""
