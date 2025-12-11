@@ -77,6 +77,7 @@ class ThemeManager:
                     max-width: 48px;
                     min-height: 48px;
                     max-height: 48px;
+                    color: white;
                 }
                 QPushButton#iconButton:hover {
                     background: rgba(102, 126, 234, 0.4);
@@ -84,6 +85,9 @@ class ThemeManager:
                 }
                 QPushButton#iconButton:pressed {
                     background: rgba(102, 126, 234, 0.6);
+                }
+                QPushButton#iconButton::icon {
+                    color: white;
                 }
                 QPushButton#themeToggle {
                     background: rgba(0, 212, 255, 0.15);
@@ -253,6 +257,7 @@ class ThemeManager:
                     max-width: 48px;
                     min-height: 48px;
                     max-height: 48px;
+                    color: #2c3e50;
                 }
                 QPushButton#iconButton:hover {
                     background: rgba(74, 144, 226, 0.2);

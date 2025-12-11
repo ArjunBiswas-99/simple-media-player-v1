@@ -183,7 +183,20 @@ class MainWindow(QMainWindow):
     def _create_icon_button(self, icon: QStyle.StandardPixmap, callback, tooltip: str):
         """Create a large circular icon button"""
         button = QPushButton()
-        button.setIcon(self.style().standardIcon(icon))
+        
+        # Map standard icons to Unicode symbols for better color control
+        icon_map = {
+            QStyle.StandardPixmap.SP_MediaPlay: "▶",
+            QStyle.StandardPixmap.SP_MediaPause: "⏸",
+            QStyle.StandardPixmap.SP_MediaStop: "⏹"
+        }
+        
+        if icon in icon_map:
+            button.setText(icon_map[icon])
+            button.setStyleSheet("font-size: 20px;")
+        else:
+            button.setIcon(self.style().standardIcon(icon))
+        
         button.clicked.connect(callback)
         button.setToolTip(tooltip)
         button.setObjectName("iconButton")
@@ -192,9 +205,11 @@ class MainWindow(QMainWindow):
     def _create_volume_controls(self):
         """Create volume control widgets"""
         layout = QHBoxLayout()
+        layout.setSpacing(8)
         
         volume_icon = QLabel("🔊")
         volume_icon.setObjectName("volumeIcon")
+        volume_icon.setFixedWidth(25)
         layout.addWidget(volume_icon)
         
         self.volume_slider = QSlider(Qt.Orientation.Horizontal)
@@ -206,7 +221,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.volume_slider)
         
         self.volume_label = QLabel("100%")
-        self.volume_label.setFixedWidth(40)
+        self.volume_label.setFixedWidth(45)
         self.volume_label.setObjectName("volumeLabel")
         layout.addWidget(self.volume_label)
         
@@ -457,13 +472,9 @@ class MainWindow(QMainWindow):
     def _update_play_button(self):
         """Update play/pause button icon"""
         if self.player.is_paused:
-            self.play_button.setIcon(
-                self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPlay)
-            )
+            self.play_button.setText("▶")
         else:
-            self.play_button.setIcon(
-                self.style().standardIcon(QStyle.StandardPixmap.SP_MediaPause)
-            )
+            self.play_button.setText("⏸")
     
     def _on_volume_changed(self, value):
         """Handle volume slider change"""
