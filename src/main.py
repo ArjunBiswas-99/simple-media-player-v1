@@ -4,12 +4,20 @@ A simple, lightweight media player built with Python, PyQt6, and MPV
 """
 
 import sys
+import os
+
+# This block is to solve the relative import issue when running as a
+# standalone executable created by PyInstaller.
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import logging
 from pathlib import Path
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import Qt
 
-from .gui.main_window import MainWindow
+from src.gui.main_window import MainWindow
 
 
 def setup_logging():

@@ -12,7 +12,8 @@ import hashlib
 from pathlib import Path
 
 VERSION = "1.0.0"
-APP_NAME = "PyMediaPlayer"
+APP_NAME = "SimpleMediaPlayer"
+OUTPUT_DIR = Path('dist') / f"v{VERSION}"
 
 
 def clean():
@@ -47,7 +48,7 @@ def check_dependencies():
     
     # Check if pyinstaller command is available (more reliable than import check)
     try:
-        result = subprocess.run(['pyinstaller', '--version'], 
+        result = subprocess.run([sys.executable, '-m', 'PyInstaller', '--version'], 
                               capture_output=True, 
                               text=True,
                               timeout=5)
@@ -72,7 +73,8 @@ def build_executable():
     
     # PyInstaller command
     cmd = [
-        'pyinstaller',
+        sys.executable, '-m', 'PyInstaller',
+        f'--distpath={OUTPUT_DIR}',
         '--onefile',                    # Single file
         '--windowed',                   # No console window
         f'--name={APP_NAME}',           # Output name
@@ -85,6 +87,8 @@ def build_executable():
         '--hidden-import=PyQt6.QtWidgets',
         '--hidden-import=PyQt6.QtMultimedia',
         '--hidden-import=PyQt6.QtMultimediaWidgets',
+        # Add project root to search paths for correct import resolution
+        '-p', '.',
         # Entry point
         'src/main.py'
     ]
@@ -103,18 +107,18 @@ def create_package():
     print("📦 Creating distribution package...")
     
     package_name = f"{APP_NAME}-v{VERSION}-Windows-x64"
-    package_dir = Path('dist') / package_name
+    package_dir = OUTPUT_DIR / package_name
     
     # Create directory
     package_dir.mkdir(exist_ok=True)
     
     # Copy executable
-    exe_source = Path('dist') / f'{APP_NAME}.exe'
+    exe_source = OUTPUT_DIR / f'{APP_NAME}.exe'
     if exe_source.exists():
         shutil.copy(exe_source, package_dir)
         print(f"   ✓ Copied {APP_NAME}.exe")
     else:
-        print(f"   ✗ {APP_NAME}.exe not found!")
+        print(f"   ✗ {APP_NAME}.exe not found in {OUTPUT_DIR}!")
         return False
     
     # Create README
@@ -215,7 +219,7 @@ PyMedia Player v{VERSION}
     print("   ✓ Created README.txt")
     
     # Create ZIP
-    archive_path = shutil.make_archive(str(package_dir), 'zip', package_dir)
+    archive_path = shutil.make_archive(str(package_dir), 'zip', OUTPUT_DIR, package_name)
     print(f"   ✓ Created {Path(archive_path).name}")
     
     print("✅ Package created\n")
@@ -227,11 +231,11 @@ def generate_checksums():
     print("🔐 Generating checksums...")
     
     files_to_hash = [
-        Path('dist') / f'{APP_NAME}.exe',
-        Path('dist') / f'{APP_NAME}-v{VERSION}-Windows-x64.zip'
+        OUTPUT_DIR / f'{APP_NAME}.exe',
+        OUTPUT_DIR / f'{APP_NAME}-v{VERSION}-Windows-x64.zip'
     ]
     
-    checksum_file = Path('dist') / 'SHA256SUMS.txt'
+    checksum_file = OUTPUT_DIR / 'SHA256SUMS.txt'
     
     with open(checksum_file, 'w') as f:
         for filepath in files_to_hash:
@@ -252,8 +256,8 @@ def generate_checksums():
 
 def print_summary():
     """Print build summary"""
-    exe_path = Path('dist') / f'{APP_NAME}.exe'
-    zip_path = Path('dist') / f'{APP_NAME}-v{VERSION}-Windows-x64.zip'
+    exe_path = OUTPUT_DIR / f'{APP_NAME}.exe'
+    zip_path = OUTPUT_DIR / f'{APP_NAME}-v{VERSION}-Windows-x64.zip'
     
     print("=" * 60)
     print("🎉 BUILD COMPLETE!")
@@ -272,14 +276,15 @@ def print_summary():
         print(f"   Size: {size_mb:.1f} MB")
     
     print("\n📋 Next Steps:")
-    print("   1. Test the executable locally")
-    print("   2. Download libmpv-2.dll and place it with the .exe")
-    print("   3. Test video playback")
-    print("   4. Create a GitHub release")
-    print("   5. Upload the .zip file as a release asset")
+    print(f"   1. Navigate to the output directory: {OUTPUT_DIR}")
+    print("   2. Test the executable locally")
+    print("   3. Download libmpv-2.dll and place it with the .exe")
+    print("   4. Test video playback")
+    print("   5. Create a GitHub release")
+    print("   6. Upload the .zip file as a release asset")
     
     print("\n💡 To test now:")
-    print(f"   cd dist")
+    print(f"   cd {OUTPUT_DIR}")
     print(f"   .\\{APP_NAME}.exe")
     print("\n")
 
@@ -293,24 +298,29 @@ def main():
     # Step 1: Clean
     clean()
     
-    # Step 2: Check dependencies
+    # Step 2: Create output directory
+    print(f"📂 Creating output directory: {OUTPUT_DIR}")
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    print("✅ Directory created\n")
+
+    # Step 3: Check dependencies
     if not check_dependencies():
         sys.exit(1)
     
-    # Step 3: Build executable
+    # Step 4: Build executable
     if not build_executable():
         print("\n❌ Build failed. Check errors above.")
         sys.exit(1)
     
-    # Step 4: Create package
+    # Step 5: Create package
     if not create_package():
         print("\n❌ Package creation failed.")
         sys.exit(1)
     
-    # Step 5: Generate checksums
+    # Step 6: Generate checksums
     generate_checksums()
     
-    # Step 6: Summary
+    # Step 7: Summary
     print_summary()
 
 
