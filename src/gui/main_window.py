@@ -62,10 +62,22 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("PyMedia Player")
         self.setMinimumSize(800, 600)
         
-        central_widget = QWidget()
-        central_widget.setMouseTracking(True)
-        # Install event filter on central widget too
-        central_widget.installEventFilter(self)
+        # Create a custom central widget that tracks mouse
+        class MouseTrackingWidget(QWidget):
+            def __init__(self, parent_window):
+                super().__init__()
+                self.parent_window = parent_window
+                self.setMouseTracking(True)
+            
+            def mouseMoveEvent(self, event):
+                if self.parent_window.isFullScreen():
+                    if self.parent_window._cursor_hidden:
+                        self.parent_window._show_controls()
+                    else:
+                        self.parent_window._start_hide_timer()
+                super().mouseMoveEvent(event)
+        
+        central_widget = MouseTrackingWidget(self)
         self.setCentralWidget(central_widget)
         main_layout = QVBoxLayout(central_widget)
         main_layout.setContentsMargins(0, 0, 0, 0)
