@@ -26,6 +26,7 @@ class VideoWidget(QVideoWidget):
     double_clicked = pyqtSignal()
     fast_forward_started = pyqtSignal()
     fast_forward_stopped = pyqtSignal()
+    mouse_moved_in_fullscreen = pyqtSignal()
     
     def __init__(self, parent=None):
         """Initialize the video widget"""
@@ -33,8 +34,13 @@ class VideoWidget(QVideoWidget):
         
         self._setup_appearance()
         self._setup_interaction()
+        self._main_window = None
         
         logger.debug("Video widget initialized")
+    
+    def set_main_window(self, main_window):
+        """Set reference to main window for fullscreen handling"""
+        self._main_window = main_window
     
     def _setup_appearance(self):
         """Configure widget appearance"""
@@ -131,6 +137,17 @@ class VideoWidget(QVideoWidget):
                 logger.debug("Fast forward stopped")
         
         super().mouseReleaseEvent(event)
+    
+    def mouseMoveEvent(self, event: QMouseEvent):
+        """
+        Handle mouse movement - emit signal for fullscreen handling
+        
+        Args:
+            event: Mouse event with movement information
+        """
+        if self._main_window and self._main_window.isFullScreen():
+            self.mouse_moved_in_fullscreen.emit()
+        super().mouseMoveEvent(event)
     
     def _on_long_press(self):
         """Handle long press to start fast forward"""
